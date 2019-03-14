@@ -1,0 +1,13 @@
+Kannan luonti 
+
+Uudet ER sekä Tietokantakaaviot 
+
+Repositorion luonti 
+
+Yksinkertainen UI (Tarvike, Asiakas, Työkohde, Työsuoritus) 
+
+Tietojen lisäys 
+
+Tietojen hakeminen 
+
+UML? 
