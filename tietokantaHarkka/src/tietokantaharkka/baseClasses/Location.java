@@ -1,0 +1,67 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package tietokantaharkka.baseClasses;
+
+/**
+ *
+ * @author Cassu
+ */
+public class Location {
+    private int nmbr;
+    private String address;
+    private int postNmbr;
+    private String city;
+    private int clientNmbr;
+
+    public Location(int nmbr, String address, int postNmbr, String city, int clientNmbr) {
+        this.nmbr = nmbr;
+        this.address = address;
+        this.postNmbr = postNmbr;
+        this.city = city;
+        this.clientNmbr = clientNmbr;
+    }
+
+    public int getNmbr() {
+        return nmbr;
+    }
+
+    public void setNmbr(int nmbr) {
+        this.nmbr = nmbr;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public int getPostNmbr() {
+        return postNmbr;
+    }
+
+    public void setPostNmbr(int postNmbr) {
+        this.postNmbr = postNmbr;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public int getClientNmbr() {
+        return clientNmbr;
+    }
+
+    public void setClientNmbr(int clientNmbr) {
+        this.clientNmbr = clientNmbr;
+    }
+    
+}
