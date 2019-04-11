@@ -38,5 +38,8 @@ public class locationCont {
         //TODO Hae db.stä sekä palauta
     }
     
+    public Location removeLocation(Location x){
+        
+    }
     
 }
