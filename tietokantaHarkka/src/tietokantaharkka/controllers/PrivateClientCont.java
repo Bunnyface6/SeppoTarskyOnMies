@@ -4,34 +4,36 @@
  * and open the template in the editor.
  */
 package tietokantaharkka.controllers;
-import java.sql.*;
-import tietokantaharkka.baseClasses.WorkSite;
+
 import java.util.ArrayList;
+import tietokantaharkka.baseClasses.PrivateClient;
+import java.sql.*;
 
 /**
  *
  * @author Jipsu
  */
-public class WorkSiteCont {
+public class PrivateClientCont {
     
-    private ArrayList<WorkSite> recentWorkSites = new ArrayList<WorkSite>();
+    private ArrayList<PrivateClient> recentPrivateClients = new ArrayList<PrivateClient>();
     
-    private WorkSite lastUsed;
+    private PrivateClient lastUsed;
     
-    public WorkSite createWorkSite(int locationNmbr, int clientNmbr) {
-        WorkSite x = new WorkSite(locationNmbr, clientNmbr);
-        recentWorkSites.add(x);
+    public PrivateClient createPrivateClient(String fName, String lName, int pCNmbr) {
+        PrivateClient x = new PrivateClient(fName, lName, pCNmbr);
+        recentPrivateClients.add(x);
         lastUsed = x;
         return x;
     }
-
-    public void addNewWorkSite(WorkSite x, Connection con) throws SQLException{
+    
+    public void addNewPrivateClient(PrivateClient x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
         try {
             con.setAutoCommit(false);
-            pStatement = con.prepareStatement("INSERT INTO tyokohde(asiakasnro, osoitenumero) VALUES(?, ?)");
-            pStatement.setInt(1, x.getClientNmbr());
-            pStatement.setInt(2, x.getLocationNmbr());
+            pStatement = con.prepareStatement("INSERT INTO henkilo VALUES(?, ?, ?)");
+            pStatement.setInt(1, x.getNmbr());
+            pStatement.setString(2, x.getfName());
+            pStatement.setString(2, x.getlName());
             pStatement.executeUpdate();
             con.commit();
         }
@@ -43,18 +45,18 @@ public class WorkSiteCont {
                 pStatement.close();
             }
         }
-    }   
+    }
     
-    public WorkSite findWorkSite(int nmbr, Connection con) throws SQLException{
-        WorkSite wS = null;
+    public PrivateClient findPrivateClient(int nmbr, Connection con) throws SQLException{
+        PrivateClient pC = null;
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
             con.setAutoCommit(false);
-            pStatement = con.prepareStatement("SELECT osoitenumero, asiakasnro FROM tyokohde WHERE tyokohdenumero = ?");
+            pStatement = con.prepareStatement("SELECT asiakasnumero, etunimi, sukunimi FROM henkilo WHERE asiakasnumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            wS = createWorkSite(resultSet.getInt(1), resultSet.getInt(2));
+            pC = createPrivateClient(resultSet.getString(2), resultSet.getString(3), resultSet.getInt(1));
             con.commit();
         }
         catch(SQLException e) {
@@ -68,14 +70,6 @@ public class WorkSiteCont {
                 pStatement.close();
             }
         }
-        return wS;
-    }
-    
-    //public WorkSite findWorkSite(int locationNmbr, int clientNmbr){
-        //TODO Hae db.stä sekä palauta
-    //}
-    
-    public WorkSite removeWorkSite(WorkSite x) {
-        return x;    
+        return pC;
     }
 }
