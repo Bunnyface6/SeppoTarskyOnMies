@@ -5,6 +5,8 @@
  */
 package tietokantaharkka;
 
+import view.testView;
+
 /**
  *
  * @author Cassu
@@ -15,7 +17,7 @@ public class TietokantaHarkka {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO Kutsutaan käyttöliittymä
+        testView.testUI();
     }
     
 }
