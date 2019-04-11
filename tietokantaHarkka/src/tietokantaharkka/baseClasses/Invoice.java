@@ -19,19 +19,24 @@ public class Invoice {
     private int reminderNmbr;
 
     public Invoice(Date finalPayDate, int ivNmbr, Date compDate, Date datePaid, int reminderNmbr) {
-        this.finalPayDate = finalPayDate;
+        this.setFinalPayDate(finalPayDate);
         this.ivNmbr = ivNmbr;
-        this.compDate = compDate;
-        this.datePaid = datePaid;
+        this.setCompDate(compDate);
+        this.setDatePaid(datePaid);
         this.reminderNmbr = reminderNmbr;
     }
 
     public Date getFinalPayDate() {
+        
         return finalPayDate;
     }
 
-    public void setFinalPayDate(Date finalPayDate) {
-        this.finalPayDate = finalPayDate;
+    public void setFinalPayDate(Date finalPayDate) throws IllegalArgumentException {
+        if(finalPayDate != null){
+            this.finalPayDate = finalPayDate;
+        }
+        else
+            throw new IllegalArgumentException();
     }
 
     public int getIvNmbr() {
@@ -46,16 +51,23 @@ public class Invoice {
         return compDate;
     }
 
-    public void setCompDate(Date compDate) {
-        this.compDate = compDate;
+    public void setCompDate(Date compDate) throws IllegalArgumentException{
+        if(compDate != null){
+            this.compDate = compDate;
+        }
+        else
+            throw new IllegalArgumentException();
     }
 
     public Date getDatePaid() {
         return datePaid;
     }
 
-    public void setDatePaid(Date datePaid) {
-        this.datePaid = datePaid;
+    public void setDatePaid(Date datePaid) throws IllegalArgumentException{
+        if(datePaid != null)
+            this.datePaid = datePaid;
+        else
+            throw new IllegalArgumentException();
     }
 
     public int getReminderNmbr() {

@@ -18,7 +18,7 @@ public class Article extends ArticleType{
 
     public Article(String name, double buyIn, int storage, double salePrice, int nmbr, int nmbr2, String unit, String typeName) {
         super(nmbr, unit, typeName);
-        this.name = name;
+        this.setName(name);
         this.buyIn = buyIn;
         this.storage = storage;
         this.salePrice = salePrice;
@@ -29,8 +29,13 @@ public class Article extends ArticleType{
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String name) throws IllegalArgumentException{
+        if(name != null && name.length() > 0){
+            this.name = name;
+        }
+        else{
+            throw new IllegalArgumentException();
+        }
     }
 
     public double getBuyIn() {

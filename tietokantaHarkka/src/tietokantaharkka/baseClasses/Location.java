@@ -36,8 +36,11 @@ public class Location {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddress(String address) throws IllegalArgumentException {
+        if(address != null)
+            this.address = address;
+        else
+            throw new IllegalArgumentException();
     }
 
     public int getPostNmbr() {
@@ -49,11 +52,15 @@ public class Location {
     }
 
     public String getCity() {
+        
         return city;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCity(String city) throws IllegalArgumentException {
+        if(city != null)
+            this.city = city;
+        else
+            throw new IllegalArgumentException();
     }
 
     public int getClientNmbr() {

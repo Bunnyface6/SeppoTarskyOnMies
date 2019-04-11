@@ -16,8 +16,8 @@ public class ArticleType {
 
     public ArticleType(int nmbr, String unit, String typeName) {
         this.nmbr = nmbr;
-        this.unit = unit;
-        this.typeName = typeName;
+        setUnit(unit);
+        setTypeName(typeName);
     }
 
     public int getNmbr() {
@@ -32,8 +32,13 @@ public class ArticleType {
         return unit;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setUnit(String unit) throws IllegalArgumentException{
+        if(unit != null && unit.length() > 0){
+             this.unit = unit;
+        }
+        else{
+            throw new IllegalArgumentException();
+        }
     }
 
     public String getTypeName() {
@@ -41,7 +46,12 @@ public class ArticleType {
     }
 
     public void setTypeName(String typeName) {
-        this.typeName = typeName;
+        if(unit != null && unit.length() > 0){
+            this.typeName = typeName;
+        }
+        else{
+            throw new IllegalArgumentException();
+        }
     }
-    
 }
+    

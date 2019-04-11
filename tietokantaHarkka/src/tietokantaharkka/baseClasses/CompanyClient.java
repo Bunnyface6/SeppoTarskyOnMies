@@ -15,7 +15,7 @@ public class CompanyClient extends Client{
 
     public CompanyClient(String name, int yIdentifier, int nmbr) {
         super(nmbr);
-        this.name = name;
+        this.setName(name);
         this.yIdentifier = yIdentifier;
     }
 
@@ -23,8 +23,12 @@ public class CompanyClient extends Client{
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String name) throws IllegalArgumentException {
+        if(name != null && name.length() > 0){
+            this.name = name;
+        }
+        else
+            throw new IllegalArgumentException();
     }
 
     public int getyIdentifier() {

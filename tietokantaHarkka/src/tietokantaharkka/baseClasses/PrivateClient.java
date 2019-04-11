@@ -23,8 +23,11 @@ public class PrivateClient extends Client{
         return fName;
     }
 
-    public void setfName(String fName) {
-        this.fName = fName;
+    public void setfName(String fName) throws IllegalArgumentException {
+        if(fName != null && name.length() > 0)
+            this.fName = fName;
+        else
+            throw new IllegalArgumentException();
     }
 
     public String getlName() {
