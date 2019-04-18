@@ -45,7 +45,7 @@ public class WorkSiteCont {
         }
     }   
     
-    public WorkSite findWorkSite(int nmbr, Connection con) throws SQLException{
+    public WorkSite findWorkSite(int nmbr, Connection con) throws SQLException {
         WorkSite wS = null;
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
@@ -75,7 +75,23 @@ public class WorkSiteCont {
         //TODO Hae db.stä sekä palauta
     //}
     
-    public WorkSite removeWorkSite(WorkSite x) {
+    public WorkSite removeWorkSite(WorkSite x) throws SQLException {
+        PreparedStatement pStatement = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("DELETE FROM tyokohde WHERE osoitenumero = ?");
+            pStatement.setInt(1, x.getLocationNmbr());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
         return x;    
     }
 }
