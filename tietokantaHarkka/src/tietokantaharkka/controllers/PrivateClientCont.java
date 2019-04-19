@@ -72,4 +72,24 @@ public class PrivateClientCont {
         }
         return pC;
     }
+    
+    public PrivateClient removePrivateClient(PrivateClient x, Connection con) throws SQLException {
+        PreparedStatement pStatement = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("DELETE FROM henkilo WHERE asiakasnumero = ?");
+            pStatement.setInt(1, x.getNmbr());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return x;    
+    }
 }

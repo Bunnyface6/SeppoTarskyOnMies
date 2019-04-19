@@ -32,7 +32,7 @@ public class ArticleTypeCont {
             pStatement = con.prepareStatement("INSERT INTO tyyppiyksikko(tyyppiyksikkonumero, tyyppi, yksikko) VALUES(?, ?, ?)");
             pStatement.setInt(1, x.getNmbr());
             pStatement.setString(2, x.getTypeName());
-            pStatement.setString(2, x.getUnit());
+            pStatement.setString(3, x.getUnit());
             pStatement.executeUpdate();
             con.commit();
         }

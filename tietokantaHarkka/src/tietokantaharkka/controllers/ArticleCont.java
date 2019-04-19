@@ -6,35 +6,93 @@
 package tietokantaharkka.controllers;
 
 import java.util.ArrayList;
-import tietokantaharkka.baseClasses.Client;
+import tietokantaharkka.baseClasses.Article;
+import java.sql.*;
 
-public class ClientCont{
+public class ArticleCont {
 	
-	private ArrayList<Client> recentClients = new ArrayList<Client>();
-	private Client lastUsed;
+    private ArrayList<Article> recentClients = new ArrayList<Article>();
+    private Article lastUsed;
 	
-	public Client createClient(int nmbr){
-		Client x = new Client(nmbr);
-		recentClients.add(x);
-		lastUsed = x;
-		return x;
-		//Jatka
-	}
+    public Article createArticle(String name, double buyIn, int storage, double salePrice, int nmbr, int nmbr2, String unit, String typeName){
+        Article x = new Article(name, buyIn, storage, salePrice, nmbr, nmbr2, unit, typeName);
+	recentClients.add(x);
+	lastUsed = x;
+	return x;
+    }
 	
-	public void addNewClient(){
-		//Jatka
-	}
+    public void addNewArticle(Article x, Connection con) throws SQLException {
+	PreparedStatement pStatement = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("INSERT INTO tarvike(sisaanostohinta, nimi, varastotilanne, myyntihinta, tyyppiyksikkonumero) VALUES(?, ?, ?, ?, ?)");
+            pStatement.setDouble(1, x.getBuyIn());
+            pStatement.setString(2, x.getName());
+            pStatement.setInt(3, x.getStorage());
+            pStatement.setDouble(4, x.getSalePrice());
+            pStatement.setInt(5, x.getNmbr());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }    	
+    }
 	
-	public Client findClient() {
-		//Jatka
-	}
+    public Article findArticle(int nmbr, Connection con) throws SQLException {
+        Article a = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            // Tarkistettava, meneekö näin.
+            pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
+                                              + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND tarvikenumero = ?");
+            pStatement.setInt(1, nmbr);
+            resultSet = pStatement.executeQuery();
+            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return a;
+    }
 	
-	public Client findClient(){
-		//Jatka
-	}
+    //public Article findClient(){
+	//Jatka
+    //}
 	
-	public Client removeClient(){
-		//Jatka
-	}
-	
+    public Article removeClient(Article x, Connection con) throws SQLException{
+        PreparedStatement pStatement = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("DELETE FROM tarvike WHERE tarvikenumero = ?");
+            pStatement.setInt(1, x.getNmbr2());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+            }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return x;    
+    }
 }
