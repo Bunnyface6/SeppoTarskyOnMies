@@ -31,9 +31,9 @@ public class CompanyClientCont {
         try {
             con.setAutoCommit(false);
             pStatement = con.prepareStatement("INSERT INTO yritys(asiakasnumero, y-tunnus, nimi) VALUES(?, ?, ?)");
-            pStatement.setInt(1, x.getNmbr()));
+            pStatement.setInt(1, x.getNmbr());
             pStatement.setInt(2, x.getyIdentifier());
-            pStatement.setInt(2, x.getName());
+            pStatement.setString(2, x.getName());
             pStatement.executeUpdate();
             con.commit();
         }
@@ -47,7 +47,7 @@ public class CompanyClientCont {
         }
     }
 
-    public CompanyClient findArticleType(int nmbr, Connection con) throws SQLException{
+    public CompanyClient findCompanyClient(int nmbr, Connection con) throws SQLException{
         CompanyClient cC = null;
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
@@ -56,7 +56,7 @@ public class CompanyClientCont {
             pStatement = con.prepareStatement("SELECT asiakasnumero, y-tunnus, nimi FROM yritys WHERE asiakasnumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            cC = createCompanyClient(resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3));
+            cC = createCompanyClient(resultSet.getString(3), resultSet.getInt(2), resultSet.getInt(1));
             con.commit();
         }
         catch(SQLException e) {
@@ -71,5 +71,25 @@ public class CompanyClientCont {
             }
         }
         return cC;
-    }   
+    }
+    
+    public CompanyClient removeCompanyClient(CompanyClient x, Connection con) throws SQLException {
+        PreparedStatement pStatement = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("DELETE FROM yritys WHERE asiakasnumero = ?");
+            pStatement.setInt(1, x.getNmbr());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return x;    
+    }
 }

@@ -30,9 +30,9 @@ public class ArticleTypeCont {
         try {
             con.setAutoCommit(false);
             pStatement = con.prepareStatement("INSERT INTO tyyppiyksikko(tyyppiyksikkonumero, tyyppi, yksikko) VALUES(?, ?, ?)");
-            pStatement.setInt(1, x.getNmbr()));
-            pStatement.setInt(2, x.getTypeName());
-            pStatement.setInt(2, x.getUnit());
+            pStatement.setInt(1, x.getNmbr());
+            pStatement.setString(2, x.getTypeName());
+            pStatement.setString(2, x.getUnit());
             pStatement.executeUpdate();
             con.commit();
         }
@@ -70,5 +70,25 @@ public class ArticleTypeCont {
             }
         }
         return aT;
-    }   
+    }
+    
+    public ArticleType removeArticleType(ArticleType x, Connection con) throws SQLException {
+        PreparedStatement pStatement = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("DELETE FROM tyyppiyksikko WHERE tyyppiyksikkonumero = ?");
+            pStatement.setInt(1, x.getNmbr());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return x;    
+    }
 }
