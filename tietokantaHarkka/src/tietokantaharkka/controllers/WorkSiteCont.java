@@ -75,7 +75,7 @@ public class WorkSiteCont {
         //TODO Hae db.stä sekä palauta
     //}
     
-    public WorkSite removeWorkSite(WorkSite x) throws SQLException {
+    public WorkSite removeWorkSite(WorkSite x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         try {
             con.setAutoCommit(false);
