@@ -12,10 +12,20 @@ package tietokantaharkka.baseClasses;
 public class WorkSite {
     private int locationNmbr;
     private int clientNmbr;
+    private int nmbr;
 
-    public WorkSite(int locationNmbr, int clientNmbr) {
+    public WorkSite(int locationNmbr, int clientNmbr, int nmbr) {
         this.locationNmbr = locationNmbr;
         this.clientNmbr = clientNmbr;
+        this.nmbr = nmbr;
+    }
+
+    public int getNmbr() {
+        return nmbr;
+    }
+
+    public void setNmbr(int nmbr) {
+        this.nmbr = nmbr;
     }
 
     public int getLocationNmbr() {
