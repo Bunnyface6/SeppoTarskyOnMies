@@ -17,14 +17,35 @@ public class Invoice {
     private Date compDate;
     private Date datePaid;
     private int reminderNmbr;
+    private int clientNmbr;
+    private int workSiteNmbr;
 
-    public Invoice(Date finalPayDate, int ivNmbr, Date compDate, Date datePaid, int reminderNmbr) {
-        this.setFinalPayDate(finalPayDate);
+    public Invoice(Date finalPayDate, int ivNmbr, Date compDate, Date datePaid, int reminderNmbr, int clientNmbr, int workSiteNmbr) {
+        this.finalPayDate = finalPayDate;
         this.ivNmbr = ivNmbr;
-        this.setCompDate(compDate);
-        this.setDatePaid(datePaid);
+        this.compDate = compDate;
+        this.datePaid = datePaid;
         this.reminderNmbr = reminderNmbr;
+        this.clientNmbr = clientNmbr;
+        this.workSiteNmbr = workSiteNmbr;
     }
+
+    public int getClientNmbr() {
+        return clientNmbr;
+    }
+
+    public void setClientNmbr(int clientNmbr) {
+        this.clientNmbr = clientNmbr;
+    }
+
+    public int getWorkSiteNmbr() {
+        return workSiteNmbr;
+    }
+
+    public void setWorkSiteNmbr(int workSiteNmbr) {
+        this.workSiteNmbr = workSiteNmbr;
+    }
+
 
     public Date getFinalPayDate() {
         

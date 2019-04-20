@@ -14,14 +14,12 @@ public class Location {
     private String address;
     private int postNmbr;
     private String city;
-    private int clientNmbr;
 
     public Location(int nmbr, String address, int postNmbr, String city, int clientNmbr) {
         this.nmbr = nmbr;
         this.address = address;
         this.postNmbr = postNmbr;
         this.city = city;
-        this.clientNmbr = clientNmbr;
     }
 
     public int getNmbr() {
@@ -61,14 +59,6 @@ public class Location {
             this.city = city;
         else
             throw new IllegalArgumentException();
-    }
-
-    public int getClientNmbr() {
-        return clientNmbr;
-    }
-
-    public void setClientNmbr(int clientNmbr) {
-        this.clientNmbr = clientNmbr;
     }
     
 }
