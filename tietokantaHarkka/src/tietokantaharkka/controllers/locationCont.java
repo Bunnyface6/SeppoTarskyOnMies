@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package tietokantaharkka.controllers;
-
+import java.sql.*;
 import java.util.ArrayList;
 import tietokantaharkka.baseClasses.Location;
 
@@ -85,7 +85,7 @@ public class locationCont {
         try {
             con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE katuosoite = ?");
-            pStatement.setInt(1, address);
+            pStatement.setString(1, address);
             resultSet = pStatement.executeQuery();
             l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),);
             con.commit();
@@ -138,7 +138,7 @@ public class locationCont {
         try {
             con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE postitoimipaikka = ?");
-            pStatement.setInt(1, city);
+            pStatement.setString(1, city);
             resultSet = pStatement.executeQuery();
             l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),);
             con.commit();
