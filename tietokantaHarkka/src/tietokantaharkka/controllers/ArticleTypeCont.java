@@ -46,7 +46,9 @@ public class ArticleTypeCont {
         }
     }
 
-    public ArticleType findArticleType(int nmbr, Connection con) throws SQLException{
+
+    //IDllä
+    public ArticleType findArticleTypeByNmbr(int nmbr, Connection con) throws SQLException{
         ArticleType aT = null;
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
@@ -54,6 +56,62 @@ public class ArticleTypeCont {
             con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT tyyppiyksikkonumero, tyyppi, yksikko FROM tyyppiyksikko WHERE tyyppiyksikkonumero = ?");
             pStatement.setInt(1, nmbr);
+            resultSet = pStatement.executeQuery();
+            aT = createArticleType(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2));
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return aT;
+    }
+
+
+    //Yksiköllä
+    public ArticleType findArticleTypeByUnit(String unit, Connection con) throws SQLException{
+        ArticleType aT = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT tyyppiyksikkonumero, tyyppi, yksikko FROM tyyppiyksikko WHERE yksikko = ?");
+            pStatement.setString(1, unit);
+            resultSet = pStatement.executeQuery();
+            aT = createArticleType(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2));
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return aT;
+    }
+
+
+    //tyypillä
+    public ArticleType findArticleTypeByTypeName(String typeName, Connection con) throws SQLException{
+        ArticleType aT = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT tyyppiyksikkonumero, tyyppi, yksikko FROM tyyppiyksikko WHERE tyyppi = ?");
+            pStatement.setString(1, typeName);
             resultSet = pStatement.executeQuery();
             aT = createArticleType(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2));
             con.commit();
