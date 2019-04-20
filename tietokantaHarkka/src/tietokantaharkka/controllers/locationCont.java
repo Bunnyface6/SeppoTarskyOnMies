@@ -26,16 +26,75 @@ public class locationCont {
         //TODO Luo uusi locaatio
     }
     
-    public void addNewLocation(int clientNmbr, Location x){
-        //TODO Lisää uusi locaatio databaseen
+    public void addNewLocation(Location x, Connection con) throws SQLException{
+        PreparedStatement pStatement = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("INSERT INTO osoite(katuosoite, postinumero, postitoimipaikka) VALUES(?, ?, ?)");
+            pStatement.setString(1, x.getAddress());
+            pStatement.setInt(2, x.getPostNmbr());
+	    pStatement.setInt(3, x.getCity());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
     }
     
     public Location findLocation(int nmbr){
         //TODO Hae db.stä sekä palauta
     }
-    
-    public Location removeLocation(Location x){
-        
+
+    public Location findLocation(int nmbr, Connection con) throws SQLException {
+        Location l = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE osoitenumero = ?");
+            pStatement.setInt(1, nmbr);
+            resultSet = pStatement.executeQuery();
+            l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),);
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return l;
+    }
+
+    public Location removeLocation(Location x, Connection con) throws SQLException {
+        PreparedStatement pStatement = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("DELETE FROM osoite WHERE osoitenumero = ?");
+            pStatement.setInt(1, x.geNmbr());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return x;    
     }
     
 }
