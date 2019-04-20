@@ -12,10 +12,30 @@ package tietokantaharkka.baseClasses;
 public class WorkSite {
     private int locationNmbr;
     private int clientNmbr;
+    private int nmbr;
+    private double contractPrice;
 
-    public WorkSite(int locationNmbr, int clientNmbr) {
+    public WorkSite(int locationNmbr, int clientNmbr, int nmbr, double contractPrice) {
         this.locationNmbr = locationNmbr;
         this.clientNmbr = clientNmbr;
+        this.nmbr = nmbr;
+        this.contractPrice = contractPrice;
+    }
+
+    public double getContractPrice() {
+        return contractPrice;
+    }
+
+    public void setContractPrice(double contractPrice) {
+        this.contractPrice = contractPrice;
+    }
+    
+    public int getNmbr() {
+        return nmbr;
+    }
+
+    public void setNmbr(int nmbr) {
+        this.nmbr = nmbr;
     }
 
     public int getLocationNmbr() {
