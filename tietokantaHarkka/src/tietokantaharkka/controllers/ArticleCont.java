@@ -43,8 +43,10 @@ public class ArticleCont {
             }
         }    	
     }
-	
-    public Article findArticle(int nmbr, Connection con) throws SQLException {
+
+
+	//ID:llä	
+    public Article findArticleByNmbr(int nmbr, Connection con) throws SQLException {
         Article a = null;
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
@@ -54,6 +56,181 @@ public class ArticleCont {
             pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND tarvikenumero = ?");
             pStatement.setInt(1, nmbr);
+            resultSet = pStatement.executeQuery();
+            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return a;
+    }
+
+	//Nimellä
+    public Article findArticleByName(String name, Connection con) throws SQLException {
+        Article a = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            // Tarkistettava, meneekö näin.
+            pStatement = con.prepareStatement("SELECT tarvikenumero, sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
+                                              + "FROM tarvike, tyyppiyksikko WHERE tarvike.nimi = ?");
+            pStatement.setString(1, name);
+            resultSet = pStatement.executeQuery();
+            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return a;
+    }
+
+	// sisäänostolla
+    public Article findArticleByBuyIn(double buyIn, Connection con) throws SQLException {
+        Article a = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            // Tarkistettava, meneekö näin.
+            pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
+                                              + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND sisaanostohinta = ?");
+            pStatement.setDouble(1, buyIn);
+            resultSet = pStatement.executeQuery();
+            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return a;
+    }
+
+	//Varastolla
+    public Article findArticleByStorage(int storage, Connection con) throws SQLException {
+        Article a = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            // Tarkistettava, meneekö näin.
+            pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
+                                              + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND varastotilanne = ?");
+            pStatement.setInt(1, storage);
+            resultSet = pStatement.executeQuery();
+            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return a;
+    }
+
+	//Myyntihinnalla
+    public Article findArticleBySalePrice(double salePrice, Connection con) throws SQLException {
+        Article a = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            // Tarkistettava, meneekö näin.
+            pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
+                                              + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND myyntihinta = ?");
+            pStatement.setDouble(1, salePrice);
+            resultSet = pStatement.executeQuery();
+            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return a;
+    }
+
+	//Yksiköllä
+    public Article findArticleByUnit(String unit, Connection con) throws SQLException {
+        Article a = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            // Tarkistettava, meneekö näin.
+            pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
+                                              + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND yksikko = ?");
+            pStatement.setString(1, unit);
+            resultSet = pStatement.executeQuery();
+            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return a;
+    }
+
+
+    //Tyypillä
+    public Article findArticleByTypeName(String typeName, Connection con) throws SQLException {
+        Article a = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            // Tarkistettava, meneekö näin.
+            pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
+                                              + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND tyyppi = ?");
+            pStatement.setString(1, typeName);
             resultSet = pStatement.executeQuery();
             a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
             con.commit();
