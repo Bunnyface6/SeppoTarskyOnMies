@@ -18,8 +18,8 @@ public class locationCont {
     private ArrayList<Location> recentLocations = new ArrayList<Location>();
     private Location lastUsed;
     
-    public Location createLocation(int nmbr,String address,int postNmbr,String city,int clientNmbr){
-       Location x = new Location(nmbr, address, postNmbr, city, clientNmbr);
+    public Location createLocation(int nmbr,String address,int postNmbr,String city){
+       Location x = new Location(nmbr, address, postNmbr, city);
        recentLocations.add(x);
        lastUsed = x;
        return x;
@@ -50,8 +50,8 @@ public class locationCont {
     public Location findLocation(int nmbr){
         //TODO Hae db.stä sekä palauta
     }
-
-    public Location findLocation(int nmbr, Connection con) throws SQLException {
+    // Haku idllä
+    public Location findLocationByNmbr(int nmbr, Connection con) throws SQLException {
         Location l = null;
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
@@ -59,6 +59,86 @@ public class locationCont {
             con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE osoitenumero = ?");
             pStatement.setInt(1, nmbr);
+            resultSet = pStatement.executeQuery();
+            l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),);
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return l;
+    }
+
+	// Haku katuosoitteella
+    public Location findLocationByAddress(String address, Connection con) throws SQLException {
+        Location l = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE katuosoite = ?");
+            pStatement.setInt(1, address);
+            resultSet = pStatement.executeQuery();
+            l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),);
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return l;
+    }
+
+	//haku postinumerolla
+    public Location findLocationByPostNmbr(int postNmbr, Connection con) throws SQLException {
+        Location l = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE postinumero = ?");
+            pStatement.setInt(1, postNmbr);
+            resultSet = pStatement.executeQuery();
+            l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),);
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return l;
+    }
+
+    public Location findLocationByCity(String city, Connection con) throws SQLException {
+        Location l = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE postitoimipaikka = ?");
+            pStatement.setInt(1, city);
             resultSet = pStatement.executeQuery();
             l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),);
             con.commit();
