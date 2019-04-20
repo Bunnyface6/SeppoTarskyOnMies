@@ -11,9 +11,11 @@ package tietokantaharkka.baseClasses;
  */
 public class Client {
     private int nmbr;
+    private int locationNmbr;
 
-    public Client(int nmbr) {
+    public Client(int nmbr, int locationNmbr) {
         this.nmbr = nmbr;
+        this.locationNmbr = locationNmbr;
     }
 
     public int getNmbr() {
@@ -23,5 +25,14 @@ public class Client {
     public void setNmbr(int nmbr) {
         this.nmbr = nmbr;
     }
+
+    public int getLocationNmbr() {
+        return locationNmbr;
+    }
+
+    public void setLocationNmbr(int locationNmbr) {
+        this.locationNmbr = locationNmbr;
+    }
+
  
 }
