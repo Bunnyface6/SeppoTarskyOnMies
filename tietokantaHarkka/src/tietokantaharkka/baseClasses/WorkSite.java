@@ -13,23 +13,23 @@ public class WorkSite {
     private int locationNmbr;
     private int clientNmbr;
     private int nmbr;
-    private int contractPrice;
+    private double contractPrice;
 
-    public WorkSite(int locationNmbr, int clientNmbr, int nmbr, int contractPrice) {
+    public WorkSite(int locationNmbr, int clientNmbr, int nmbr, double contractPrice) {
         this.locationNmbr = locationNmbr;
         this.clientNmbr = clientNmbr;
         this.nmbr = nmbr;
         this.contractPrice = contractPrice;
     }
 
-    public int getContractPrice() {
+    public double getContractPrice() {
         return contractPrice;
     }
 
-    public void setContractPrice(int contractPrice) {
+    public void setContractPrice(double contractPrice) {
         this.contractPrice = contractPrice;
     }
-
+    
     public int getNmbr() {
         return nmbr;
     }
