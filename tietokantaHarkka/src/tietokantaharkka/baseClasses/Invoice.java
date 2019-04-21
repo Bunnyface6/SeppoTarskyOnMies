@@ -16,18 +16,19 @@ public class Invoice {
     private int ivNmbr;
     private Date compDate;
     private Date datePaid;
-    private int reminderNmbr;
+    private int reminderOfNmbr;
     private int clientNmbr;
-    private int workSiteNmbr;
+    private int workPerformanceNmbr;
+    private int nmbrOfInvoices;
 
-    public Invoice(Date finalPayDate, int ivNmbr, Date compDate, Date datePaid, int reminderNmbr, int clientNmbr, int workSiteNmbr) {
+    public Invoice(Date finalPayDate, int ivNmbr, Date compDate, Date datePaid, int nmbrOfInvoices, int reminderOfNmbr, int clientNmbr, int workPerformanceNmbr) {
         this.finalPayDate = finalPayDate;
         this.ivNmbr = ivNmbr;
         this.compDate = compDate;
         this.datePaid = datePaid;
-        this.reminderNmbr = reminderNmbr;
+        this.reminderOfNmbr = reminderOfNmbr;
         this.clientNmbr = clientNmbr;
-        this.workSiteNmbr = workSiteNmbr;
+        this.workPerformanceNmbr = workPerformanceNmbr;
     }
 
     public int getClientNmbr() {
@@ -38,14 +39,13 @@ public class Invoice {
         this.clientNmbr = clientNmbr;
     }
 
-    public int getWorkSiteNmbr() {
-        return workSiteNmbr;
+    public int getWorkPerformanceNmbr() {
+        return workPerformanceNmbr;
     }
 
-    public void setWorkSiteNmbr(int workSiteNmbr) {
-        this.workSiteNmbr = workSiteNmbr;
+    public void setWorkPerformanceNmbr(int workPerformanceNmbr) {
+        this.workPerformanceNmbr = workPerformanceNmbr;
     }
-
 
     public Date getFinalPayDate() {
         
@@ -91,12 +91,19 @@ public class Invoice {
             throw new IllegalArgumentException();
     }
 
-    public int getReminderNmbr() {
-        return reminderNmbr;
+    public int getReminderOfNmbr() {
+        return reminderOfNmbr;
     }
 
-    public void setReminderNmbr(int reminderNmbr) {
-        this.reminderNmbr = reminderNmbr;
+    public void setReminderOfNmbr(int reminderOfNmbr) {
+        this.reminderOfNmbr = reminderOfNmbr;
+    }
+    
+    public int getNmbrOfInvoices() {
+        return nmbrOfInvoices;
     }
 
+    public void setNmbrOfInvoices(int nmbrOfInvoices) {
+        this.nmbrOfInvoices = nmbrOfInvoices;
+    }
 }
