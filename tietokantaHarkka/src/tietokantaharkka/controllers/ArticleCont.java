@@ -43,8 +43,7 @@ public class ArticleCont {
             }
         }    	
     }
-
-
+    
 	//ID:llä	
     public Article findArticleByNmbr(int nmbr, Connection con) throws SQLException {
         Article a = null;
@@ -57,7 +56,9 @@ public class ArticleCont {
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND tarvikenumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            if (resultSet.next()) {
+                a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -86,7 +87,9 @@ public class ArticleCont {
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.nimi = ?");
             pStatement.setString(1, name);
             resultSet = pStatement.executeQuery();
-            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            if (resultSet.next()) {
+                a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -115,7 +118,9 @@ public class ArticleCont {
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND sisaanostohinta = ?");
             pStatement.setDouble(1, buyIn);
             resultSet = pStatement.executeQuery();
-            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            if (resultSet.next()) {
+                a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -144,7 +149,9 @@ public class ArticleCont {
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND varastotilanne = ?");
             pStatement.setInt(1, storage);
             resultSet = pStatement.executeQuery();
-            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            if (resultSet.next()) {
+                a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -173,7 +180,9 @@ public class ArticleCont {
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND myyntihinta = ?");
             pStatement.setDouble(1, salePrice);
             resultSet = pStatement.executeQuery();
-            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            if (resultSet.next()) {
+                a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -202,7 +211,9 @@ public class ArticleCont {
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND yksikko = ?");
             pStatement.setString(1, unit);
             resultSet = pStatement.executeQuery();
-            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            if (resultSet.next()) {
+                a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -232,7 +243,9 @@ public class ArticleCont {
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND tyyppi = ?");
             pStatement.setString(1, typeName);
             resultSet = pStatement.executeQuery();
-            a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            if (resultSet.next()) {
+                a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -271,5 +284,27 @@ public class ArticleCont {
             }
         }
         return x;    
+    }
+    
+    public void updateArticle(Article x, Connection con) throws SQLException {
+	PreparedStatement pStatement = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("UPDATE tarvike SET sisaanostohinta = ?,varastotilanne = ?, myyntihinta = ? WHERE tarvikenumero = ?");
+            pStatement.setDouble(1, x.getBuyIn());
+            pStatement.setInt(2, x.getStorage());
+            pStatement.setDouble(3, x.getSalePrice());
+            pStatement.setInt(4, x.getNmbr2());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }    	
     }
 }
