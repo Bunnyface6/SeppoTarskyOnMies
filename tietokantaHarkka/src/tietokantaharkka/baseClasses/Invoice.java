@@ -29,6 +29,7 @@ public class Invoice {
         this.reminderOfNmbr = reminderOfNmbr;
         this.clientNmbr = clientNmbr;
         this.workPerformanceNmbr = workPerformanceNmbr;
+        this.nmbrOfInvoices = nmbrOfInvoices;
     }
 
     public int getClientNmbr() {
