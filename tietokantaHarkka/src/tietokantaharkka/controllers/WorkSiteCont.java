@@ -70,9 +70,9 @@ public class WorkSiteCont {
                                               + "FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.tyokohdenumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            double d = resultSet.getDouble(4);
+            Double d = resultSet.getDouble(4);
             if (d.isNaN()) {
-               d = new double(0); 
+               d = new Double(0); 
             }
             wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
             con.commit();
@@ -109,9 +109,9 @@ public class WorkSiteCont {
                                               + "FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.asiakasnro = ? AND rownum = ?");
 	         pStatement.setInt(1, clientNmbr);
 		 pStatement.setInt(2, i+1);
-		 double d = resultSet.getDouble(4);
+		 Double d = resultSet.getDouble(4);
                      if (d.isNaN()) {
-                         d = new double(0); 
+                         d = new Double(0); 
                      }
 		 wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
 		 wSAL.add(wS);
@@ -151,9 +151,9 @@ public class WorkSiteCont {
                                               + "FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.osoitenumero = ? AND rownum = ?");
 	         pStatement.setInt(1, locationNmbr);
 		 pStatement.setInt(2, i+1);
-		 double d = resultSet.getDouble(4);
+		 Double d = resultSet.getDouble(4);
                      if (d.isNaN()) {
-                         d = new double(0); 
+                         d = new Double(0); 
                      }
 		 wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
 		 wSAL.add(wS);
