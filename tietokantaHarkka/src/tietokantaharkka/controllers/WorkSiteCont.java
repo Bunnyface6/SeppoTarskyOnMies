@@ -58,7 +58,9 @@ public class WorkSiteCont {
         }
     }   
     
-    public WorkSite findWorkSite(int nmbr, Connection con) throws SQLException {
+
+    //IDllä
+    public WorkSite findWorkSiteByNmbr(int nmbr, Connection con) throws SQLException {
         WorkSite wS = null;
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
@@ -88,7 +90,89 @@ public class WorkSiteCont {
         }
         return wS;
     }
+
+    //Asiakasnumerolla
+    public ArrayList<WorkSite> findWorkSiteByClientNmbr(int clientNmbr, Connection con) throws SQLException {
+        WorkSite wS = null;
+	ArrayList<WorkSite> wSAL = new ArrayList<WorkSite>();
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+	int rows = 0;
+        try {
+            con.setAutoCommit(false);
+	    pStatement = con.prepareStatement("SELECT COUNT(*) FROM tyokohde WHERE asiakasnro = ?");
+	    pStatement.setInt(1, clientNmbr);
+	    resultSet = pStatement.executeQuery();
+	    rows = resultSet.getInt(1);
+	    for (int i = 0; i < rows; i++) {
+	         pStatement = con.prepareStatement("SELECT tyokohde.tyokohdenumero, tyokohde.osoitenumero, tyokohde.asiakasnro, urakka.urakkahinta ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum "
+                                              + "FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.asiakasnro = ? AND rownum = ?");
+	         pStatement.setInt(1, clientNmbr);
+		 pStatement.setInt(2, i+1);
+		 Double d = resultSet.getDouble(4);
+                     if (d.isNaN()) {
+                         d = new Double(0); 
+                     }
+		 wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
+		 wSAL.add(wS);
+	    }
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return wSAL;
+    }
     
+
+    //osoitenumerolla
+    public ArrayList<WorkSite> findWorkSiteByLocationNmbr(int locationNmbr, Connection con) throws SQLException {
+        WorkSite wS = null;
+	ArrayList<WorkSite> wSAL = new ArrayList<WorkSite>();
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+	int rows = 0;
+        try {
+            con.setAutoCommit(false);
+	    pStatement = con.prepareStatement("SELECT COUNT(*) FROM tyokohde WHERE osoitenumero = ?");
+	    pStatement.setInt(1, locationNmbr);
+	    resultSet = pStatement.executeQuery();
+	    rows = resultSet.getInt(1);
+	    for (int i = 0; i < rows; i++) {
+	         pStatement = con.prepareStatement("SELECT tyokohde.tyokohdenumero, tyokohde.osoitenumero, tyokohde.asiakasnro, urakka.urakkahinta ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum "
+                                              + "FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.osoitenumero = ? AND rownum = ?");
+	         pStatement.setInt(1, locationNmbr);
+		 pStatement.setInt(2, i+1);
+		 Double d = resultSet.getDouble(4);
+                     if (d.isNaN()) {
+                         d = new Double(0); 
+                     }
+		 wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
+		 wSAL.add(wS);
+	    }
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return wSAL;
+    }
     //public WorkSite findWorkSite(int locationNmbr, int clientNmbr){
         //TODO Hae db.stä sekä palauta
     //}

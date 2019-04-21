@@ -253,7 +253,7 @@ public class ArticleCont {
 	//Jatka
     //}
 	
-    public Article removeClient(Article x, Connection con) throws SQLException{
+    public Article removeArticle(Article x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
         try {
             con.setAutoCommit(false);

@@ -46,7 +46,7 @@ public class CompanyClientCont {
             }
         }
     }
-
+	//Idllä
     public CompanyClient findCompanyClient(int nmbr, Connection con) throws SQLException{
         CompanyClient cC = null;
         PreparedStatement pStatement = null;
@@ -73,6 +73,71 @@ public class CompanyClientCont {
         return cC;
     }
     
+
+    //Nimellä
+    public ArrayList<CompanyClient> findCompanyClientByName(String name, Connection con) throws SQLException{
+        ArrayList<CompanyClient> cCAL = new ArrayList<CompanyClient>();
+	CompanyClient cC = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+	int rows = 0;
+        try {
+            con.setAutoCommit(false);
+	    pStatement = con.prepareStatement("SELECT COUNT(*) FROM yritys WHERE nimi = ?");
+	    pStatement.setString(1, name);
+	    resultSet = pStatement.executeQuery();
+	    rows = resultSet.getInt(1);
+	    for (int i = 0; i < rows; i++) {
+	         pStatement = con.prepareStatement("SELECT asiakasnumero, y-tunnus, nimi, ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum FROM yritys WHERE nimi = ? AND rownum = ?");
+	         pStatement.setString(1, name);
+		 pStatement.setInt(2, i+1);
+		 cC = createCompanyClient(resultSet.getString(3), resultSet.getInt(2), resultSet.getInt(1));
+		 cCAL.add(cC);
+	    }
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return cCAL;
+    }
+
+
+    //ytunnuksella
+    public CompanyClient findCompanyClientByYIdentifier(int yIdentifier, Connection con) throws SQLException{
+        CompanyClient cC = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT asiakasnumero, ytunnus, nimi FROM yritys WHERE ytunnus = ?");
+            pStatement.setInt(1, yIdentifier);
+            resultSet = pStatement.executeQuery();
+            cC = createCompanyClient(resultSet.getString(3), resultSet.getInt(2), resultSet.getInt(1));
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return cC;
+    }
+
     public CompanyClient removeCompanyClient(CompanyClient x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         try {
