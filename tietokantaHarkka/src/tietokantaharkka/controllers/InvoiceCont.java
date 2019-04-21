@@ -20,8 +20,8 @@ public class InvoiceCont {
     
     private Invoice lastUsed;
     
-    public Invoice createInvoice(Date finalPayDate, int ivNmbr, Date compDate, Date datePaid, int reminderNmbr) {
-        Invoice x = new Invoice(finalPayDate, ivNmbr, compDate, datePaid, reminderNmbr);
+    public Invoice createInvoice(Date finalPayDate, int ivNmbr, Date compDate, Date datePaid, int reminderNmbr, int clientNmbr, int workPerformanceNmbr) {
+        Invoice x = new Invoice(finalPayDate, ivNmbr, compDate, datePaid, reminderNmbr, clientNmbr, workPerformanceNmbr);
         recentInvoices.add(x);
         lastUsed = x;
         return x;

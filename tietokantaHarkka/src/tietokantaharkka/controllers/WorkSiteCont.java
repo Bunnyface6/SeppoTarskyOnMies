@@ -18,8 +18,8 @@ public class WorkSiteCont {
     
     private WorkSite lastUsed;
     
-    public WorkSite createWorkSite(int locationNmbr, int clientNmbr) {
-        WorkSite x = new WorkSite(locationNmbr, clientNmbr);
+    public WorkSite createWorkSite(int locationNmbr, int clientNmbr, int nmbr, double contractPrice) {
+        WorkSite x = new WorkSite(locationNmbr, clientNmbr, nmbr, contractPrice);
         recentWorkSites.add(x);
         lastUsed = x;
         return x;
@@ -27,18 +27,31 @@ public class WorkSiteCont {
 
     public void addNewWorkSite(WorkSite x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
         try {
             con.setAutoCommit(false);
-            pStatement = con.prepareStatement("INSERT INTO tyokohde(asiakasnro, osoitenumero) VALUES(?, ?)");
+            pStatement = con.prepareStatement("INSERT INTO tyokohde(asiakasnro, osoitenumero) VALUES(?, ?)", Statement.RETURN_GENERATED_KEYS);
             pStatement.setInt(1, x.getClientNmbr());
             pStatement.setInt(2, x.getLocationNmbr());
             pStatement.executeUpdate();
+            if (x.getContractPrice() > 0) {
+                resultSet = pStatement.getGeneratedKeys();
+                resultSet.last();
+                pStatement.clearParameters();
+                pStatement = con.prepareStatement("INSERT INTO urarakka(tyokohdenumero, urakkahinta) VALUES(?, ?)");
+                pStatement.setInt(1, resultSet.getInt(1));
+                pStatement.setDouble(2, x.getContractPrice());
+                pStatement.executeUpdate();
+            }
             con.commit();
         }
         catch(SQLException e) {
             con.rollback(); 
         }
         finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
             if (pStatement != null) {
                 pStatement.close();
             }
@@ -51,10 +64,15 @@ public class WorkSiteCont {
         ResultSet resultSet = null;
         try {
             con.setAutoCommit(false);
-            pStatement = con.prepareStatement("SELECT osoitenumero, asiakasnro FROM tyokohde WHERE tyokohdenumero = ?");
+            pStatement = con.prepareStatement("SELECT tyokohde.tyokohdenumero, tyokohde.osoitenumero, tyokohde.asiakasnro, urakka.urakkahinta "
+                                              + "FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.tyokohdenumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            wS = createWorkSite(resultSet.getInt(1), resultSet.getInt(2));
+            Double d = resultSet.getDouble(4);
+            if (d.isNaN()) {
+               d = new Double(0); 
+            }
+            wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
             con.commit();
         }
         catch(SQLException e) {
@@ -79,8 +97,12 @@ public class WorkSiteCont {
         PreparedStatement pStatement = null;
         try {
             con.setAutoCommit(false);
-            pStatement = con.prepareStatement("DELETE FROM tyokohde WHERE osoitenumero = ?");
-            pStatement.setInt(1, x.getLocationNmbr());
+            pStatement = con.prepareStatement("DELETE FROM urakka WHERE tyokohdenumero = ?");
+            pStatement.setInt(1, x.getNmbr());
+            pStatement.executeUpdate();
+            pStatement.clearParameters();
+            pStatement = con.prepareStatement("DELETE FROM tyokohde WHERE tyokohdenumero = ?");
+            pStatement.setInt(1, x.getNmbr());
             pStatement.executeUpdate();
             con.commit();
         }
