@@ -96,9 +96,9 @@ public class InvoiceGenerator {
        
        for(SoldArticle x : sA){
            try{
-            art = artCont.findArticle(x.getArticleNmbr(), con);
+            art = artCont.findArticleByNmbr(x.getArticleNmbr(), con);
 
-            artType = artTypeCont.findArticleType(art.getNmbr2(), con);
+            artType = artTypeCont.findArticleTypeByNmbr(art.getNmbr2(), con);
             
             double price = art.getSalePrice() * x.getNmbrOfSold();
             
