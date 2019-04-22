@@ -107,8 +107,8 @@ public class ArticleCont {
     }
 
 	// sisäänostolla
-    public Article findArticleByBuyIn(double buyIn, Connection con) throws SQLException {
-        Article a = null;
+    public ArrayList<Article> findArticleByBuyIn(double buyIn, Connection con) throws SQLException {
+        ArrayList<Article> a = new ArrayList<Article>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -118,8 +118,8 @@ public class ArticleCont {
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND sisaanostohinta = ?");
             pStatement.setDouble(1, buyIn);
             resultSet = pStatement.executeQuery();
-            if (resultSet.next()) {
-                a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            while (resultSet.next()) {
+                a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
             }
             con.commit();
         }
@@ -138,8 +138,8 @@ public class ArticleCont {
     }
 
 	//Varastolla
-    public Article findArticleByStorage(int storage, Connection con) throws SQLException {
-        Article a = null;
+    public ArrayList<Article> findArticleByStorage(int storage, Connection con) throws SQLException {
+        ArrayList<Article> a = new ArrayList<Article>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -149,8 +149,8 @@ public class ArticleCont {
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND varastotilanne = ?");
             pStatement.setInt(1, storage);
             resultSet = pStatement.executeQuery();
-            if (resultSet.next()) {
-                a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            while (resultSet.next()) {
+                a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
             }
             con.commit();
         }
@@ -169,8 +169,8 @@ public class ArticleCont {
     }
 
 	//Myyntihinnalla
-    public Article findArticleBySalePrice(double salePrice, Connection con) throws SQLException {
-        Article a = null;
+    public ArrayList<Article> findArticleBySalePrice(double salePrice, Connection con) throws SQLException {
+        ArrayList<Article> a = new ArrayList<Article>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -180,8 +180,8 @@ public class ArticleCont {
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND myyntihinta = ?");
             pStatement.setDouble(1, salePrice);
             resultSet = pStatement.executeQuery();
-            if (resultSet.next()) {
-                a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            while (resultSet.next()) {
+                a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
             }
             con.commit();
         }
@@ -200,8 +200,8 @@ public class ArticleCont {
     }
 
 	//Yksiköllä
-    public Article findArticleByUnit(String unit, Connection con) throws SQLException {
-        Article a = null;
+    public ArrayList<Article> findArticleByUnit(String unit, Connection con) throws SQLException {
+        ArrayList<Article> a = new ArrayList<Article>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -211,8 +211,8 @@ public class ArticleCont {
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND yksikko = ?");
             pStatement.setString(1, unit);
             resultSet = pStatement.executeQuery();
-            if (resultSet.next()) {
-                a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            while (resultSet.next()) {
+                a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
             }
             con.commit();
         }
@@ -232,8 +232,8 @@ public class ArticleCont {
 
 
     //Tyypillä
-    public Article findArticleByTypeName(String typeName, Connection con) throws SQLException {
-        Article a = null;
+    public ArrayList<Article> findArticleByTypeName(String typeName, Connection con) throws SQLException {
+        ArrayList<Article> a = new ArrayList<Article>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -243,8 +243,8 @@ public class ArticleCont {
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND tyyppi = ?");
             pStatement.setString(1, typeName);
             resultSet = pStatement.executeQuery();
-            if (resultSet.next()) {
-                a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
+            while (resultSet.next()) {
+                a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
             }
             con.commit();
         }
@@ -261,11 +261,7 @@ public class ArticleCont {
         }
         return a;
     }
-	
-    //public Article findClient(){
-	//Jatka
-    //}
-	
+    	
     public Article removeArticle(Article x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
         try {
