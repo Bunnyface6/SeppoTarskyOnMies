@@ -19,13 +19,105 @@ public class WorkPerformanceCont {
     
     private WorkPerformance lastUsed;
     
-    public WorkPerformance createWorkPerformance(int nmbr, int assistanceWork, int desingWork, int work, int discountPer, int workSiteNmbr) {
-        WorkPerformance x = new WorkPerformance(nmbr, assistanceWork, desingWork, work, discountPer, workSiteNmbr);
+    public WorkPerformance createWorkPerformance(int nmbr,int workSiteNmbr) {
+        WorkPerformance x = new WorkPerformance(nmbr, workSiteNmbr);
         recentWorkPerformances.add(x);
         lastUsed = x;
         return x;
     }
     
+    public void addNewWorkPerformance(WorkPerformance x, Connection con) throws SQLException {
+	PreparedStatement pStatement = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("INSERT INTO tyosuoritus(tyokohdenumero) VALUES(?)");
+            pStatement.setInt(1, x.getWorkSiteNmbr());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }    	
+    }
     
+    public WorkPerformance findWorkPerformanceByNmbr(int nmbr, Connection con) throws SQLException {
+        WorkPerformance wP = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT tyosuoritusnumero, tyokohdenumero FROM tyosuoritus WHERE tyosuoritusnumero = ?");
+            pStatement.setInt(1, nmbr);
+            resultSet = pStatement.executeQuery();
+            if (resultSet.next()) {
+                wP = createWorkPerformance(resultSet.getInt(1), resultSet.getInt(2));
+            }
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return wP;
+    }
     
+    public WorkPerformance findWorkPerformanceByWorkSiteNmbr(int nmbr, Connection con) throws SQLException {
+        WorkPerformance wP = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT tyosuoritusnumero, tyokohdenumero FROM tyosuoritus WHERE tyokohdenumero = ?");
+            pStatement.setInt(1, nmbr);
+            resultSet = pStatement.executeQuery();
+            if (resultSet.next()) {
+                wP = createWorkPerformance(resultSet.getInt(1), resultSet.getInt(2));
+            }
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return wP;
+    }
+    
+    public WorkPerformance removeWorkPerformance(WorkPerformance x, Connection con) throws SQLException{
+        PreparedStatement pStatement = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("DELETE FROM tyosuoritus WHERE tyosuoritusnumero = ?");
+            pStatement.setInt(1, x.getNmbr());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+            }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return x;    
+    }
 }
