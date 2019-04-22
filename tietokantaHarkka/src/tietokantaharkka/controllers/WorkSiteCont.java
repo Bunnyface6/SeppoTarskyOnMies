@@ -70,11 +70,13 @@ public class WorkSiteCont {
                                               + "FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.tyokohdenumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            Double d = resultSet.getDouble(4);
-            if (d.isNaN()) {
-               d = new Double(0); 
+            if (resultSet.next()) {
+                Double d = resultSet.getDouble(4);
+                if (d.isNaN()) {
+                    d = new Double(0); 
+                }
+                wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
             }
-            wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
             con.commit();
         }
         catch(SQLException e) {
