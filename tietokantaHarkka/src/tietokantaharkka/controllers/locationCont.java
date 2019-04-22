@@ -18,12 +18,11 @@ public class locationCont {
     private ArrayList<Location> recentLocations = new ArrayList<Location>();
     private Location lastUsed;
     
-    public Location createLocation(int nmbr,String address,int postNmbr,String city){
+    public Location createLocation(int nmbr, String address, int postNmbr, String city){
        Location x = new Location(nmbr, address, postNmbr, city);
        recentLocations.add(x);
        lastUsed = x;
        return x;
-        //TODO Luo uusi locaatio
     }
     
     public void addNewLocation(Location x, Connection con) throws SQLException{
@@ -33,7 +32,7 @@ public class locationCont {
             pStatement = con.prepareStatement("INSERT INTO osoite(katuosoite, postinumero, postitoimipaikka) VALUES(?, ?, ?)");
             pStatement.setString(1, x.getAddress());
             pStatement.setInt(2, x.getPostNmbr());
-	    pStatement.setInt(3, x.getCity());
+	    pStatement.setString(3, x.getCity());
             pStatement.executeUpdate();
             con.commit();
         }
@@ -46,10 +45,7 @@ public class locationCont {
             }
         }
     }
-    
-    public Location findLocation(int nmbr){
-        //TODO Hae db.stä sekä palauta
-    }
+        
     // Haku idllä
     public Location findLocationByNmbr(int nmbr, Connection con) throws SQLException {
         Location l = null;
@@ -60,7 +56,9 @@ public class locationCont {
             pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE osoitenumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),);
+            if (resultSet.next()) {
+                l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getString(4));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -78,8 +76,8 @@ public class locationCont {
     }
 
 	// Haku katuosoitteella
-    public Location findLocationByAddress(String address, Connection con) throws SQLException {
-        Location l = null;
+    public ArrayList<Location> findLocationByAddress(String address, Connection con) throws SQLException {
+        ArrayList<Location> l = new ArrayList<Location>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -87,7 +85,9 @@ public class locationCont {
             pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE katuosoite = ?");
             pStatement.setString(1, address);
             resultSet = pStatement.executeQuery();
-            l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),);
+            while (resultSet.next()) {
+                l.add(createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getString(4)));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -105,8 +105,8 @@ public class locationCont {
     }
 
 	//haku postinumerolla
-    public Location findLocationByPostNmbr(int postNmbr, Connection con) throws SQLException {
-        Location l = null;
+    public ArrayList<Location> findLocationByPostNmbr(int postNmbr, Connection con) throws SQLException {
+        ArrayList<Location> l = new ArrayList<Location>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -114,7 +114,9 @@ public class locationCont {
             pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE postinumero = ?");
             pStatement.setInt(1, postNmbr);
             resultSet = pStatement.executeQuery();
-            l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),);
+            while (resultSet.next()) {
+                l.add(createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getString(4)));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -131,8 +133,8 @@ public class locationCont {
         return l;
     }
 
-    public Location findLocationByCity(String city, Connection con) throws SQLException {
-        Location l = null;
+    public ArrayList<Location> findLocationByCity(String city, Connection con) throws SQLException {
+        ArrayList<Location> l = new ArrayList<Location>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -140,7 +142,9 @@ public class locationCont {
             pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE postitoimipaikka = ?");
             pStatement.setString(1, city);
             resultSet = pStatement.executeQuery();
-            l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4),);
+            while (resultSet.next()) {
+                l.add(createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getString(4)));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -162,7 +166,7 @@ public class locationCont {
         try {
             con.setAutoCommit(false);
             pStatement = con.prepareStatement("DELETE FROM osoite WHERE osoitenumero = ?");
-            pStatement.setInt(1, x.geNmbr());
+            pStatement.setInt(1, x.getNmbr());
             pStatement.executeUpdate();
             con.commit();
         }
@@ -176,5 +180,4 @@ public class locationCont {
         }
         return x;    
     }
-    
 }
