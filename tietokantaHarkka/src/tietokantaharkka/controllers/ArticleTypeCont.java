@@ -57,7 +57,9 @@ public class ArticleTypeCont {
             pStatement = con.prepareStatement("SELECT tyyppiyksikkonumero, tyyppi, yksikko FROM tyyppiyksikko WHERE tyyppiyksikkonumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            aT = createArticleType(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2));
+            if (resultSet.next()) {
+                aT = createArticleType(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -85,7 +87,9 @@ public class ArticleTypeCont {
             pStatement = con.prepareStatement("SELECT tyyppiyksikkonumero, tyyppi, yksikko FROM tyyppiyksikko WHERE yksikko = ?");
             pStatement.setString(1, unit);
             resultSet = pStatement.executeQuery();
-            aT = createArticleType(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2));
+            if (resultSet.next()) {
+                aT = createArticleType(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -113,7 +117,9 @@ public class ArticleTypeCont {
             pStatement = con.prepareStatement("SELECT tyyppiyksikkonumero, tyyppi, yksikko FROM tyyppiyksikko WHERE tyyppi = ?");
             pStatement.setString(1, typeName);
             resultSet = pStatement.executeQuery();
-            aT = createArticleType(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2));
+            if (resultSet.next()) {
+                aT = createArticleType(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2));
+            }
             con.commit();
         }
         catch(SQLException e) {
