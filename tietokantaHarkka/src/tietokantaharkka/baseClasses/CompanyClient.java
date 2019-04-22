@@ -13,8 +13,8 @@ public class CompanyClient extends Client{
     private String name;
     private int yIdentifier;
 
-    public CompanyClient(String name, int yIdentifier, int nmbr) {
-        super(nmbr);
+    public CompanyClient(String name, int yIdentifier, int nmbr, int locationNmbr) {
+        super(nmbr, locationNmbr);
         this.setName(name);
         this.yIdentifier = yIdentifier;
     }
