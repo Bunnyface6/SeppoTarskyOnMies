@@ -79,7 +79,7 @@ public class SoldArticleCont {
         }
     }
     public ArrayList<SoldArticle> findSoldArticles(int aNmbr, Connection con) throws SQLException {
-        ArrayList<SoldArticle> sA = null;
+        ArrayList<SoldArticle> sA = new ArrayList<SoldArticle>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -108,7 +108,7 @@ public class SoldArticleCont {
     }
     
     public ArrayList<SoldArticle> findSoldArticlesOfInvoice(int aNmbr, Connection con) throws SQLException {
-        ArrayList<SoldArticle> sA = null;
+        ArrayList<SoldArticle> sA = new ArrayList<SoldArticle>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
