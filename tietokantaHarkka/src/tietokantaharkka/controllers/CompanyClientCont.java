@@ -95,19 +95,17 @@ public class CompanyClientCont {
 	    pStatement = con.prepareStatement("SELECT COUNT(*) FROM yritys WHERE nimi = ?");
 	    pStatement.setString(1, name);
 	    resultSet = pStatement.executeQuery();
-	    if (resultSet.next()) {
-                rows = resultSet.getInt(1);
-	        for (int i = 0; i < rows; i++) {
-	            pStatement = con.prepareStatement("SELECT yritys.asiakasnumero, y-tunnus, nimi, asiakas.osoitenumero, ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum FROM yritys, asiakas WHERE asiakas.asiakasnumero = yritys.asiakasnumero AND nimi = ? AND rownum = ?");
-	            pStatement.setString(1, name);
-		    pStatement.setInt(2, i+1);
-                    resultSet = pStatement.executeQuery();
-                    if (resultSet.next()) {
-		       cC = createCompanyClient(resultSet.getString(3), resultSet.getInt(2), resultSet.getInt(1), resultSet.getInt(4));
-		       cCAL.add(cC);
-                    }
-                }
-	    }
+	    resultSet.next();
+            rows = resultSet.getInt(1);
+	    for (int i = 0; i < rows; i++) {
+	        pStatement = con.prepareStatement("SELECT yritys.asiakasnumero, y-tunnus, nimi, asiakas.osoitenumero, ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum FROM yritys, asiakas WHERE asiakas.asiakasnumero = yritys.asiakasnumero AND nimi = ? AND rownum = ?");
+	        pStatement.setString(1, name);
+		pStatement.setInt(2, i+1);
+                resultSet = pStatement.executeQuery();
+                resultSet.next();
+		cC = createCompanyClient(resultSet.getString(3), resultSet.getInt(2), resultSet.getInt(1), resultSet.getInt(4));
+		cCAL.add(cC);
+            }
             con.commit();
         }
         catch(SQLException e) {
