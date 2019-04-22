@@ -13,8 +13,8 @@ public class PrivateClient extends Client{
     private String fName;
     private String lName;
 
-    public PrivateClient(String fName, String lName, int nmbr) {
-        super(nmbr);
+    public PrivateClient(String fName, String lName, int nmbr, int locationNmbr) {
+        super(nmbr, locationNmbr);
         this.fName = fName;
         this.lName = lName;
     }
