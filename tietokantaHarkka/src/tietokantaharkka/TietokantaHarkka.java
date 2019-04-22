@@ -5,6 +5,8 @@
  */
 package tietokantaharkka;
 
+import theController.OverallController;
+import view.MainWindow;
 import view.testView;
 
 /**
@@ -17,7 +19,8 @@ public class TietokantaHarkka {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        testView.testUI();
+        MainWindow view = new MainWindow();
+        OverallController controller = new OverallController(view);
     }
     
 }
