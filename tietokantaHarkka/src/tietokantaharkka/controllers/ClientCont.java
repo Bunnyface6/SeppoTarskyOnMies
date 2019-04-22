@@ -69,7 +69,7 @@ public class ClientCont {
     }
     
     public ArrayList<Client> findClientByLocationNmbr(int nmbr, Connection con) throws SQLException {
-        ArrayList<Client> c = null;
+        ArrayList<Client> c = new ArrayList<Client>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
