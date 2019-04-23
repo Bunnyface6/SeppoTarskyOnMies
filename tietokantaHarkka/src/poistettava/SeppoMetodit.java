@@ -108,5 +108,5 @@ public class SeppoMetodit {
             con.rollback();
             return false;
         }
-   }
+    }
 }
