@@ -35,6 +35,7 @@ public class MainWindow extends javax.swing.JFrame {
         deleteButton = new javax.swing.JButton();
         editButton = new javax.swing.JButton();
         findButton = new javax.swing.JButton();
+        invoiceButton = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -54,6 +55,8 @@ public class MainWindow extends javax.swing.JFrame {
 
         findButton.setText("Etsi...");
         findButton.setToolTipText("");
+
+        invoiceButton.setText("Tulosta lasku");
 
         jMenu1.setText("File");
 
@@ -85,8 +88,9 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(editButton)
-                    .addComponent(deleteButton))
-                .addGap(0, 184, Short.MAX_VALUE))
+                    .addComponent(deleteButton)
+                    .addComponent(invoiceButton))
+                .addGap(0, 164, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(findButton)
@@ -103,7 +107,9 @@ public class MainWindow extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(editButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(deleteButton)))
+                        .addComponent(deleteButton)
+                        .addGap(38, 38, 38)
+                        .addComponent(invoiceButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addButton)
@@ -138,6 +144,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
     private javax.swing.JButton findButton;
+    private javax.swing.JButton invoiceButton;
     private javax.swing.JList<Object> jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
