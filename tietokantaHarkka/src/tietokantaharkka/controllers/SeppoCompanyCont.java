@@ -14,8 +14,39 @@ import java.util.Date;
  */
 public class SeppoCompanyCont {
     
-    public SeppoCompany seppoInfo() {
-        SeppoCompany seppo = new SeppoCompany();
+    public SeppoCompany seppoInfo(Connection con) throws SQLException {
+        SeppoCompany seppo = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT * FROM sepon_firma"); 
+            resultSet = pStatement.executeQuery();
+            if (resultSet.next()) {
+                seppo = new SeppoCompany(resultSet.getString(1),
+                                         resultSet.getInt(2),
+                                         resultSet.getString(3),
+                                         resultSet.getDouble(4),
+                                         resultSet.getDouble(5),
+                                         resultSet.getDouble(6),
+                                         resultSet.getInt(7),
+                                         resultSet.getInt(8),
+                                         resultSet.getDouble(9),
+                                         resultSet.getDouble(10));
+            }
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
         return seppo;
     };
     
