@@ -71,25 +71,144 @@ public class SeppoCompanyCont {
         }
     };
     public void modifyWorkVAT(double newWVAT, Connection con) throws SQLException {
-    
+        PreparedStatement pStatement = null;
+        SeppoCompany seppo = seppoInfo(con);
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("UPDATE sepon_firma SET tyoalv = ? WHERE tyoalv = ?");
+            pStatement.setDouble(1, newWVAT);
+            pStatement.setDouble(2, seppo.getWorkVAT());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+            }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
     };
     public void modifyArticleVAT(double newAVAT, Connection con) throws SQLException {
-    
+        PreparedStatement pStatement = null;
+        SeppoCompany seppo = seppoInfo(con);
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("UPDATE sepon_firma SET tarvikealv = ? WHERE tarvikealv = ?");
+            pStatement.setDouble(1, newAVAT);
+            pStatement.setDouble(2, seppo.getArticleVAT());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+            }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
     };
     public void modifyBookVAT(double newBVAT, Connection con) throws SQLException {
-    
+        PreparedStatement pStatement = null;
+        SeppoCompany seppo = seppoInfo(con);
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("UPDATE sepon_firma SET kirjaalv = ? WHERE kirjaalv = ?");
+            pStatement.setDouble(1, newBVAT);
+            pStatement.setDouble(2, seppo.getBookVAT());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+            }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
     };
     public void modifyCompanyFee(int newCompanyFee, Connection con) throws SQLException {
-    
+        PreparedStatement pStatement = null;
+        SeppoCompany seppo = seppoInfo(con);
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("UPDATE sepon_firma SET yrityskulu = ? WHERE yrityskulu = ?");
+            pStatement.setInt(1, newCompanyFee);
+            pStatement.setInt(2, seppo.getCompanyFee());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+            }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
     };
     public void modifyConsumerFee(int newConsumerFee, Connection con) throws SQLException {
-    
+        PreparedStatement pStatement = null;
+        SeppoCompany seppo = seppoInfo(con);
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("UPDATE sepon_firma SET kuluttajakulu = ? WHERE kuluttajakulu = ?");
+            pStatement.setInt(1, newConsumerFee);
+            pStatement.setInt(2, seppo.getConsumerFee());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+            }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
     };
     public void modifyConsumerInterest(double newConsumerInterest, Connection con) throws SQLException {
-    
+        PreparedStatement pStatement = null;
+        SeppoCompany seppo = seppoInfo(con);
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("UPDATE sepon_firma SET kuluttajakorko = ? WHERE kuluttajakorko = ?");
+            pStatement.setDouble(1, newConsumerInterest);
+            pStatement.setDouble(2, seppo.getConsumerInterest());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+            }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
     };
     public void modifyCompanyInterest(double newCompanyInterest, Connection con) throws SQLException {
-    
+        PreparedStatement pStatement = null;
+        SeppoCompany seppo = seppoInfo(con);
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("UPDATE sepon_firma SET yrityskorko = ? WHERE yrityskorko = ?");
+            pStatement.setDouble(1, newCompanyInterest);
+            pStatement.setDouble(2, seppo.getCompanyInterest());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+            }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
     };
     public void modifySeppo(){};
 }
