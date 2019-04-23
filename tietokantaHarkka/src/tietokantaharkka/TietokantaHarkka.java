@@ -7,7 +7,6 @@ package tietokantaharkka;
 
 import theController.OverallController;
 import view.MainWindow;
-import view.testView;
 
 /**
  *
