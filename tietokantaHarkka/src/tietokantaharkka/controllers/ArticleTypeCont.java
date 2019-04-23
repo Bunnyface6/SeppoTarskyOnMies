@@ -78,8 +78,8 @@ public class ArticleTypeCont {
 
 
     //Yksiköllä
-    public ArticleType findArticleTypeByUnit(String unit, Connection con) throws SQLException{
-        ArticleType aT = null;
+    public ArrayList<ArticleType> findArticleTypeByUnit(String unit, Connection con) throws SQLException{
+        ArrayList<ArticleType> aT = new ArrayList<ArticleType>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -87,8 +87,8 @@ public class ArticleTypeCont {
             pStatement = con.prepareStatement("SELECT tyyppiyksikkonumero, tyyppi, yksikko FROM tyyppiyksikko WHERE yksikko = ?");
             pStatement.setString(1, unit);
             resultSet = pStatement.executeQuery();
-            if (resultSet.next()) {
-                aT = createArticleType(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2));
+            while (resultSet.next()) {
+                aT.add(createArticleType(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2)));
             }
             con.commit();
         }

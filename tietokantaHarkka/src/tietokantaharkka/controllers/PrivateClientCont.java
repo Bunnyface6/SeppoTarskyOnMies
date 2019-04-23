@@ -19,8 +19,8 @@ public class PrivateClientCont {
     
     private PrivateClient lastUsed;
     
-    public PrivateClient createPrivateClient(String fName, String lName, int pCNmbr) {
-        PrivateClient x = new PrivateClient(fName, lName, pCNmbr);
+    public PrivateClient createPrivateClient(String fName, String lName, int pCNmbr, int locationNmbr) {
+        PrivateClient x = new PrivateClient(fName, lName, pCNmbr, locationNmbr);
         recentPrivateClients.add(x);
         lastUsed = x;
         return x;
@@ -28,10 +28,17 @@ public class PrivateClientCont {
     
     public void addNewPrivateClient(PrivateClient x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
         try {
             con.setAutoCommit(false);
+            pStatement = con.prepareStatement("INSERT INTO asiakas(osoitenumero) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+            pStatement.setInt(1, x.getLocationNmbr());
+            pStatement.executeUpdate();
+            resultSet = pStatement.getGeneratedKeys();
+            resultSet.last();
+            pStatement.clearParameters();
             pStatement = con.prepareStatement("INSERT INTO henkilo VALUES(?, ?, ?)");
-            pStatement.setInt(1, x.getNmbr());
+            pStatement.setInt(1, resultSet.getInt(1));
             pStatement.setString(2, x.getfName());
             pStatement.setString(2, x.getlName());
             pStatement.executeUpdate();
@@ -54,10 +61,12 @@ public class PrivateClientCont {
         ResultSet resultSet = null;
         try {
             con.setAutoCommit(false);
-            pStatement = con.prepareStatement("SELECT asiakasnumero, etunimi, sukunimi FROM henkilo WHERE asiakasnumero = ?");
+            pStatement = con.prepareStatement("SELECT henkilo.asiakasnumero, etunimi, sukunimi, asiakas.osoitenumero FROM henkilo, asiakas WHERE asiakas.asiakasnumero = henkilo.asiakasnumero AND henkilo.asiakasnumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            pC = createPrivateClient(resultSet.getString(2), resultSet.getString(3), resultSet.getInt(1));
+            if (resultSet.next()) {
+                pC = createPrivateClient(resultSet.getString(2), resultSet.getString(3), resultSet.getInt(1), resultSet.getInt(4));
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -85,14 +94,17 @@ public class PrivateClientCont {
 	    pStatement = con.prepareStatement("SELECT COUNT(*) FROM henkilo WHERE etunimi = ?");
 	    pStatement.setString(1, fName);
 	    resultSet = pStatement.executeQuery();
+            resultSet.next();
 	    rows = resultSet.getInt(1);
 	    for (int i = 0; i < rows; i++) {
-	         pStatement = con.prepareStatement("SELECT asiakasnumero, etunimi, sukunimi, ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum FROM henkilo WHERE etunimi = ? AND rownum = ?");
-	         pStatement.setString(1, fName);
-		 pStatement.setInt(2, i+1);
-		 pC = createPrivateClient(resultSet.getString(2), resultSet.getString(3), resultSet.getInt(1));
-		 pCAL.add(pC);
-	    }
+	        pStatement = con.prepareStatement("SELECT asiakasnumero, etunimi, sukunimi, asiakas.osoitenumero, ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum FROM henkilo, asiakas WHERE asiakas.asiakasnumero = henkilo.asiakasnumero AND etunimi = ? AND rownum = ?");
+	        pStatement.setString(1, fName);
+		pStatement.setInt(2, i+1);
+                resultSet = pStatement.executeQuery();
+                resultSet.next();
+		pC = createPrivateClient(resultSet.getString(2), resultSet.getString(3), resultSet.getInt(1), resultSet.getInt(4));
+		pCAL.add(pC);
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -121,14 +133,17 @@ public class PrivateClientCont {
 	    pStatement = con.prepareStatement("SELECT COUNT(*) FROM henkilo WHERE sukunimi = ?");
 	    pStatement.setString(1, lName);
 	    resultSet = pStatement.executeQuery();
+            resultSet.next();
 	    rows = resultSet.getInt(1);
 	    for (int i = 0; i < rows; i++) {
-	         pStatement = con.prepareStatement("SELECT asiakasnumero, etunimi, sukunimi, ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum FROM henkilo WHERE sukunimi = ? AND rownum = ?");
-	         pStatement.setString(1, lName);
-		 pStatement.setInt(2, i+1);
-		 pC = createPrivateClient(resultSet.getString(2), resultSet.getString(3), resultSet.getInt(1));
-		 pCAL.add(pC);
-	    }
+	        pStatement = con.prepareStatement("SELECT henkilo.asiakasnumero, etunimi, sukunimi, asiakas.osoitenumero, ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum FROM henkilo, asiakas WHERE asiakas.asiakasnumero = henkilo.asiakasnumero AND sukunimi = ? AND rownum = ?");
+	        pStatement.setString(1, lName);
+		pStatement.setInt(2, i+1);
+                resultSet = pStatement.executeQuery();
+                resultSet.next();
+		pC = createPrivateClient(resultSet.getString(2), resultSet.getString(3), resultSet.getInt(1), resultSet.getInt(4));
+		pCAL.add(pC);
+            }
             con.commit();
         }
         catch(SQLException e) {
@@ -150,6 +165,10 @@ public class PrivateClientCont {
         try {
             con.setAutoCommit(false);
             pStatement = con.prepareStatement("DELETE FROM henkilo WHERE asiakasnumero = ?");
+            pStatement.setInt(1, x.getNmbr());
+            pStatement.executeUpdate();
+            pStatement.clearParameters();
+            pStatement = con.prepareStatement("DELETE FROM asiakas WHERE asiakasnumero = ?");
             pStatement.setInt(1, x.getNmbr());
             pStatement.executeUpdate();
             con.commit();
