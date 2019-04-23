@@ -50,28 +50,46 @@ public class SeppoCompanyCont {
         return seppo;
     };
     
-    public void modifyAddress(String address){
+    public void modifyAddress(String newAddress, Connection con) throws SQLException {
+        PreparedStatement pStatement = null;
+        SeppoCompany seppo = seppoInfo(con);
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("UPDATE sepon_firma SET osoite = '?' WHERE osoite = '?'");
+            pStatement.setString(1, newAddress);
+            pStatement.setString(2, seppo.getAddress());
+            pStatement.executeUpdate();
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+            }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+    };
+    public void modifyWorkVAT(double newWVAT, Connection con) throws SQLException {
     
     };
-    public void modifyWorkVAT(double newWVAT){
+    public void modifyArticleVAT(double newAVAT, Connection con) throws SQLException {
     
     };
-    public void modifyArticleVAT(double newAVAT){
+    public void modifyBookVAT(double newBVAT, Connection con) throws SQLException {
     
     };
-    public void modifyBookVAT(double newBVAT){
+    public void modifyCompanyFee(int newCompanyFee, Connection con) throws SQLException {
     
     };
-    public void modifyCompanyFee(int newCompanyFee){
+    public void modifyConsumerFee(int newConsumerFee, Connection con) throws SQLException {
     
     };
-    public void modifyConsumerFee(int newConsumerFee){
+    public void modifyConsumerInterest(double newConsumerInterest, Connection con) throws SQLException {
     
     };
-    public void modifyConsumerInterest(double newConsumerInterest){
+    public void modifyCompanyInterest(double newCompanyInterest, Connection con) throws SQLException {
     
     };
-    public void modifyCompanyInterest(double newCompanyInterest){
-    
-    };
+    public void modifySeppo(){};
 }
