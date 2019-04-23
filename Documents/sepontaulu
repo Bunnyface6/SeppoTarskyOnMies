@@ -1,0 +1,13 @@
+CREATE TABLE sepon_firma (
+	nimi VARCHAR(30) NOT NULL,
+	ytunnus INT NOT NULL,
+	osoite VARCHAR(50) NOT NULL,
+	tyoalv DECIMAL(3,2) NOT NULL,
+	tarvikealv DECIMAL(3, 2) NOT NULL,
+	kirjaalv DECIMAL(3, 2) NOT NULL,
+	kuluttajakulu INT NOT NULL,
+	yrityskulu INT NOT NULL,
+	yrityskorko DECIMAL(3, 2) NOT NULL,
+	kuluttajakorko DECIMAL(3, 2) NOT NULL,
+	PRIMARY KEY (nimi)
+);
