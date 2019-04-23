@@ -1,0 +1,13 @@
+CREATE TABLE lasku_paiva (
+	erapaiva DATE,
+	paivays DATE,
+	laskutunnus INT NOT NULL,
+	PRIMARY KEY (laskutunnus),
+	FOREIGN KEY (laskutunnus) REFERENCES lasku(laskutunnus)
+);
+
+ALTER TABLE lasku DROP erapaiva;
+ALTER TABLE lasku DROP paivamaara;
+ALTER TABLE hinnoiteltu_tyosuoritus ADD paivamaara DATE NOT NULL;
+
+Sepon tauluun tiedot sisään.
