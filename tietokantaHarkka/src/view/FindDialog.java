@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package theController;
+package view;
 
 import java.awt.event.ActionListener;
 
@@ -149,7 +149,7 @@ public class FindDialog extends javax.swing.JDialog {
      * @param args the command line arguments
      */
 
-    javax.swing.DefaultComboBoxModel<String> laskuM = new javax.swing.DefaultComboBoxModel<String>(new String[] { "Tunnus", "Päivämäärä", "Työkohdenumero", "Asiakasnumero", "Kaikki maksamattomat" });
+    javax.swing.DefaultComboBoxModel<String> laskuM = new javax.swing.DefaultComboBoxModel<String>(new String[] { "Tunnus", "Päivämäärä", "Työkohdenumero", "Asiakasnumero", "Kaikki maksamattomat", "Lähettämättömät" });
     javax.swing.DefaultComboBoxModel<String> tarvikeM = new javax.swing.DefaultComboBoxModel<String>(new String[] { "Tunnus", "Nimi", "Varastotilanne"});
     javax.swing.DefaultComboBoxModel<String> tyokohdeM = new javax.swing.DefaultComboBoxModel<String>(new String[] {"Tunnus", "Asiakas", "Osoite", "Laskuttamaton"});
     javax.swing.DefaultComboBoxModel<String> yAsiakasM = new javax.swing.DefaultComboBoxModel<String>(new String[] { "Tunnus", "Nimi", "Maksamattomia laskuja" });
