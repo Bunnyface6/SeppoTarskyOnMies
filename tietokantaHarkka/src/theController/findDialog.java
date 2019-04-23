@@ -5,6 +5,8 @@
  */
 package theController;
 
+import java.awt.event.ActionListener;
+
 /**
  *
  * @author Cassu
@@ -34,6 +36,8 @@ public class findDialog extends javax.swing.JDialog {
         howBox = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         findDialogButton = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        searchBox = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -57,6 +61,8 @@ public class findDialog extends javax.swing.JDialog {
 
         findDialogButton.setText("Etsi");
 
+        jLabel3.setText("Hakuehdot");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -72,8 +78,10 @@ public class findDialog extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(findDialogButton)))
-                .addContainerGap(240, Short.MAX_VALUE))
+                        .addComponent(findDialogButton))
+                    .addComponent(jLabel3)
+                    .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(161, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -86,7 +94,11 @@ public class findDialog extends javax.swing.JDialog {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(howBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(findDialogButton))
@@ -118,7 +130,12 @@ public class findDialog extends javax.swing.JDialog {
         }
             
     }//GEN-LAST:event_whatBoxItemStateChanged
-
+    public void setListener(ActionListener x){
+        
+        findDialogButton.addActionListener(x);
+        
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -135,6 +152,8 @@ public class findDialog extends javax.swing.JDialog {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JTextField searchBox;
     private javax.swing.JComboBox<String> whatBox;
     // End of variables declaration//GEN-END:variables
 }

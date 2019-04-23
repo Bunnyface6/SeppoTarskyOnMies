@@ -22,7 +22,6 @@ public class OverallController {
     private JList list;
     private MainWindow win;
     private ModelList model;
-    private JDialog curDialog;
     
     public OverallController(MainWindow y){
         
@@ -38,7 +37,8 @@ public class OverallController {
         
         @Override
         public void actionPerformed(ActionEvent e){
-            curDialog = new findDialog(win, true);
+            findDialog curDialog = new findDialog(win, true);
+            curDialog.setListener(new findDialogListener());
             curDialog.show();
         }
         
@@ -63,6 +63,14 @@ public class OverallController {
     }
     
     class addListener implements ActionListener{
+        
+        @Override
+        public void actionPerformed(ActionEvent e){
+            
+        }
+        
+    }
+    class findDialogListener implements ActionListener{
         
         @Override
         public void actionPerformed(ActionEvent e){
