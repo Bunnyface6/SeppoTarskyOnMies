@@ -194,4 +194,51 @@ public class InvoiceCont {
         }
         return x;    
     }
+    
+    public boolean updateCompDateFinalPayDate(Invoice x, Connection con) throws SQLException {
+        PreparedStatement pStatement = null;
+        boolean oK = false;
+        try {
+            pStatement = con.prepareStatement("UPDATE lasku SET paivamaara = ?, erapaiva = ? WHERE laskutunnus = ?");
+            pStatement.setDate(1, new java.sql.Date(x.getCompDate().getTime()));
+            pStatement.setDate(2, new java.sql.Date(x.getFinalPayDate().getTime()));
+            pStatement.setInt(3, x.getIvNmbr());
+            int rV = pStatement.executeUpdate();
+            if (rV == 1) {
+                oK = true;
+            }
+        }
+        catch(SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return oK;        
+    }
+    
+     public boolean updateDatePaid(Invoice x, Connection con) throws SQLException {
+        PreparedStatement pStatement = null;
+        boolean oK = false;
+        try {
+            pStatement = con.prepareStatement("UPDATE lasku SET maksupaiva = ? WHERE laskutunnus = ?");
+            pStatement.setDate(1, new java.sql.Date(x.getDatePaid().getTime()));
+            pStatement.setInt(2, x.getIvNmbr());
+            int rV = pStatement.executeUpdate();
+            if (rV == 1) {
+                oK = true;
+            }
+        }
+        catch(SQLException e) {
+            throw new SQLException(e.getMessage());
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return oK;        
+    }
 }

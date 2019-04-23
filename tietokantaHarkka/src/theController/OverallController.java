@@ -5,8 +5,11 @@
  */
 package theController;
 
+import view.FindDialog;
 import helpers.*;
 import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -71,7 +74,9 @@ public class OverallController {
         
         @Override
         public void actionPerformed(ActionEvent e){
-            
+            AddMainDialog dial = new AddMainDialog(win, true);
+            dial.addListeners(new addContinueButton());
+            dial.show();
         }
         
     }
@@ -94,9 +99,37 @@ public class OverallController {
             
             Component comp = (Component) e.getSource();
             AddMainDialog dial = (AddMainDialog) SwingUtilities.getRoot(comp);
-            
-            
+            String str = (String)dial.getValues();
+            //Työkohde, Kuluttaja asiakas, Yritysasiakas, Tarvike
+            if(str.equals("Työkohde")){
+                
+                AddWorkSiteView ndial = new AddWorkSiteView(win, true);
+                ndial.show();
+                dial.dispose();
+            }
+            if(str.equals("Kuluttaja-asiakas")){
+                
+                
+                
+            }
+            if(str.equals("Yritysasiakas")){
+                
+                
+            }
+            if(str.equals("Tarvike")){
+                
+                
+            }
         }
+        
+    }
+    class addLocationButton implements ActionListener{
+        
+        @Override
+         public void actionPerformed(ActionEvent e){
+            Component comp = (Component) e.getSource();
+            
+         }
         
     }
 

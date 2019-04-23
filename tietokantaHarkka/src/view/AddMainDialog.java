@@ -39,7 +39,7 @@ public class AddMainDialog extends javax.swing.JDialog {
 
         jLabel1.setText("Mitä lisätään?");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Työkohde", "Kuluttaja asiakas", "Yritysasiakas", "Tarvike" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Työkohde", "Kuluttaja-asiakas", "Yritysasiakas", "Tarvike" }));
 
         jButton1.setText("Peruuta");
         jButton1.addActionListener(new java.awt.event.ActionListener() {

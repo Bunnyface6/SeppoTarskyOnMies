@@ -78,7 +78,7 @@
             <StringItem index="1" value="Ty&#xf6;kohde"/>
             <StringItem index="2" value="Tarvike"/>
             <StringItem index="3" value="Yritysasiakas"/>
-            <StringItem index="4" value="Kuluttaja asiakas"/>
+            <StringItem index="4" value="Kuluttaja-asiakas"/>
           </StringArray>
         </Property>
       </Properties>
