@@ -19,15 +19,19 @@ public class SeppoMetodit {
     private PrivateClientCont pCC;
     private CompanyClientCont cCC;
     private WorkSiteCont wSC;
+    private WorkPerformanceCont wPC;
+    private PerformedWorkCont pVC;
 
     public SeppoMetodit() {
         this.lC = new LocationCont();
         this.pCC = new PrivateClientCont();
         this.cCC = new CompanyClientCont();
         this.wSC = new WorkSiteCont();
+        this.wPC = new WorkPerformanceCont();
+        this.pVC = new PerformedWorkCont();
     }
     
-    public boolean addClient(String fName, String lName, String address, int zipCode, String city, Connection con) {
+    public boolean addClient(String fName, String lName, String address, int zipCode, String city, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
             Location l = new Location(0, address, zipCode, city);
@@ -70,8 +74,8 @@ public class SeppoMetodit {
             else {
                 l = new Location(0, address, zipCode, city);
                 int lN = lC.addNewLocation(l, con);
-                WorkSite wS = new WorkSite(lN, x.getNmbr(), 0, contractPrice);
-                wSC.addNewWorkSite(wS, con);
+                WorkSite wS2 = new WorkSite(lN, x.getNmbr(), 0, contractPrice);
+                wSC.addNewWorkSite(wS2, con);
             }
             con.commit();
             return true;
@@ -81,4 +85,28 @@ public class SeppoMetodit {
             return false;
         }
     }
+    
+    public boolean addHourstoWorkPerformaceofWorkSite(WorkSite x, String wType, int nOHours, int disc, Connection con) throws SQLException {
+        try {
+            con.setAutoCommit(false);
+            WorkPerformance w = wPC.findWorkPerformanceByWorkSiteNmbr(x.getNmbr(), con);
+            if (w != null) {
+                PerformedWork p = new PerformedWork(wType, w.getNmbr(), nOHours, disc);
+                pVC.addNewPerformedWork(p, con);
+            }
+            else {
+                w = new WorkPerformance(0, x.getNmbr());
+                wPC.addNewWorkPerformance(w, con);
+                w = wPC.findWorkPerformanceByWorkSiteNmbr(w.getWorkSiteNmbr(), con);
+                PerformedWork p2 = new PerformedWork(wType, w.getNmbr(), nOHours, disc);
+                pVC.addNewPerformedWork(p2, con);
+            }
+            con.commit();
+            return true;
+        }
+        catch(SQLException e) {
+            con.rollback();
+            return false;
+        }
+   }
 }
