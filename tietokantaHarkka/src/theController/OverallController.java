@@ -8,6 +8,7 @@ package theController;
 import view.FindDialog;
 import helpers.*;
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Window;
@@ -104,8 +105,9 @@ public class OverallController {
             if(str.equals("Työkohde")){
                 
                 AddWorkSiteView ndial = new AddWorkSiteView(win, true);
-                ndial.show();
                 dial.dispose();
+                ndial.addListeners(new addLocationButtonFromWS(), new addLocationButtonFromWS());
+                ndial.show();
             }
             if(str.equals("Kuluttaja-asiakas")){
                 
@@ -123,14 +125,39 @@ public class OverallController {
         }
         
     }
-    class addLocationButton implements ActionListener{
+    class addLocationButtonFromWS implements ActionListener{
         
         @Override
          public void actionPerformed(ActionEvent e){
             Component comp = (Component) e.getSource();
             
+            AddWorkSiteView dial = (AddWorkSiteView)SwingUtilities.getRoot(comp);
+            
+            AddLocationView locDial = new AddLocationView(win, true);
+            
+            locDial.setComponent(dial.getTextBox());
+            
+            locDial.show();
+         }
+    }
+    
+    class saveLocationButton implements ActionListener{
+        
+         @Override
+         public void actionPerformed(ActionEvent e){
+             
+             Component comp = (Component) e.getSource();
+             
+             AddLocationView dial = (AddLocationView)SwingUtilities.getRoot(comp);
+             
+             
+             
          }
         
+        
+        
     }
+    
+    
 
 }
