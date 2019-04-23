@@ -70,11 +70,13 @@ public class WorkSiteCont {
                                               + "FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.tyokohdenumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            Double d = resultSet.getDouble(4);
-            if (d.isNaN()) {
-               d = new Double(0); 
+            if (resultSet.next()) {
+                Double d = resultSet.getDouble(4);
+                if (d.isNaN()) {
+                    d = new Double(0); 
+                }
+                wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
             }
-            wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
             con.commit();
         }
         catch(SQLException e) {
@@ -103,12 +105,15 @@ public class WorkSiteCont {
 	    pStatement = con.prepareStatement("SELECT COUNT(*) FROM tyokohde WHERE asiakasnro = ?");
 	    pStatement.setInt(1, clientNmbr);
 	    resultSet = pStatement.executeQuery();
-	    rows = resultSet.getInt(1);
+            resultSet.next();
+            rows = resultSet.getInt(1);
 	    for (int i = 0; i < rows; i++) {
 	         pStatement = con.prepareStatement("SELECT tyokohde.tyokohdenumero, tyokohde.osoitenumero, tyokohde.asiakasnro, urakka.urakkahinta ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum "
                                               + "FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.asiakasnro = ? AND rownum = ?");
 	         pStatement.setInt(1, clientNmbr);
 		 pStatement.setInt(2, i+1);
+                 resultSet = pStatement.executeQuery();
+                 resultSet.next();
 		 Double d = resultSet.getDouble(4);
                      if (d.isNaN()) {
                          d = new Double(0); 
@@ -145,12 +150,15 @@ public class WorkSiteCont {
 	    pStatement = con.prepareStatement("SELECT COUNT(*) FROM tyokohde WHERE osoitenumero = ?");
 	    pStatement.setInt(1, locationNmbr);
 	    resultSet = pStatement.executeQuery();
+            resultSet.next();
 	    rows = resultSet.getInt(1);
 	    for (int i = 0; i < rows; i++) {
 	         pStatement = con.prepareStatement("SELECT tyokohde.tyokohdenumero, tyokohde.osoitenumero, tyokohde.asiakasnro, urakka.urakkahinta ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum "
                                               + "FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.osoitenumero = ? AND rownum = ?");
 	         pStatement.setInt(1, locationNmbr);
 		 pStatement.setInt(2, i+1);
+                 resultSet = pStatement.executeQuery();
+                 resultSet.next();
 		 Double d = resultSet.getDouble(4);
                      if (d.isNaN()) {
                          d = new Double(0); 

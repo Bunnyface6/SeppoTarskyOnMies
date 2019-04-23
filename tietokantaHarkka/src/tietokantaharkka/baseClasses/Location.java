@@ -15,7 +15,7 @@ public class Location {
     private int postNmbr;
     private String city;
 
-    public Location(int nmbr, String address, int postNmbr, String city, int clientNmbr) {
+    public Location(int nmbr, String address, int postNmbr, String city) {
         this.nmbr = nmbr;
         this.address = address;
         this.postNmbr = postNmbr;

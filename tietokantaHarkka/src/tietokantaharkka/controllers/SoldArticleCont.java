@@ -79,7 +79,7 @@ public class SoldArticleCont {
         }
     }
     public ArrayList<SoldArticle> findSoldArticles(int aNmbr, Connection con) throws SQLException {
-        ArrayList<SoldArticle> sA = null;
+        ArrayList<SoldArticle> sA = new ArrayList<SoldArticle>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -108,7 +108,7 @@ public class SoldArticleCont {
     }
     
     public ArrayList<SoldArticle> findSoldArticlesOfInvoice(int aNmbr, Connection con) throws SQLException {
-        ArrayList<SoldArticle> sA = null;
+        ArrayList<SoldArticle> sA = new ArrayList<SoldArticle>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -184,5 +184,31 @@ public class SoldArticleCont {
             }
         }
         return x;    
+    }
+    
+    public boolean updateDiscount(SoldArticle x, Connection con) throws SQLException {
+        PreparedStatement pStatement = null;
+        boolean oK = false;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("UPDATE myyty_tarvike SET alennusprosentti = ? WHERE laskutunnus = ? AND tarvikenumero = ?");
+            pStatement.setInt(1, x.getDiscountPer());
+            pStatement.setInt(2, x.getInvoiceNmbr());
+            pStatement.setInt(3, x.getArticleNmbr());
+            int rV = pStatement.executeUpdate();
+            if (rV == 1) {
+                oK = true;
+            }
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return oK;        
     }
 }
