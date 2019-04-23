@@ -21,6 +21,7 @@ public class SeppoMetodit {
     private WorkSiteCont wSC;
     private WorkPerformanceCont wPC;
     private PerformedWorkCont pVC;
+    private InvoiceCont iC;
 
     public SeppoMetodit() {
         this.lC = new LocationCont();
@@ -29,6 +30,7 @@ public class SeppoMetodit {
         this.wSC = new WorkSiteCont();
         this.wPC = new WorkPerformanceCont();
         this.pVC = new PerformedWorkCont();
+        this.iC = new InvoiceCont();
     }
     
     public boolean addClient(String fName, String lName, String address, int zipCode, String city, Connection con) throws SQLException {
@@ -100,7 +102,22 @@ public class SeppoMetodit {
                 w = wPC.findWorkPerformanceByWorkSiteNmbr(w.getWorkSiteNmbr(), con);
                 PerformedWork p2 = new PerformedWork(wType, w.getNmbr(), nOHours, disc);
                 pVC.addNewPerformedWork(p2, con);
+                Invoice i = new Invoice(null, 0, null, null, 1, 0, x.getClientNmbr(), w.getNmbr());
+                iC.addNewInvoice(i, con);
             }
+            con.commit();
+            return true;
+        }
+        catch(SQLException e) {
+            con.rollback();
+            return false;
+        }
+    }
+    // Kesken
+    public boolean addArticleToWorksite(WorkSite x, Article a, Connection con) throws SQLException {
+        try {
+            con.setAutoCommit(false);
+            WorkPerformance w
             con.commit();
             return true;
         }
