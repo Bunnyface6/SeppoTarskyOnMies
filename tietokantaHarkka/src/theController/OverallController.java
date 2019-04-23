@@ -6,11 +6,15 @@
 package theController;
 
 import helpers.*;
+import java.awt.Component;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JDialog;
 import javax.swing.JList;
 import view.*;
+import java.sql.*;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -18,13 +22,14 @@ import view.*;
  */
 public class OverallController {
     
-        
+    private Connection con;
     private JList list;
     private MainWindow win;
     private ModelList model;
     
-    public OverallController(MainWindow y){
+    public OverallController(MainWindow y, Connection con2){
         
+        this.con = con2;
         win = y;
         list = win.getList();
         model = new ModelList();
@@ -37,7 +42,7 @@ public class OverallController {
         
         @Override
         public void actionPerformed(ActionEvent e){
-            findDialog curDialog = new findDialog(win, true);
+            FindDialog curDialog = new FindDialog(win, true);
             curDialog.setListener(new findDialogListener());
             curDialog.show();
         }
@@ -74,7 +79,8 @@ public class OverallController {
         
         @Override
         public void actionPerformed(ActionEvent e){
-            
+            Component comp = (Component) e.getSource();
+            FindDialog dial = (FindDialog) SwingUtilities.getRoot(comp);
         }
         
     }

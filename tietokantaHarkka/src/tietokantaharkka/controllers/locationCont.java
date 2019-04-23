@@ -12,7 +12,7 @@ import tietokantaharkka.baseClasses.Location;
  *
  * @author Cassu
  */
-public class locationCont {
+public class LocationCont {
     
     // Ei varmuutta tarvitaanko ArrayListia, tehty varalle.
     private ArrayList<Location> recentLocations = new ArrayList<Location>();
