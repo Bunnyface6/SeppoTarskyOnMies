@@ -169,6 +169,34 @@ public class LocationCont {
         }
         return l;
     }
+    
+    public Location findLocation(String address, int zipCode, String city, Connection con) throws SQLException {
+        Location l = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE katuosoite = ? AND postinumero = ? AND postitoimipaikka = ?");
+            pStatement.setString(3, city);
+            resultSet = pStatement.executeQuery();
+            if (resultSet.next()) {
+                l = createLocation(resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3), resultSet.getString(4));
+            }
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return l;
+    }
 
     public Location removeLocation(Location x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
