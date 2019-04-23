@@ -5,6 +5,7 @@
  */
 package tietokantaharkka;
 
+import dBConnection.dBConnection;
 import theController.OverallController;
 import view.MainWindow;
 
@@ -18,8 +19,9 @@ public class TietokantaHarkka {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        dBConnection connect = new dBConnection();
         MainWindow view = new MainWindow();
-        OverallController controller = new OverallController(view);
+        OverallController controller = new OverallController(view, connect.createConnection());
     }
     
 }

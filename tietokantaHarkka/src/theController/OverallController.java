@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JDialog;
 import javax.swing.JList;
 import view.*;
+import java.sql.*;
 
 /**
  *
@@ -18,13 +19,14 @@ import view.*;
  */
 public class OverallController {
     
-        
+    private Connection con;
     private JList list;
     private MainWindow win;
     private ModelList model;
     
-    public OverallController(MainWindow y){
+    public OverallController(MainWindow y, Connection con2){
         
+        this.con = con2;
         win = y;
         list = win.getList();
         model = new ModelList();

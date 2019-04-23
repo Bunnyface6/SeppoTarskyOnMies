@@ -135,6 +135,13 @@ public class findDialog extends javax.swing.JDialog {
         findDialogButton.addActionListener(x);
         
     }
+    public String[] getParameters(){
+        
+        String[] rtn = new String[3];
+        rtn[0] = (String)whatBox.getSelectedItem();
+        rtn[1] = (String)howBox.getSelectedItem();
+        rtn
+    }
     
     /**
      * @param args the command line arguments
