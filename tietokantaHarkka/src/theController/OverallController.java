@@ -71,7 +71,9 @@ public class OverallController {
         
         @Override
         public void actionPerformed(ActionEvent e){
-            
+            AddMainDialog dial = new AddMainDialog(win, true);
+            dial.addListeners(new addContinueButton());
+            dial.show();
         }
         
     }
@@ -94,8 +96,7 @@ public class OverallController {
             
             Component comp = (Component) e.getSource();
             AddMainDialog dial = (AddMainDialog) SwingUtilities.getRoot(comp);
-            
-            
+            String str = (String)dial.getValues();
         }
         
     }
