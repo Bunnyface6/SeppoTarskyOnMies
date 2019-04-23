@@ -37,7 +37,7 @@ public class OverallController {
         win.show();
     }
     
-    
+    // NÄMÄ KUULUVAT PÄÄIKKUNAAN
     class findListener implements ActionListener{
         
         @Override
@@ -75,12 +75,27 @@ public class OverallController {
         }
         
     }
+    
+    // TÄSTÄ ALASPÄIN KUULUVAT DIALOGEIHIN
     class findDialogListener implements ActionListener{
         
         @Override
         public void actionPerformed(ActionEvent e){
             Component comp = (Component) e.getSource();
             FindDialog dial = (FindDialog) SwingUtilities.getRoot(comp);
+            FindMethods finder = new FindMethods(model, con);
+            finder.findInDb(dial.getParameters());
+        }
+    }
+    class addContinueButton implements ActionListener{
+        
+        @Override
+        public void actionPerformed(ActionEvent e){
+            
+            Component comp = (Component) e.getSource();
+            AddMainDialog dial = (AddMainDialog) SwingUtilities.getRoot(comp);
+            
+            
         }
         
     }
