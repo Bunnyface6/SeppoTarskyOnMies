@@ -11,12 +11,12 @@ import java.awt.event.ActionListener;
  *
  * @author Cassu
  */
-public class findDialog extends javax.swing.JDialog {
+public class FindDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form findDialog
      */
-    public findDialog(java.awt.Frame parent, boolean modal) {
+    public FindDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -140,7 +140,9 @@ public class findDialog extends javax.swing.JDialog {
         String[] rtn = new String[3];
         rtn[0] = (String)whatBox.getSelectedItem();
         rtn[1] = (String)howBox.getSelectedItem();
-        rtn
+        rtn[2] = (String)searchBox.getText();
+        
+        return rtn;
     }
     
     /**
