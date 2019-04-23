@@ -25,25 +25,34 @@ public class locationCont {
        return x;
     }
     
-    public void addNewLocation(Location x, Connection con) throws SQLException{
+    public int addNewLocation(Location x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        int lN = 0;
         try {
             con.setAutoCommit(false);
-            pStatement = con.prepareStatement("INSERT INTO osoite(katuosoite, postinumero, postitoimipaikka) VALUES(?, ?, ?)");
+            pStatement = con.prepareStatement("INSERT INTO osoite(katuosoite, postinumero, postitoimipaikka) VALUES(?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             pStatement.setString(1, x.getAddress());
             pStatement.setInt(2, x.getPostNmbr());
 	    pStatement.setString(3, x.getCity());
             pStatement.executeUpdate();
+            resultSet = pStatement.getGeneratedKeys();
+            resultSet.last();
+            lN = resultSet.getInt(1);
             con.commit();
         }
         catch(SQLException e) {
             con.rollback(); 
         }
         finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
             if (pStatement != null) {
                 pStatement.close();
             }
         }
+        return lN;
     }
         
     // Haku idllä
