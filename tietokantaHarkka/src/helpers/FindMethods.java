@@ -101,7 +101,6 @@ public class FindMethods {
             model.add(inv);
             
         }
-        //Puuttuu invoicecontista
         else if(arr[1].equals("Kaikki maksamattomat")){
             
             InvoiceCont cont = new InvoiceCont();
@@ -111,14 +110,16 @@ public class FindMethods {
             model.add(invAL);
             
         }
-        //Puuttuu invoicecontista
         else if(arr[1].equals("Lähettämättömät laskut")){
             
             InvoiceCont cont = new InvoiceCont();
             
-            invAL = cont.findInvoiceByClientNmbr(Integer.parseInt(arr[2]), con);
+            DateFormat dfe = new SimpleDateFormat("YYYY-MM-dd");
+            Date results = dfe.parse(arr[2]);
             
-            model.add(inv);
+            invAL = cont.findInvoiceByFinalPayDate(results, con);
+            
+            model.add(invAL);
             
         }
         
@@ -126,6 +127,8 @@ public class FindMethods {
     
     private void findTarvike(String[] arr){
         Article a;
+        ArrayList<Article> aAL = new ArrayList<Article>;
+
         if(arr[1].equals("Tunnus")){
             
             ArticleCont cont = new ArticleCont();
@@ -148,9 +151,9 @@ public class FindMethods {
             
             ArticleCont cont = new ArticleCont();
             
-            a = cont.findArticleByStorage(Integer.parseInt(arr[2]), con);
+            aAL = cont.findArticleByStorage(Integer.parseInt(arr[2]), con);
             
-            model.add(a);
+            model.add(aAL);
             
         }
     }
