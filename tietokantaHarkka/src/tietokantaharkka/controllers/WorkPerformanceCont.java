@@ -73,8 +73,9 @@ public class WorkPerformanceCont {
         return wP;
     }
     
-    public WorkPerformance findWorkPerformanceByWorkSiteNmbr(int nmbr, Connection con) throws SQLException {
+    public ArrayList<WorkPerformance> findWorkPerformanceByWorkSiteNmbr(int nmbr, Connection con) throws SQLException {
         WorkPerformance wP = null;
+        ArrayList<WorkPerformance> wPAL = new ArrayList<WorkPerformance>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -82,9 +83,10 @@ public class WorkPerformanceCont {
             pStatement = con.prepareStatement("SELECT tyosuoritusnumero, tyokohdenumero FROM tyosuoritus WHERE tyokohdenumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            if (resultSet.next()) {
-                wP = createWorkPerformance(resultSet.getInt(1), resultSet.getInt(2));
-            }
+            
+                while (resultSet.next()) {
+                    wPAL.add(createWorkPerformance(resultSet.getInt(1), resultSet.getInt(2));
+                }
             con.commit();
         }
         catch(SQLException e) {
@@ -98,7 +100,7 @@ public class WorkPerformanceCont {
                 pStatement.close();
             }
         }
-        return wP;
+        return wPAL;
     }
     
     public WorkPerformance removeWorkPerformance(WorkPerformance x, Connection con) throws SQLException{
