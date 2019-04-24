@@ -13,6 +13,7 @@ import java.sql.*;
 import tietokantaharkka.baseClasses.*;
 import tietokantaharkka.controllers.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 /**
  *
  * @author Cassu
@@ -82,12 +83,10 @@ public class FindMethods {
             model.add(inv);
             
         }
-        //EI  VIELÄ VALMIS
         else if(arr[1].equals("Työkohdenumero")){
             
-            InvoiceCont cont = new InvoiceCont();
             
-            invAL = cont.findInvoiceByWorkSiteNmbr(Integer.parseInt(arr[2]), con);
+            invAL = findInvoiceByWorkSiteNumber(con, Integer.parseInt(arr[2]));
             
             model.add(invAL);
             
@@ -258,16 +257,23 @@ public class FindMethods {
     }
     //
     private ArrayList<Invoice> findInvoiceByWorkSiteNumber(Connection coni, int i){
-        WorkSite wS;
-        WorkSiteCont wSC = new WorkSiteCont();
         ArrayList<WorkPerformance> wPAL = new ArrayList<WorkPerformance>();
         WorkPerformance wP;
         WorkPerformanceCont wPC = new WorkPerformanceCont();
+        Invoice in;
+        InvoiceCont iC = new InvoiceCont();
+        ArrayList<Invoice> iAL = new ArrayList<Invoice>();
         
         wPAL = wPC.findWorkPerformanceByWorkSiteNmbr(i, coni);
+        Iterator<WorkPerformance> iter = wPAL.iterator();
+        while (iter.hasNext()) {
+            in = iC.findInvoiceByWorkPerformanceNmbr(iter.next().getNmbr(), coni);
+            iAL.add(in);          
+        }
+        return iAL;
         
         
-    };
+    }
     
     public ArrayList<ArticleType> findArticleTypes(Connection con) throws SQLException {
         ArrayList<ArticleType> a = null;
