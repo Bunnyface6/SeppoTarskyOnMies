@@ -104,14 +104,14 @@ public class OverallController {
             //Kuluttaja asiakas, Yritysasiakas, Tarvike
             if(str.equals("Kuluttaja-asiakas")){
                 
-                AddPClientView ndial = new AddPClientView(win, true);
+                AddCClientView ndial = new AddCClientView(win, true);
                 dial.dispose();
                 ndial.addListeners(new addCClientB());
                 ndial.show();
                 
             }
             if(str.equals("Yritysasiakas")){
-                AddCClientView ndial = new AddCClientView(win, true);
+                AddPClientView ndial = new AddPClientView(win, true);
                 dial.dispose();
                 ndial.addListeners(new addPClientB());
                 ndial.show();
@@ -128,7 +128,7 @@ public class OverallController {
         class addPClientB implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e){
-                Component comp = (Component) e.getSource();
+                Component comp = (Component)e.getSource();
                 AddPClientView dial = (AddPClientView)SwingUtilities.getRoot(comp);
                 String[] result = dial.getParam();
                 Transaction ta = new Transaction();

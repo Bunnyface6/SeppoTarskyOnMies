@@ -142,6 +142,10 @@ public class AddPClientView extends javax.swing.JDialog {
         return rtn;
     }
     
+    @Override
+    public String toString(){
+        return "Tämä on oikea";
+    }
     /**
      * @param args the command line arguments
      */
