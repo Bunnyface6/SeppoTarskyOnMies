@@ -45,4 +45,13 @@ public class ModelList extends AbstractListModel<Object> {
             }
         }
     }
+    
+    public void add(ArrayList x){
+        
+        for(Object y : x){
+            if(model.add(y)){
+               fireContentsChanged(MODELS, 0, model.size());
+            }
+        }
+    }
 }
