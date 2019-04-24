@@ -130,6 +130,18 @@ public class AddCClientView extends javax.swing.JDialog {
     public void addListeners(ActionListener x){
         saveB.addActionListener(x);
     }
+    
+    public String[] getParam(){
+        
+        String[] rtn = new String[5];
+        rtn[0] = nameF.getText();
+        rtn[1] = yIdF.getText();
+        rtn[2] = cityF.getText();
+        rtn[3] = postNmbrF.getText();
+        rtn[4] = adressF.getText();
+        
+        return rtn;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField adressF;

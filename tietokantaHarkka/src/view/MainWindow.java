@@ -42,6 +42,8 @@ public class MainWindow extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -78,11 +80,15 @@ public class MainWindow extends javax.swing.JFrame {
 
         invoiceButton.setText("Tulosta lasku");
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Lisää työkohde");
 
-        jButton2.setText("jButton2");
+        jButton2.setText("Lisää tunteja");
 
-        jButton3.setText("jButton3");
+        jButton3.setText("Lisää tarvikkeita");
+
+        jButton4.setText("Myy tarvikkeita");
+
+        jButton5.setText("Lisää muistutukset");
 
         jMenu1.setText("File");
 
@@ -116,14 +122,17 @@ public class MainWindow extends javax.swing.JFrame {
                             .addComponent(deleteButton)
                             .addComponent(jButton1)
                             .addComponent(jButton2)
-                            .addComponent(jButton3)))
+                            .addComponent(jButton3)
+                            .addComponent(jButton4)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(findButton)
                         .addGap(18, 18, 18)
                         .addComponent(addButton)
                         .addGap(18, 18, 18)
-                        .addComponent(invoiceButton)))
+                        .addComponent(invoiceButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton5)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -134,19 +143,22 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(editButton)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(deleteButton)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)))
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addButton)
                     .addComponent(findButton)
-                    .addComponent(invoiceButton))
+                    .addComponent(invoiceButton)
+                    .addComponent(jButton5))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -198,6 +210,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JList<Object> jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;

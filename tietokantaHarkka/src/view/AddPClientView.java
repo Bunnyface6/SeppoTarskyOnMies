@@ -130,6 +130,18 @@ public class AddPClientView extends javax.swing.JDialog {
         saveB.addActionListener(x);
     }
     
+    public String[] getParam(){
+        
+        String[] rtn = new String[5];
+        rtn[0] = fNameF.getText();
+        rtn[1] = lNameF.getText();
+        rtn[2] = cityF.getText();
+        rtn[3] = postNF.getText();
+        rtn[4] = adressF.getText();
+        
+        return rtn;
+    }
+    
     /**
      * @param args the command line arguments
      */

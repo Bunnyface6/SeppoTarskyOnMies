@@ -79,6 +79,8 @@ public class OverallController {
     
     
     
+    
+    
     // TÄSTÄ ALASPÄIN KUULUVAT DIALOGEIHIN
     class findDialogListener implements ActionListener{
         
@@ -98,43 +100,37 @@ public class OverallController {
             Component comp = (Component) e.getSource();
             AddMainDialog dial = (AddMainDialog) SwingUtilities.getRoot(comp);
             String str = (String)dial.getValues();
-            //Työkohde, Kuluttaja asiakas, Yritysasiakas, Tarvike
-            if(str.equals("Työkohde")){
-                
-                AddWorkSiteView ndial = new AddWorkSiteView(win, true);
-                dial.dispose();
-                ndial.addListeners(new addLocationButtonFromWS(), new addLocationButtonFromWS());
-                ndial.show();
-            }
+            //Kuluttaja asiakas, Yritysasiakas, Tarvike
             if(str.equals("Kuluttaja-asiakas")){
                 
                 AddPClientView ndial = new AddPClientView(win, true);
                 dial.dispose();
-                ndial.addListeners();
+                ndial.addListeners(new addCClientB());
                 ndial.show();
                 
             }
             if(str.equals("Yritysasiakas")){
                 AddCClientView ndial = new AddCClientView(win, true);
                 dial.dispose();
-                ndial.addListeners();
+                ndial.addListeners(new addPClientB());
                 ndial.show();
                 
             }
             if(str.equals("Tarvike")){
                 AddCClientView ndial = new AddCClientView(win, true);
                 dial.dispose();
-                ndial.addListeners();
+                ndial.addListeners(new addArticleB());
                 ndial.show();
             }
         }
         
-        class addPCclientB implements ActionListener{
+        class addPClientB implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e){
                 Component comp = (Component) e.getSource();
                 AddPClientView dial = (AddPClientView)SwingUtilities.getRoot(comp);
-
+                String[] result = dial.getParam();
+                
             }
         }
         class addCClientB implements ActionListener{
@@ -142,7 +138,8 @@ public class OverallController {
             public void actionPerformed(ActionEvent e){
                 Component comp = (Component) e.getSource();
                 AddCClientView dial = (AddCClientView)SwingUtilities.getRoot(comp);
-            
+                String[] result = dial.getParam();
+                
             }
             
         }
@@ -151,7 +148,8 @@ public class OverallController {
             public void actionPerformed(ActionEvent e){
                 Component comp = (Component) e.getSource();
                 AddCClientView dial = (AddCClientView)SwingUtilities.getRoot(comp);
-            
+                String[] result = dial.getParam();
+                
             } 
         }
         

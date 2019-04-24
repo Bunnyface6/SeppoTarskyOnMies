@@ -23,6 +23,16 @@ public class AddArticleView extends javax.swing.JDialog {
     public void addListeners(ActionListener x){
        saveB.addActionListener(x);
     }
+    public String[] getParam(){
+        String[] rtn = new String[5];
+        rtn[0] = articleTypeF.getSelectedItem().toString();
+        rtn[1] = articleNameF.getText();
+        rtn[2] = buyInF.getText();
+        rtn[3] = sellF.getText();
+        rtn[4] = storageF.getText();
+        
+        return rtn;
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
