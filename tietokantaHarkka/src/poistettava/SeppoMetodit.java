@@ -6,6 +6,8 @@
 package poistettava;
 
 import java.sql.*;
+import java.util.Date;
+import java.util.ArrayList;
 import tietokantaharkka.baseClasses.*;
 import tietokantaharkka.controllers.*;
 
@@ -22,6 +24,9 @@ public class SeppoMetodit {
     private WorkPerformanceCont wPC;
     private PerformedWorkCont pVC;
     private InvoiceCont iC;
+    private WorkPriceCont wPrC;
+    private ArticleCont aC;
+    private ArticleTypeCont aTC;
 
     public SeppoMetodit() {
         this.lC = new LocationCont();
@@ -31,6 +36,9 @@ public class SeppoMetodit {
         this.wPC = new WorkPerformanceCont();
         this.pVC = new PerformedWorkCont();
         this.iC = new InvoiceCont();
+        this.wPrC = new WorkPriceCont();
+        this.aC = new ArticleCont();
+        this.aTC = new ArticleTypeCont();
     }
     
     public boolean addClient(String fName, String lName, String address, int zipCode, String city, Connection con) throws SQLException {
@@ -124,6 +132,106 @@ public class SeppoMetodit {
         catch(SQLException e) {
             con.rollback();
             return false;
+        }
+    }
+    
+    public boolean createReminderOfUnpaidInvoices(Date today, Date fpDate, Connection con) throws SQLException {
+        try {
+            con.setAutoCommit(false);
+            ArrayList<Invoice> unpaidInvoices = iC.findUnpaidInvoices(1, con);
+            for (int i = 0; i < unpaidInvoices.size(); i++) {
+                Invoice inv = unpaidInvoices.get(i);
+                if (inv.getFinalPayDate().before(today)) {
+                    Invoice reminder = new Invoice(fpDate, 0, today, null, 2, inv.getIvNmbr(), inv.getClientNmbr(), inv.getWorkPerformanceNmbr());
+                    iC.addNewInvoice(reminder, con);
+                    inv.setDatePaid(today);
+                    iC.updateDatePaid(inv, con);
+                }
+            }
+            con.commit();
+            return true;
+        }
+        catch (SQLException e) {
+            con.rollback();
+            return false; 
+        }
+    }
+    
+    public boolean createSecondReminderOfUnpaidInvoice(Date today, Date fpDate, Connection con) throws SQLException {
+        try {
+            con.setAutoCommit(false);
+            ArrayList<Invoice> unpaidInvoices = iC.findUnpaidInvoices(2, con);
+            for (int i = 0; i < unpaidInvoices.size(); i++) {
+                Invoice inv = unpaidInvoices.get(i);
+                if (inv.getFinalPayDate().before(today)) {
+                    Invoice reminder = new Invoice(fpDate, 0, today, null, 3, inv.getIvNmbr(), inv.getClientNmbr(), inv.getWorkPerformanceNmbr());
+                    iC.addNewInvoice(reminder, con);
+                    inv.setDatePaid(today);
+                    iC.updateDatePaid(inv, con);
+                }
+            }
+            con.commit();
+            return true;
+        }
+        catch (SQLException e) {
+            con.rollback();
+            return false; 
+        }
+    }
+    
+    public boolean addWorkTypeAndPrice(String type, double price, Connection con) throws SQLException {
+        try {
+            con.setAutoCommit(false);
+            WorkPrice w = new WorkPrice(type, price);
+            wPrC.addNewWorkPrice(w, con);
+            con.commit();
+            return true;
+        }
+        catch (SQLException e) {
+            con.rollback();
+            return false; 
+        }
+    }
+    
+    public boolean addArticle(String name, double buyIn, int storage, double salePrice, int typeNmbr, Connection con) throws SQLException {
+        try {
+            con.setAutoCommit(false);
+            Article a = new Article(name, buyIn, storage, salePrice, typeNmbr, 0, null, null);
+            aC.addNewArticle(a, con);
+            con.commit();
+            return true;
+        }
+        catch (SQLException e) {
+            con.rollback();
+            return false; 
+        }
+    }
+    
+    public boolean addArticleType(String type, String unit, Connection con) throws SQLException {
+        try {
+            con.setAutoCommit(false);
+            ArticleType aT = new ArticleType(0, unit, type);
+            aTC.addNewArticleType(aT, con);
+            con.commit();
+            return true;
+        }
+        catch (SQLException e) {
+            con.rollback();
+            return false; 
+        }
+    }
+    
+    public boolean updateStorage(Article x, int newAmount, Connection con) throws SQLException {
+        try {
+            con.setAutoCommit(false);
+            x.setStorage(newAmount);
+            aC.updateArticle(x, con);
+            con.commit();
+            return true;
+        }
+        catch (SQLException e) {
+            con.rollback();
+            return false; 
         }
     }
 }
