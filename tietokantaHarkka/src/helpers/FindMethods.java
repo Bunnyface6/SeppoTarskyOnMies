@@ -126,7 +126,7 @@ public class FindMethods {
     
     private void findTarvike(String[] arr){
         Article a;
-        ArrayList<Article> aAL = new ArrayList<Article>;
+        ArrayList<Article> aAL = new ArrayList<Article>();
 
         if(arr[1].equals("Tunnus")){
             
