@@ -17,8 +17,8 @@ public class dBConnection {
     private final String SERVER = "dbstud2.sis.uta.fi";
     private final int PORTNUM = 5432;
     private final String DATABASE = "tiko2019r28"; 
-    private final String USERNAME = "na428043";
-    private final String PASSWORD = "Velimatti1";
+    private final String USERNAME = "js428162";
+    private final String PASSWORD = "t13t0k4nt4";
     private Connection con;
     
     public Connection createConnection() {
@@ -27,6 +27,7 @@ public class dBConnection {
             return con;
 	}
 	catch (SQLException e) {
+            System.out.println(e.getMessage());
             return null;     
 	}
     }
