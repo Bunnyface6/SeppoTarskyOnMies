@@ -273,6 +273,7 @@ public class FindMethods {
         ArrayList<ArticleType> a = null;
         try {
             con.setAutoCommit(false);
+            ArticleTypeCont aTC = new ArticleTypeCont();
             a = aTC.findArticleTypes(con);
             con.commit();
             return a;
