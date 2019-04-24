@@ -70,4 +70,8 @@ public class Article extends ArticleType{
         this.nmbr2 = nmbr2;
     }
     
+    @Override
+    public String toString() {
+        return "TARVIKE: " + name + ", Kappaleita varastossa: " + storage + ", Ostohinta: " + buyIn + ", Myyntihinta: " + salePrice;
+    }
 }

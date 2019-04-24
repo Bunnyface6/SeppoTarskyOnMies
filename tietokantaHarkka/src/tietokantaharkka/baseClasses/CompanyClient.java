@@ -38,6 +38,11 @@ public class CompanyClient extends Client{
     public void setyIdentifier(int yIdentifier) {
         this.yIdentifier = yIdentifier;
     }
+
+    @Override
+    public String toString() {
+        return "Yritysasiakas: " + ", Tunnus: " + this.getNmbr() + ", Nimi: " + name + ", Y-Tunnus: " + yIdentifier;
+    }
     
     
 }
