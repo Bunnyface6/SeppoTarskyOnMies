@@ -29,14 +29,14 @@
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="fNameF" alignment="0" max="32767" attributes="0"/>
-                      <Component id="lNameF" alignment="0" max="32767" attributes="0"/>
                       <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="cityF" alignment="0" max="32767" attributes="0"/>
                       <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="postNF" alignment="0" max="32767" attributes="0"/>
                       <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="adressF" alignment="0" pref="160" max="32767" attributes="0"/>
+                      <Component id="articleNameF" alignment="0" max="32767" attributes="0"/>
+                      <Component id="buyInF" alignment="0" max="32767" attributes="0"/>
+                      <Component id="sellF" alignment="0" max="32767" attributes="0"/>
+                      <Component id="storageF" alignment="0" max="32767" attributes="0"/>
+                      <Component id="articleTypeF" alignment="0" pref="160" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="backB" min="-2" max="-2" attributes="0"/>
@@ -44,7 +44,7 @@
                       <Component id="saveB" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="75" max="32767" attributes="0"/>
+              <EmptySpace pref="51" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -53,24 +53,24 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="fNameF" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="articleTypeF" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="lNameF" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+              <Component id="articleNameF" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="cityF" min="-2" max="-2" attributes="0"/>
+              <Component id="buyInF" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="postNF" min="-2" max="-2" attributes="0"/>
+              <Component id="sellF" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="adressF" min="-2" max="-2" attributes="0"/>
+              <Component id="storageF" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="backB" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -84,46 +84,51 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Etunimi"/>
+        <Property name="text" type="java.lang.String" value="Tarvikkeen tyyppi"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="articleTypeF">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Sukunimi"/>
+        <Property name="text" type="java.lang.String" value="Tarvikkeen nimi"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="fNameF">
-    </Component>
-    <Component class="javax.swing.JTextField" name="lNameF">
+    <Component class="javax.swing.JTextField" name="articleNameF">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Kaupunki"/>
+        <Property name="text" type="java.lang.String" value="Sis&#xe4;&#xe4;nostohinta"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="cityF">
+    <Component class="javax.swing.JTextField" name="buyInF">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Posti Nro"/>
+        <Property name="text" type="java.lang.String" value="Myyntihinta"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="postNF">
+    <Component class="javax.swing.JTextField" name="sellF">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Katuosoite"/>
+        <Property name="text" type="java.lang.String" value="Varastotilanne"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="adressF">
+    <Component class="javax.swing.JTextField" name="storageF">
     </Component>
     <Component class="javax.swing.JButton" name="backB">
       <Properties>
         <Property name="text" type="java.lang.String" value="Peruuta"/>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backBActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="saveB">
       <Properties>

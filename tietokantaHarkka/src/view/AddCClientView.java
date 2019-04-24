@@ -11,12 +11,12 @@ import java.awt.event.ActionListener;
  *
  * @author Cassu
  */
-public class AddPClientView extends javax.swing.JDialog {
+public class AddCClientView extends javax.swing.JDialog {
 
     /**
-     * Creates new form AddPClientView
+     * Creates new form AddCClientView
      */
-    public AddPClientView(java.awt.Frame parent, boolean modal) {
+    public AddCClientView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -31,13 +31,13 @@ public class AddPClientView extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        nameF = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        fNameF = new javax.swing.JTextField();
-        lNameF = new javax.swing.JTextField();
+        yIdF = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         cityF = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        postNF = new javax.swing.JTextField();
+        postNmbrF = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         adressF = new javax.swing.JTextField();
         backB = new javax.swing.JButton();
@@ -45,13 +45,13 @@ public class AddPClientView extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("Etunimi");
+        jLabel1.setText("Yrityksen nimi");
 
-        jLabel2.setText("Sukunimi");
+        jLabel2.setText("Y-tunnus");
 
         jLabel3.setText("Kaupunki");
 
-        jLabel4.setText("Posti Nro");
+        jLabel4.setText("Postinumero");
 
         jLabel5.setText("Katuosoite");
 
@@ -70,23 +70,22 @@ public class AddPClientView extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1)
-                        .addComponent(jLabel2)
-                        .addComponent(fNameF)
-                        .addComponent(lNameF)
-                        .addComponent(jLabel3)
-                        .addComponent(cityF)
-                        .addComponent(jLabel4)
-                        .addComponent(postNF)
-                        .addComponent(jLabel5)
-                        .addComponent(adressF, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(backB)
                         .addGap(18, 18, 18)
-                        .addComponent(saveB)))
-                .addContainerGap(75, Short.MAX_VALUE))
+                        .addComponent(saveB))
+                    .addComponent(nameF)
+                    .addComponent(yIdF)
+                    .addComponent(cityF)
+                    .addComponent(postNmbrF)
+                    .addComponent(adressF))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,20 +93,20 @@ public class AddPClientView extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fNameF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nameF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lNameF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addComponent(yIdF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cityF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(postNF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(postNmbrF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(adressF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -124,28 +123,26 @@ public class AddPClientView extends javax.swing.JDialog {
     private void backBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBActionPerformed
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_backBActionPerformed
-    
-    
-    public void addListeners(ActionListener x){
-        saveB.addActionListener(x);
-    }
-    
+
     /**
      * @param args the command line arguments
      */
+    public void addListeners(ActionListener x){
+        saveB.addActionListener(x);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField adressF;
     private javax.swing.JButton backB;
     private javax.swing.JTextField cityF;
-    private javax.swing.JTextField fNameF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField lNameF;
-    private javax.swing.JTextField postNF;
+    private javax.swing.JTextField nameF;
+    private javax.swing.JTextField postNmbrF;
     private javax.swing.JButton saveB;
+    private javax.swing.JTextField yIdF;
     // End of variables declaration//GEN-END:variables
 }
