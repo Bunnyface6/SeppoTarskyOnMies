@@ -61,6 +61,7 @@ public class FindMethods {
     
     private void findLasku(String[] arr){
         Invoice inv;
+        ArrayList<Invoice> invAL = new ArrayList<Invoice>;
         if(arr[1].equals("Tunnus")){
             
             InvoiceCont cont = new InvoiceCont();
@@ -86,9 +87,9 @@ public class FindMethods {
             
             InvoiceCont cont = new InvoiceCont();
             
-            inv = cont.findInvoiceByWorkSiteNmbr(Integer.parseInt(arr[2]), con);
+            invAL = cont.findInvoiceByWorkSiteNmbr(Integer.parseInt(arr[2]), con);
             
-            model.add(inv);
+            model.add(invAL);
             
         }
         else if(arr[1].equals("Asiakasnumero")){
@@ -105,9 +106,9 @@ public class FindMethods {
             
             InvoiceCont cont = new InvoiceCont();
             
-            inv = cont.findInvoiceByClientNmbr(Integer.parseInt(arr[2]), con);
+            invAL = cont.findUnpaidInvoices(Integer.parseInt(arr[2]), con);
             
-            model.add(inv);
+            model.add(invAL);
             
         }
         //Puuttuu invoicecontista
@@ -115,7 +116,7 @@ public class FindMethods {
             
             InvoiceCont cont = new InvoiceCont();
             
-            inv = cont.findInvoiceByClientNmbr(Integer.parseInt(arr[2]), con);
+            invAL = cont.findInvoiceByClientNmbr(Integer.parseInt(arr[2]), con);
             
             model.add(inv);
             
