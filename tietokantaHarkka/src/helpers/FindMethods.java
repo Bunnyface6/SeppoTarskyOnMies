@@ -269,4 +269,18 @@ public class FindMethods {
         
     };
     
+    public ArrayList<ArticleType> findArticleTypes(Connection con) throws SQLException {
+        ArrayList<ArticleType> a = null;
+        try {
+            con.setAutoCommit(false);
+            a = aTC.findArticleTypes(con);
+            con.commit();
+            return a;
+        }
+        catch (SQLException e) {
+            con.rollback();
+            return a; 
+        }
+    }
+    
 }
