@@ -14,6 +14,7 @@ import javax.swing.JList;
 import view.*;
 import java.sql.*;
 import javax.swing.SwingUtilities;
+import transaction.Transaction;
 
 /**
  *
@@ -130,7 +131,13 @@ public class OverallController {
                 Component comp = (Component) e.getSource();
                 AddPClientView dial = (AddPClientView)SwingUtilities.getRoot(comp);
                 String[] result = dial.getParam();
-                
+                Transaction ta = new Transaction();
+                try{
+                    ta.addClient(result[0], result[1], result[4], Integer.parseInt(result[3]), result[2], con);
+                }
+                catch(SQLException f){
+                    System.out.println("AAAARG");
+                }
             }
         }
         class addCClientB implements ActionListener{
