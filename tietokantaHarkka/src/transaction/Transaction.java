@@ -3,19 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package poistettava;
+package transaction;
 
 import java.sql.*;
 import java.util.Date;
 import java.util.ArrayList;
 import tietokantaharkka.baseClasses.*;
 import tietokantaharkka.controllers.*;
-
 /**
  *
  * @author Jipsu
  */
-public class SeppoMetodit {
+public class Transaction {
     
     private LocationCont lC;
     private PrivateClientCont pCC;
@@ -28,7 +27,7 @@ public class SeppoMetodit {
     private ArticleCont aC;
     private ArticleTypeCont aTC;
 
-    public SeppoMetodit() {
+    public Transaction() {
         this.lC = new LocationCont();
         this.pCC = new PrivateClientCont();
         this.cCC = new CompanyClientCont();
@@ -232,20 +231,6 @@ public class SeppoMetodit {
         catch (SQLException e) {
             con.rollback();
             return false; 
-        }
-    }
-   
-    public ArrayList<ArticleType> findArticleTypes(Connection con) throws SQLException {
-        ArrayList<ArticleType> a = null;
-        try {
-            con.setAutoCommit(false);
-            a = aTC.findArticleTypes(con);
-            con.commit();
-            return a;
-        }
-        catch (SQLException e) {
-            con.rollback();
-            return a; 
         }
     }
 }

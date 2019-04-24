@@ -17,7 +17,7 @@ public class dBConnection {
     private final String SERVER = "dbstud2.sis.uta.fi";
     private final int PORTNUM = 5432;
     private final String DATABASE = ""; 
-    private final String USERNAME = " tiko2019r28";
+    private final String USERNAME = "";
     private final String PASSWORD = "";
     private Connection con;
     

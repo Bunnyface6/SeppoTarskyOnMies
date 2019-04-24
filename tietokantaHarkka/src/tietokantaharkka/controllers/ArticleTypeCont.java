@@ -136,6 +136,33 @@ public class ArticleTypeCont {
         return aT;
     }
     
+    public ArrayList<ArticleType> findArticleTypes(Connection con) throws SQLException{
+        ArrayList<ArticleType> aT = new ArrayList<ArticleType>();
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT tyyppiyksikkonumero, tyyppi, yksikko FROM tyyppiyksikko;");
+            resultSet = pStatement.executeQuery();
+            while (resultSet.next()) {
+                aT.add(createArticleType(resultSet.getInt(1), resultSet.getString(3), resultSet.getString(2)));
+            }
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return aT;
+    }
+    
     public ArticleType removeArticleType(ArticleType x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         try {

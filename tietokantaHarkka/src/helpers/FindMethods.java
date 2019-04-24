@@ -75,7 +75,7 @@ public class FindMethods {
             
             InvoiceCont cont = new InvoiceCont();
             
-            DateFormat df = new SimpleDateFormat("YYYY-MM-dd");
+            DateFormat df = new SimpleDateFormat("dd-MM-YYYY");
             Date result = df.parse(arr[2]);
             inv = cont.findInvoiceByDate(result, con);
             
@@ -114,7 +114,7 @@ public class FindMethods {
             
             InvoiceCont cont = new InvoiceCont();
             
-            DateFormat dfe = new SimpleDateFormat("YYYY-MM-dd");
+            DateFormat dfe = new SimpleDateFormat("dd-MM-YYYY");
             Date results = dfe.parse(arr[2]);
             
             invAL = cont.findInvoiceByFinalPayDate(results, con);
@@ -184,7 +184,7 @@ public class FindMethods {
             
             PrivateClientCont cont = new PrivateClientCont();
             
-            pCAL = cont.findPrivateClientByLName(arr[2], con);
+            pCAL = cont.findPrivateClientByUnpaidInvoice(arr[2], con);
             
             model.add(pC);
             
@@ -217,9 +217,9 @@ public class FindMethods {
             
             CompanyClientCont cont = new CompanyClientCont();
             
-            cCAL = cont.findCompanyClientByLName(arr[2], con);
+            cCAL = cont.findCompanyClientByUnpaidInvoices(arr[2], con);
             
-            model.add(cC);
+            model.add(cCAL);
             
         }
     }
@@ -254,6 +254,32 @@ public class FindMethods {
             
             model.add(wSAL);
             
+        }
+    }
+    //
+    private ArrayList<Invoice> findInvoiceByWorkSiteNumber(Connection coni, int i){
+        WorkSite wS;
+        WorkSiteCont wSC = new WorkSiteCont();
+        ArrayList<WorkPerformance> wPAL = new ArrayList<WorkPerformance>();
+        WorkPerformance wP;
+        WorkPerformanceCont wPC = new WorkPerformanceCont();
+        
+        wPAL = wPC.findWorkPerformanceByWorkSiteNmbr(i, coni);
+        
+        
+    };
+    
+    public ArrayList<ArticleType> findArticleTypes(Connection con) throws SQLException {
+        ArrayList<ArticleType> a = null;
+        try {
+            con.setAutoCommit(false);
+            a = aTC.findArticleTypes(con);
+            con.commit();
+            return a;
+        }
+        catch (SQLException e) {
+            con.rollback();
+            return a; 
         }
     }
     
