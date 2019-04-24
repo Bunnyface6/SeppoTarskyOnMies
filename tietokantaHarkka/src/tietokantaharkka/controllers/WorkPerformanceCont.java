@@ -85,7 +85,7 @@ public class WorkPerformanceCont {
             resultSet = pStatement.executeQuery();
             
                 while (resultSet.next()) {
-                    wPAL.add(createWorkPerformance(resultSet.getInt(1), resultSet.getInt(2));
+                    wPAL.add(createWorkPerformance(resultSet.getInt(1), resultSet.getInt(2)));
                 }
             con.commit();
         }
