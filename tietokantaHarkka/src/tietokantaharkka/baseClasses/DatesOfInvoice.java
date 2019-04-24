@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * @author Jipsu
  */
-public class DatesOfInvoice {
+public class DatesOfInvoice{
     
     Date date;
     Date finalPayDate;

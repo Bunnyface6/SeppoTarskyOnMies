@@ -38,4 +38,9 @@ public class PrivateClient extends Client{
         this.lName = lName;
     }
 
+    @Override
+    public String toString() {
+        return "KULUTTAJA-ASIAKAS: " + "Asiakastunnus: " + this.getNmbr() + "Etunimi: " + fName + ", Sukunimi: " + lName;
+    }
+    
 }

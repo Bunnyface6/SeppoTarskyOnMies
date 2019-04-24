@@ -107,4 +107,16 @@ public class Invoice {
     public void setNmbrOfInvoices(int nmbrOfInvoices) {
         this.nmbrOfInvoices = nmbrOfInvoices;
     }
+
+    @Override
+    public String toString() {
+        if(finalPayDate != null && datePaid == null)
+            return "LASKU (MAKSAMATON): " + "Laskun numero " + ivNmbr + ", Asiakasnumero: " + clientNmbr + ", Laskun päiväys: " + compDate + ", Viimeinen maksupäivä: " + finalPayDate;
+        else if(finalPayDate != null && datePaid != null)
+            return "LASKU (MAKSETTU): " + "Laskun numero " + ivNmbr + ", Asiakasnumero: " + clientNmbr + ", Laskun päiväys: " + compDate + ", Maksttu päivämäärä: " + datePaid;
+        else
+            return "LASKU (EI LÄHETETTY): " + "Laskun numero " + ivNmbr + ", Asiakasnumero: " + clientNmbr;
+    }
+    
+    
 }

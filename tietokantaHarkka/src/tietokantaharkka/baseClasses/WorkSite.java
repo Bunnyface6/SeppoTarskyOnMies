@@ -53,6 +53,11 @@ public class WorkSite {
     public void setClientNmbr(int clientNmbr) {
         this.clientNmbr = clientNmbr;
     }
+
+    @Override
+    public String toString() {
+        return "TYÖKOHDE: " + "Tunnus: " + nmbr + ", Asiakastunnus: " + clientNmbr + ", Kohdetunnus: " + locationNmbr;
+    }
     
     
 }
