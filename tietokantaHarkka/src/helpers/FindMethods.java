@@ -61,6 +61,7 @@ public class FindMethods {
     
     private void findLasku(String[] arr){
         Invoice inv;
+        ArrayList<Invoice> invAL = new ArrayList<Invoice>;
         if(arr[1].equals("Tunnus")){
             
             InvoiceCont cont = new InvoiceCont();
@@ -74,7 +75,7 @@ public class FindMethods {
             
             InvoiceCont cont = new InvoiceCont();
             
-            DateFormat df = new SimpleDateFormat("YYYY-MM-dd");
+            DateFormat df = new SimpleDateFormat("dd-MM-YYYY");
             Date result = df.parse(arr[2]);
             inv = cont.findInvoiceByDate(result, con);
             
@@ -86,9 +87,9 @@ public class FindMethods {
             
             InvoiceCont cont = new InvoiceCont();
             
-            inv = cont.findInvoiceByWorkSiteNmbr(Integer.parseInt(arr[2]), con);
+            invAL = cont.findInvoiceByWorkSiteNmbr(Integer.parseInt(arr[2]), con);
             
-            model.add(inv);
+            model.add(invAL);
             
         }
         else if(arr[1].equals("Asiakasnumero")){
@@ -100,24 +101,25 @@ public class FindMethods {
             model.add(inv);
             
         }
-        //Puuttuu invoicecontista
         else if(arr[1].equals("Kaikki maksamattomat")){
             
             InvoiceCont cont = new InvoiceCont();
             
-            inv = cont.findInvoiceByClientNmbr(Integer.parseInt(arr[2]), con);
+            invAL = cont.findUnpaidInvoices(Integer.parseInt(arr[2]), con);
             
-            model.add(inv);
+            model.add(invAL);
             
         }
-        //Puuttuu invoicecontista
         else if(arr[1].equals("Lähettämättömät laskut")){
             
             InvoiceCont cont = new InvoiceCont();
             
-            inv = cont.findInvoiceByClientNmbr(Integer.parseInt(arr[2]), con);
+            DateFormat dfe = new SimpleDateFormat("dd-MM-YYYY");
+            Date results = dfe.parse(arr[2]);
             
-            model.add(inv);
+            invAL = cont.findInvoiceByFinalPayDate(results, con);
+            
+            model.add(invAL);
             
         }
         
@@ -125,6 +127,8 @@ public class FindMethods {
     
     private void findTarvike(String[] arr){
         Article a;
+        ArrayList<Article> aAL = new ArrayList<Article>;
+
         if(arr[1].equals("Tunnus")){
             
             ArticleCont cont = new ArticleCont();
@@ -147,9 +151,9 @@ public class FindMethods {
             
             ArticleCont cont = new ArticleCont();
             
-            a = cont.findArticleByStorage(Integer.parseInt(arr[2]), con);
+            aAL = cont.findArticleByStorage(Integer.parseInt(arr[2]), con);
             
-            model.add(a);
+            model.add(aAL);
             
         }
     }
@@ -180,7 +184,7 @@ public class FindMethods {
             
             PrivateClientCont cont = new PrivateClientCont();
             
-            pCAL = cont.findPrivateClientByLName(arr[2], con);
+            pCAL = cont.findPrivateClientByUnpaidInvoice(arr[2], con);
             
             model.add(pC);
             
@@ -213,9 +217,9 @@ public class FindMethods {
             
             CompanyClientCont cont = new CompanyClientCont();
             
-            cCAL = cont.findCompanyClientByLName(arr[2], con);
+            cCAL = cont.findCompanyClientByUnpaidInvoices(arr[2], con);
             
-            model.add(cC);
+            model.add(cCAL);
             
         }
     }
@@ -252,5 +256,17 @@ public class FindMethods {
             
         }
     }
+    //
+    private ArrayList<Invoice> findInvoiceByWorkSiteNumber(Connection coni, int i){
+        WorkSite wS;
+        WorkSiteCont wSC = new WorkSiteCont();
+        ArrayList<WorkPerformance> wPAL = new ArrayList<WorkPerformance>();
+        WorkPerformance wP;
+        WorkPerformanceCont wPC = new WorkPerformanceCont();
+        
+        wPAL = wPC.findWorkPerformanceByWorkSiteNmbr(i, coni);
+        
+        
+    };
     
 }
