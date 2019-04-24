@@ -3,20 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view;
+package old;
 
+import java.awt.Component;
 import java.awt.event.ActionListener;
 
 /**
  *
  * @author Cassu
  */
-public class AddPClientView extends javax.swing.JDialog {
+public class AddLocationView extends javax.swing.JDialog {
 
     /**
-     * Creates new form AddPClientView
+     * Creates new form AddLocationView
      */
-    public AddPClientView(java.awt.Frame parent, boolean modal) {
+    public AddLocationView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -31,29 +32,21 @@ public class AddPClientView extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        fNameF = new javax.swing.JTextField();
-        lNameF = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         cityF = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        postNF = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        adressF = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        postalF = new javax.swing.JTextField();
+        addressF = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
         backB = new javax.swing.JButton();
         saveB = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("Etunimi");
+        jLabel1.setText("Kaupunki");
 
-        jLabel2.setText("Sukunimi");
+        jLabel2.setText("Postinumero");
 
-        jLabel3.setText("Kaupunki");
-
-        jLabel4.setText("Posti Nro");
-
-        jLabel5.setText("Katuosoite");
+        jLabel3.setText("Osoite");
 
         backB.setText("Peruuta");
         backB.addActionListener(new java.awt.event.ActionListener() {
@@ -63,6 +56,11 @@ public class AddPClientView extends javax.swing.JDialog {
         });
 
         saveB.setText("Tallenna");
+        saveB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveBActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -70,23 +68,18 @@ public class AddPClientView extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1)
-                        .addComponent(jLabel2)
-                        .addComponent(fNameF)
-                        .addComponent(lNameF)
-                        .addComponent(jLabel3)
-                        .addComponent(cityF)
-                        .addComponent(jLabel4)
-                        .addComponent(postNF)
-                        .addComponent(jLabel5)
-                        .addComponent(adressF, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(backB)
                         .addGap(18, 18, 18)
-                        .addComponent(saveB)))
-                .addContainerGap(75, Short.MAX_VALUE))
+                        .addComponent(saveB))
+                    .addComponent(cityF, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                    .addComponent(postalF)
+                    .addComponent(addressF))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -94,23 +87,15 @@ public class AddPClientView extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fNameF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cityF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lNameF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addComponent(postalF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cityF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(postNF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(adressF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(addressF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(backB)
@@ -124,28 +109,44 @@ public class AddPClientView extends javax.swing.JDialog {
     private void backBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBActionPerformed
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_backBActionPerformed
+
+    private void saveBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBActionPerformed
+                // TODO add your handling code here:
+    }//GEN-LAST:event_saveBActionPerformed
     
-    
-    public void addListeners(ActionListener x){
+    private void addActionListeners(ActionListener x){
+        
         saveB.addActionListener(x);
+        
     }
     
-    /**
-     * @param args the command line arguments
-     */
+    public void setComponent(javax.swing.JTextField x){
+        
+        comp = x;
+        
+    }
+    
+        
+    public String[] getParams(){
+        
+        String[] rtn = new String[3];
+        
+        rtn[0] =  addressF.getText();
+        rtn[1] =  cityF.getText();
+        rtn[2] =  postalF.getText();
 
+        return rtn;
+    }
+
+    private javax.swing.JTextField comp;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField adressF;
+    private javax.swing.JTextField addressF;
     private javax.swing.JButton backB;
     private javax.swing.JTextField cityF;
-    private javax.swing.JTextField fNameF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField lNameF;
-    private javax.swing.JTextField postNF;
+    private javax.swing.JTextField postalF;
     private javax.swing.JButton saveB;
     // End of variables declaration//GEN-END:variables
 }

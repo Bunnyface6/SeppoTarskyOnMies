@@ -5,19 +5,18 @@
  */
 package view;
 
-import java.awt.Component;
 import java.awt.event.ActionListener;
 
 /**
  *
  * @author Cassu
  */
-public class AddLocationView extends javax.swing.JDialog {
+public class AddCClientView extends javax.swing.JDialog {
 
     /**
-     * Creates new form AddLocationView
+     * Creates new form AddCClientView
      */
-    public AddLocationView(java.awt.Frame parent, boolean modal) {
+    public AddCClientView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -32,21 +31,29 @@ public class AddLocationView extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        cityF = new javax.swing.JTextField();
+        nameF = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        postalF = new javax.swing.JTextField();
-        addressF = new javax.swing.JTextField();
+        yIdF = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        cityF = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        postNmbrF = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        adressF = new javax.swing.JTextField();
         backB = new javax.swing.JButton();
         saveB = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("Kaupunki");
+        jLabel1.setText("Yrityksen nimi");
 
-        jLabel2.setText("Postinumero");
+        jLabel2.setText("Y-tunnus");
 
-        jLabel3.setText("Osoite");
+        jLabel3.setText("Kaupunki");
+
+        jLabel4.setText("Postinumero");
+
+        jLabel5.setText("Katuosoite");
 
         backB.setText("Peruuta");
         backB.addActionListener(new java.awt.event.ActionListener() {
@@ -56,11 +63,6 @@ public class AddLocationView extends javax.swing.JDialog {
         });
 
         saveB.setText("Tallenna");
-        saveB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveBActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -72,14 +74,18 @@ public class AddLocationView extends javax.swing.JDialog {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(backB)
                         .addGap(18, 18, 18)
                         .addComponent(saveB))
-                    .addComponent(cityF, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
-                    .addComponent(postalF)
-                    .addComponent(addressF))
-                .addContainerGap(70, Short.MAX_VALUE))
+                    .addComponent(nameF)
+                    .addComponent(yIdF)
+                    .addComponent(cityF)
+                    .addComponent(postNmbrF)
+                    .addComponent(adressF))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,15 +93,23 @@ public class AddLocationView extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cityF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(nameF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(postalF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(yIdF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(addressF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cityF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(postNmbrF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(adressF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(backB)
@@ -110,43 +124,25 @@ public class AddLocationView extends javax.swing.JDialog {
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_backBActionPerformed
 
-    private void saveBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBActionPerformed
-                // TODO add your handling code here:
-    }//GEN-LAST:event_saveBActionPerformed
-    
-    private void addActionListeners(ActionListener x){
-        
+    /**
+     * @param args the command line arguments
+     */
+    public void addListeners(ActionListener x){
         saveB.addActionListener(x);
-        
-    }
-    
-    public void setComponent(javax.swing.JTextField x){
-        
-        comp = x;
-        
-    }
-    
-        
-    public String[] getParams(){
-        
-        String[] rtn = new String[3];
-        
-        rtn[0] =  addressF.getText();
-        rtn[1] =  cityF.getText();
-        rtn[2] =  postalF.getText();
-
-        return rtn;
     }
 
-    private javax.swing.JTextField comp;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField addressF;
+    private javax.swing.JTextField adressF;
     private javax.swing.JButton backB;
     private javax.swing.JTextField cityF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField postalF;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JTextField nameF;
+    private javax.swing.JTextField postNmbrF;
     private javax.swing.JButton saveB;
+    private javax.swing.JTextField yIdF;
     // End of variables declaration//GEN-END:variables
 }

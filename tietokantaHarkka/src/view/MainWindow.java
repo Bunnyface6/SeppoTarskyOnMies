@@ -6,6 +6,9 @@
 package view;
 
 import java.awt.event.ActionListener;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.*;
 
 /**
  *
@@ -36,20 +39,37 @@ public class MainWindow extends javax.swing.JFrame {
         editButton = new javax.swing.JButton();
         findButton = new javax.swing.JButton();
         invoiceButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         lopetaButton = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jList1.setModel(new javax.swing.AbstractListModel<Object>() {
+            String[] strings = { "Testi 1", "Testi 2" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jList1ValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(jList1);
 
         addButton.setText("Lisää...");
 
         deleteButton.setText("Poista");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
 
         editButton.setText("Muokkaa");
 
@@ -57,6 +77,12 @@ public class MainWindow extends javax.swing.JFrame {
         findButton.setToolTipText("");
 
         invoiceButton.setText("Tulosta lasku");
+
+        jButton1.setText("jButton1");
+
+        jButton2.setText("jButton2");
+
+        jButton3.setText("jButton3");
 
         jMenu1.setText("File");
 
@@ -74,9 +100,6 @@ public class MainWindow extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -84,18 +107,23 @@ public class MainWindow extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(editButton)
-                    .addComponent(deleteButton)
-                    .addComponent(invoiceButton))
-                .addGap(0, 164, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(findButton)
-                .addGap(18, 18, 18)
-                .addComponent(addButton)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(editButton)
+                            .addComponent(deleteButton)
+                            .addComponent(jButton1)
+                            .addComponent(jButton2)
+                            .addComponent(jButton3)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(findButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(addButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(invoiceButton)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -106,14 +134,19 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(editButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(deleteButton)
-                        .addGap(38, 38, 38)
-                        .addComponent(invoiceButton)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addButton)
-                    .addComponent(findButton))
+                    .addComponent(findButton)
+                    .addComponent(invoiceButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -123,6 +156,27 @@ public class MainWindow extends javax.swing.JFrame {
     private void lopetaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lopetaButtonActionPerformed
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_lopetaButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        jButton1.show(false);        // TODO add your handling code here:
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
+        JList lsm = (JList)evt.getSource();
+        int firstIndex = evt.getFirstIndex();
+        int lastIndex = evt.getLastIndex();
+        boolean isAdjusting = evt.getValueIsAdjusting();
+        
+        if (lsm.isSelectionEmpty()) {
+            System.out.println("TEEST");
+            deleteButton.show(true);
+        }
+        else
+            if(lsm.getSelectedValue() instanceof Integer)
+                deleteButton.show(false);
+        
+        
+    }//GEN-LAST:event_jList1ValueChanged
     public javax.swing.JList<Object> getList(){
         return jList1;
     }
@@ -134,10 +188,6 @@ public class MainWindow extends javax.swing.JFrame {
         editButton.addActionListener(editL);
         
     }
-    
-    /**
-     * @param args the command line arguments
-     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
@@ -145,9 +195,11 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton editButton;
     private javax.swing.JButton findButton;
     private javax.swing.JButton invoiceButton;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JList<Object> jList1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;

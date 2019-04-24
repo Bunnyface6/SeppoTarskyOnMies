@@ -77,6 +77,8 @@ public class OverallController {
         
     }
     
+    
+    
     // TÄSTÄ ALASPÄIN KUULUVAT DIALOGEIHIN
     class findDialogListener implements ActionListener{
         
@@ -106,20 +108,55 @@ public class OverallController {
             }
             if(str.equals("Kuluttaja-asiakas")){
                 
-                
+                AddPClientView ndial = new AddPClientView(win, true);
+                dial.dispose();
+                ndial.addListeners();
+                ndial.show();
                 
             }
             if(str.equals("Yritysasiakas")){
-                
+                AddCClientView ndial = new AddCClientView(win, true);
+                dial.dispose();
+                ndial.addListeners();
+                ndial.show();
                 
             }
             if(str.equals("Tarvike")){
-                
-                
+                AddCClientView ndial = new AddCClientView(win, true);
+                dial.dispose();
+                ndial.addListeners();
+                ndial.show();
             }
         }
         
+        class addPCclientB implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent e){
+                Component comp = (Component) e.getSource();
+                AddPClientView dial = (AddPClientView)SwingUtilities.getRoot(comp);
+
+            }
+        }
+        class addCClientB implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent e){
+                Component comp = (Component) e.getSource();
+                AddCClientView dial = (AddCClientView)SwingUtilities.getRoot(comp);
+            
+            }
+            
+        }
+        class addArticleB implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent e){
+                Component comp = (Component) e.getSource();
+                AddCClientView dial = (AddCClientView)SwingUtilities.getRoot(comp);
+            
+            } 
+        }
+        
     }
+    /*
     class addLocationButtonFromWS implements ActionListener{
         
         @Override
@@ -135,7 +172,7 @@ public class OverallController {
             locDial.show();
          }
     }
-    
+    *//*
     class saveLocationButton implements ActionListener{
         
          @Override
@@ -148,11 +185,6 @@ public class OverallController {
              
              
          }
-        
-        
-        
     }
-    
-    
-
+*/
 }
