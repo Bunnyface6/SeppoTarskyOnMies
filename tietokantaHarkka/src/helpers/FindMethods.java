@@ -62,7 +62,7 @@ public class FindMethods {
     
     private void findLasku(String[] arr){
         Invoice inv;
-        ArrayList<Invoice> invAL = new ArrayList<Invoice>;
+        ArrayList<Invoice> invAL = new ArrayList<Invoice>();
         if(arr[1].equals("Tunnus")){
             
             InvoiceCont cont = new InvoiceCont();
