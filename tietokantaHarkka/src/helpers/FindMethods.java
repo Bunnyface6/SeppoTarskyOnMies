@@ -78,9 +78,9 @@ public class FindMethods {
             
             DateFormat df = new SimpleDateFormat("dd-MM-YYYY");
             Date result = df.parse(arr[2]);
-            inv = cont.findInvoiceByDate(result, con);
+            invAL = cont.findInvoiceByDate(result, con);
             
-            model.add(inv);
+            model.add(invAL);
             
         }
         else if(arr[1].equals("Työkohdenumero")){
