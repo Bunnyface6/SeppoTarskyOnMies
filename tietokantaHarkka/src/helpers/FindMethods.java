@@ -294,6 +294,7 @@ public class FindMethods {
         LocationCont lCont = new LocationCont();
         ArrayList<Location> lAL = null;
         ArrayList<WorkSite> wSAL = null;
+        ArrayList<WorkSite> wSALH = null;
         WorkSite wS;
         WorkSiteCont wSCont = new WorkSiteCont();
         
@@ -301,8 +302,11 @@ public class FindMethods {
         
         Iterator<Location> iter = lAL.iterator();
         while (iter.hasNext()) {
-            wS = wSCont.findWorkSiteByLocationNmbr(iter.next().getNmbr(), coni);
-            wSAL.add(wS);          
+            wSALH = wSCont.findWorkSiteByLocationNmbr(iter.next().getNmbr(), coni);
+            Iterator<WorkSite> iterw = wSALH.iterator();
+            while (iterw.hasNext()) {
+                wSAL.add(iterw.next());  
+            }
         }
         return wSAL;
         
