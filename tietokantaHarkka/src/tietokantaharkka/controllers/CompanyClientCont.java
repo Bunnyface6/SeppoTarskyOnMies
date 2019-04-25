@@ -175,4 +175,31 @@ public class CompanyClientCont {
         }
         return x;    
     }
+    
+    public ArrayList<CompanyClient> findCompanyClientByUnpaid(Connection con) throws SQLException {
+        ArrayList<CompanyClient> l = new ArrayList<CompanyClient>();
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("\"SELECT yritys.asiakasnumero, yritys.y-tunnus, yritys.nimi, asiakas.osoitenumero FROM yritys, asiakas, lasku WHERE asiakas.asiakasnumero = yritys.asiakasnumero AND lasku.asiakasnumero = henkilo.asiakasnumero AND maksupaiva IS NULL");
+            resultSet = pStatement.executeQuery();
+            while (resultSet.next()) {
+                l.add(createCompanyClient(resultSet.getString(3), resultSet.getInt(2), resultSet.getInt(1), resultSet.getInt(4));
+            }
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return l;
+    }
 }

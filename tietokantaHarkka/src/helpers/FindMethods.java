@@ -62,7 +62,7 @@ public class FindMethods {
     
     private void findLasku(String[] arr){
         Invoice inv;
-        ArrayList<Invoice> invAL = new ArrayList<Invoice>;
+        ArrayList<Invoice> invAL = new ArrayList<Invoice>();
         if(arr[1].equals("Tunnus")){
             
             InvoiceCont cont = new InvoiceCont();
@@ -78,9 +78,9 @@ public class FindMethods {
             
             DateFormat df = new SimpleDateFormat("dd-MM-YYYY");
             Date result = df.parse(arr[2]);
-            inv = cont.findInvoiceByDate(result, con);
+            invAL = cont.findInvoiceByDate(result, con);
             
-            model.add(inv);
+            model.add(invAL);
             
         }
         else if(arr[1].equals("Työkohdenumero")){
@@ -126,7 +126,7 @@ public class FindMethods {
     
     private void findTarvike(String[] arr){
         Article a;
-        ArrayList<Article> aAL = new ArrayList<Article>;
+        ArrayList<Article> aAL = new ArrayList<Article>();
 
         if(arr[1].equals("Tunnus")){
             
@@ -183,9 +183,9 @@ public class FindMethods {
             
             PrivateClientCont cont = new PrivateClientCont();
             
-            pCAL = cont.findPrivateClientByUnpaidInvoice(arr[2], con);
+            pCAL = cont.findPrivateClientByUnpaid(con);
             
-            model.add(pC);
+            model.add(pCAL);
             
         }
     }
@@ -216,7 +216,7 @@ public class FindMethods {
             
             CompanyClientCont cont = new CompanyClientCont();
             
-            cCAL = cont.findCompanyClientByUnpaidInvoices(arr[2], con);
+            cCAL = cont.findCompanyClientByUnpaid (con);
             
             model.add(cCAL);
             
@@ -249,7 +249,7 @@ public class FindMethods {
             
             WorkSiteCont cont = new WorkSiteCont();
             
-            wSAL = cont.findWorkSiteByAddress(arr[2], con);
+            wSAL = findWorkSiteByAddress(arr[2], con);
             
             model.add(wSAL);
             
@@ -288,6 +288,29 @@ public class FindMethods {
             con.rollback();
             return a; 
         }
+    }
+    
+    private ArrayList<WorkSite> findWorkSiteByAddress(String address, Connection coni){
+        LocationCont lCont = new LocationCont();
+        ArrayList<Location> lAL = null;
+        ArrayList<WorkSite> wSAL = null;
+        ArrayList<WorkSite> wSALH = null;
+        WorkSite wS;
+        WorkSiteCont wSCont = new WorkSiteCont();
+        
+        lAL = lCont.findLocationByAddress(address, coni);
+        
+        Iterator<Location> iter = lAL.iterator();
+        while (iter.hasNext()) {
+            wSALH = wSCont.findWorkSiteByLocationNmbr(iter.next().getNmbr(), coni);
+            Iterator<WorkSite> iterw = wSALH.iterator();
+            while (iterw.hasNext()) {
+                wSAL.add(iterw.next());  
+            }
+        }
+        return wSAL;
+        
+        
     }
     
 }

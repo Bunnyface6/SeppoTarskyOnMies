@@ -175,6 +175,38 @@ public class InvoiceCont {
         return i;
     }
     
+    public ArrayList<Invoice> findInvoiceByDate(Date fBD, Connection con) throws SQLException {
+        ArrayList<Invoice> i = new ArrayList<Invoice>();
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE paivamaara = ?"); 
+            pStatement.setDate(1, new java.sql.Date(fBD.getTime()));
+            resultSet = pStatement.executeQuery();
+            while (resultSet.next()) {
+                i.add(createInvoice(new java.util.Date(resultSet.getDate(3).getTime()), resultSet.getInt(1), 
+                                  new java.util.Date(resultSet.getDate(2).getTime()), new java.util.Date(resultSet.getDate(4).getTime()), 
+                                  resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
+            }
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return i;
+    }
+    
+    
+    
     public ArrayList<Invoice> findUnpaidInvoices(int whatNumber, Connection con) throws SQLException {
         ArrayList<Invoice> i = new ArrayList<Invoice>();
         PreparedStatement pStatement = null;
