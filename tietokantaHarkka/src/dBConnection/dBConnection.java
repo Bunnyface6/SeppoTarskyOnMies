@@ -5,7 +5,9 @@
  */
 package dBConnection;
 
+import com.jcraft.jsch.*;
 import java.sql.*;
+import java.util.Properties;
 
 /**
  *
@@ -17,19 +19,29 @@ public class dBConnection {
     private final String SERVER = "dbstud2.sis.uta.fi";
     private final int PORTNUM = 5432;
     private final String DATABASE = "tiko2019r28"; 
-    private final String USERNAME = "js428162";
-    private final String PASSWORD = "t13t0k4nt4";
+    private final String USERNAME = "na428043";
+    private final String PASSWORD = "Velimatti1";
     private Connection con;
+    static int lport;
+    static String rhost;
+    static int rport;
+    Session session;
     
     public Connection createConnection() {
         try {
-            con = DriverManager.getConnection(PROTOCOL + "//" + SERVER + ":" + PORTNUM + "/" + DATABASE, USERNAME, PASSWORD);
+            Class.forName("org.postgresql.Driver");
+            System.out.println(PROTOCOL + "//" + SERVER + ":" + PORTNUM + "/" + DATABASE);
+            con = DriverManager.getConnection(PROTOCOL + "//" + "localhost" + ":" + lport + "/" + DATABASE, USERNAME, PASSWORD);
             return con;
 	}
 	catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(e);
             return null;     
 	}
+        catch (ClassNotFoundException f){
+             System.out.println(f);
+            return null;
+        }
     }
     
     public boolean closeConnection() {
@@ -46,4 +58,37 @@ public class dBConnection {
 	    return false;
 	}			
     }
+    public void go(){
+        String user = "ja427770";
+        String password = "Predator669";
+        String host = "shell.sis.uta.fi";
+        int port=22;
+        try
+            {
+            JSch jsch = new JSch();
+            session = jsch.getSession(user, host, port);
+            lport = 4321;
+            rhost = "dbstud2.sis.uta.fi";
+            rport = 5432;
+            session.setPassword(password);
+            session.setConfig("StrictHostKeyChecking", "no");
+            System.out.println("Establishing Connection...");
+            session.connect();
+            int assinged_port=session.setPortForwardingL(lport, rhost, rport);
+            System.out.println("localhost:"+assinged_port+" -> "+rhost+":"+rport);
+            }
+        catch(Exception e){System.err.print(e);}
+    }
+         
+   public void disconnect(){
+       System.out.println("SUljetaan");
+       try{
+        con.close();
+       }
+       catch(Exception e){
+           System.out.println("JOTAIN MENI PIELEEN");
+       }
+       session.disconnect();
+       System.out.println("SUljetaan");
+   }
 }

@@ -5,11 +5,14 @@
  */
 package theController;
 
+import dBConnection.dBConnection;
 import view.FindDialog;
 import helpers.*;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import javax.swing.JList;
 import view.*;
 import java.sql.*;
@@ -26,17 +29,53 @@ public class OverallController {
     private JList list;
     private MainWindow win;
     private ModelList model;
+    private dBConnection connection;
     
-    public OverallController(MainWindow y, Connection con2){
-        
-        this.con = con2;
+    public OverallController(MainWindow y, dBConnection connect){
+        connection = connect;
+        this.con = connection.createConnection();
         win = y;
+        win.addWindowListener(new mainWinL());
         list = win.getList();
         model = new ModelList();
-        win.setListeners(new findListener(), new addListener(), new removeListener(), new editListener());
+        win.setListeners(new findListener(), new addListener(), new removeListener(), new editListener(), new closeConL());
         win.show();
     }
     
+    class mainWinL implements WindowListener{
+        
+        @Override 
+        public void windowDeactivated(WindowEvent e){
+            System.out.println("WHATS THIS");
+        }
+
+        @Override
+        public void windowOpened(WindowEvent e) {
+        }
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            connection.disconnect();
+        }
+
+        @Override
+        public void windowClosed(WindowEvent e) {
+        }
+
+        @Override
+        public void windowIconified(WindowEvent e) {
+        }
+
+        @Override
+        public void windowDeiconified(WindowEvent e) {
+        }
+
+        @Override
+        public void windowActivated(WindowEvent e) {
+        }
+        
+        
+    }
     // NÄMÄ KUULUVAT PÄÄIKKUNAAN
     class findListener implements ActionListener{
         
@@ -75,13 +114,8 @@ public class OverallController {
             dial.addListeners(new addContinueButton());
             dial.show();
         }
-        
     }
-    
-    
-    
-    
-    
+
     // TÄSTÄ ALASPÄIN KUULUVAT DIALOGEIHIN
     class findDialogListener implements ActionListener{
         
@@ -93,6 +127,13 @@ public class OverallController {
             finder.findInDb(dial.getParameters());
         }
     }
+    
+    class closeConL implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent e){
+                connection.disconnect();
+            }
+        }
     class addContinueButton implements ActionListener{
         
         @Override
@@ -124,7 +165,6 @@ public class OverallController {
                 ndial.show();
             }
         }
-        
         class addPClientB implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e){
@@ -133,9 +173,10 @@ public class OverallController {
                 String[] result = dial.getParam();
                 Transaction ta = new Transaction();
                 try{
-                    ta.addClient(result[0], result[1], result[4], Integer.parseInt(result[3]), result[2], con);
+                    System.out.println(ta.addClient(result[0], result[1], result[4], Integer.parseInt(result[3]), result[2], con));
                 }
                 catch(SQLException f){
+                    System.out.println(f.getMessage());
                     System.out.println("AAAARG");
                 }
             }

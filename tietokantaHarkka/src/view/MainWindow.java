@@ -6,6 +6,7 @@
 package view;
 
 import java.awt.event.ActionListener;
+import java.awt.event.WindowListener;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.*;
@@ -14,7 +15,7 @@ import javax.swing.*;
  *
  * @author Cassu
  */
-public class MainWindow extends javax.swing.JFrame {
+public class MainWindow extends javax.swing.JFrame{
 
     /**
      * Creates new form mainWindow
@@ -44,12 +45,18 @@ public class MainWindow extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        closeConB = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         lopetaButton = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jList1.setModel(new javax.swing.AbstractListModel<Object>() {
             String[] strings = { "Testi 1", "Testi 2" };
@@ -90,6 +97,13 @@ public class MainWindow extends javax.swing.JFrame {
 
         jButton5.setText("Lisää muistutukset");
 
+        closeConB.setText("Suljje");
+        closeConB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeConBActionPerformed(evt);
+            }
+        });
+
         jMenu1.setText("File");
 
         jMenuItem1.setText("Asetukset");
@@ -113,27 +127,28 @@ public class MainWindow extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(editButton)
-                            .addComponent(deleteButton)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3)
-                            .addComponent(jButton4)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(findButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(addButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(invoiceButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton5)))
+                    .addComponent(editButton)
+                    .addComponent(deleteButton)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(findButton)
+                .addGap(18, 18, 18)
+                .addComponent(addButton)
+                .addGap(18, 18, 18)
+                .addComponent(invoiceButton)
+                .addGap(18, 18, 18)
+                .addComponent(jButton5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(closeConB)
+                .addGap(23, 23, 23))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,7 +173,8 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(addButton)
                     .addComponent(findButton)
                     .addComponent(invoiceButton)
-                    .addComponent(jButton5))
+                    .addComponent(jButton5)
+                    .addComponent(closeConB))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -189,20 +205,30 @@ public class MainWindow extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jList1ValueChanged
+
+    private void closeConBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeConBActionPerformed
+                // TODO add your handling code here:
+    }//GEN-LAST:event_closeConBActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowClosing
     public javax.swing.JList<Object> getList(){
         return jList1;
     }
-    public void setListeners(ActionListener findL, ActionListener addL, ActionListener removeL, ActionListener editL){
+    public void setListeners(ActionListener findL, ActionListener addL, ActionListener removeL, ActionListener editL, ActionListener closeL){
         
         addButton.addActionListener(addL);
         findButton.addActionListener(findL);
         deleteButton.addActionListener(removeL);
         editButton.addActionListener(editL);
+        closeConB.addActionListener(closeL);
         
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
+    private javax.swing.JButton closeConB;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
     private javax.swing.JButton findButton;

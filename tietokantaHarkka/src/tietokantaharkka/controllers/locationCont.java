@@ -37,11 +37,12 @@ public class LocationCont {
 	    pStatement.setString(3, x.getCity());
             pStatement.executeUpdate();
             resultSet = pStatement.getGeneratedKeys();
-            resultSet.last();
+            resultSet.next();
             lN = resultSet.getInt(1);
             con.commit();
         }
         catch(SQLException e) {
+            System.out.println(e.getMessage());
             con.rollback(); 
         }
         finally {

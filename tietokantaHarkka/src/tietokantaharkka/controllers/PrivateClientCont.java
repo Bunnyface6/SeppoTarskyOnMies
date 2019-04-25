@@ -35,16 +35,17 @@ public class PrivateClientCont {
             pStatement.setInt(1, x.getLocationNmbr());
             pStatement.executeUpdate();
             resultSet = pStatement.getGeneratedKeys();
-            resultSet.last();
+            resultSet.next();
             pStatement.clearParameters();
             pStatement = con.prepareStatement("INSERT INTO henkilo VALUES(?, ?, ?)");
             pStatement.setInt(1, resultSet.getInt(1));
             pStatement.setString(2, x.getfName());
-            pStatement.setString(2, x.getlName());
+            pStatement.setString(3, x.getlName());
             pStatement.executeUpdate();
             con.commit();
         }
         catch(SQLException e) {
+            System.out.println(e.getMessage());
             con.rollback(); 
         }
         finally {

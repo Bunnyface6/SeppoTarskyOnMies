@@ -19,9 +19,11 @@ public class TietokantaHarkka {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
         dBConnection connect = new dBConnection();
+        connect.go();
         MainWindow view = new MainWindow();
-        OverallController controller = new OverallController(view, connect.createConnection());
+        OverallController controller = new OverallController(view, connect);
     }
     
 }
