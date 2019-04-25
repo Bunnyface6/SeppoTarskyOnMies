@@ -183,9 +183,9 @@ public class FindMethods {
             
             PrivateClientCont cont = new PrivateClientCont();
             
-            pCAL = cont.findPrivateClientByUnpaidInvoice(arr[2], con);
+            pCAL = cont.findPrivateClientByUnpaid(con);
             
-            model.add(pC);
+            model.add(pCAL);
             
         }
     }
@@ -216,7 +216,7 @@ public class FindMethods {
             
             CompanyClientCont cont = new CompanyClientCont();
             
-            cCAL = cont.findCompanyClientByUnpaidInvoices(arr[2], con);
+            cCAL = cont.findCompanyClientByUnpaid (con);
             
             model.add(cCAL);
             

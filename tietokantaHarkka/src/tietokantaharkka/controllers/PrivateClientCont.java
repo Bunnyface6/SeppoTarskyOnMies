@@ -183,4 +183,31 @@ public class PrivateClientCont {
         }
         return x;    
     }
+    
+    public ArrayList<PrivateClient> findPrivateClientByUnpaid(Connection con) throws SQLException {
+        ArrayList<PrivateClient> l = new ArrayList<PrivateClient>();
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            con.setAutoCommit(false);
+            pStatement = con.prepareStatement("SELECT henkilo.asiakasnumero, etunimi, sukunimi, asiakas.osoitenumero FROM henkilo, asiakas, lasku WHERE asiakas.asiakasnumero = henkilo.asiakasnumero AND lasku.asiakasnumero = henkilo.asiakasnumero AND maksupaiva IS NULL");
+            resultSet = pStatement.executeQuery();
+            while (resultSet.next()) {
+                l.add(createPrivateClient(resultSet.getString(2), resultSet.getString(3), resultSet.getInt(1), resultSet.getInt(4));
+            }
+            con.commit();
+        }
+        catch(SQLException e) {
+            con.rollback(); 
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return l;
+    }
 }
