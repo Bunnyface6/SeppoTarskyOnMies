@@ -249,7 +249,7 @@ public class FindMethods {
             
             WorkSiteCont cont = new WorkSiteCont();
             
-            wSAL = cont.findWorkSiteByAddress(arr[2], con);
+            wSAL = findWorkSiteByAddress(arr[2], con);
             
             model.add(wSAL);
             
@@ -288,6 +288,25 @@ public class FindMethods {
             con.rollback();
             return a; 
         }
+    }
+    
+    private ArrayList<WorkSite> findWorkSiteByAddress(String address, Connection coni){
+        LocationCont lCont = new LocationCont();
+        ArrayList<Location> lAL = null;
+        ArrayList<WorkSite> wSAL = null;
+        WorkSite wS;
+        WorkSiteCont wSCont = new WorkSiteCont();
+        
+        lAL = lCont.findLocationByAddress(address, coni);
+        
+        Iterator<Location> iter = lAL.iterator();
+        while (iter.hasNext()) {
+            wS = wSCont.findWorkSiteByLocationNmbr(iter.next().getNmbr(), coni);
+            wSAL.add(wS);          
+        }
+        return wSAL;
+        
+        
     }
     
 }
