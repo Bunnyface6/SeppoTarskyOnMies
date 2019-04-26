@@ -60,5 +60,16 @@ public class Location {
         else
             throw new IllegalArgumentException();
     }
+
+    @Override
+    public String toString() {
+        return "OSOITE:" + " Osoitenumero: " + nmbr + " Katuosoite: " + address + " Postinumero: " + postNmbr + " Kaupunki: " + city;
+    }
+    
+    public String showString() {
+        return "Osoite: " + address + " " + postNmbr + " " + city;
+    }
+    
+    
     
 }

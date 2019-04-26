@@ -29,6 +29,7 @@ public class Transaction {
     private LocationCont lC;
     private PrivateClientCont pCC;
     private CompanyClientCont cCC;
+    private ClientCont cC;
     private WorkSiteCont wSC;
     private WorkPerformanceCont wPC;
     private PerformedWorkCont pVC;
@@ -48,15 +49,23 @@ public class Transaction {
         this.wPrC = new WorkPriceCont();
         this.aC = new ArticleCont();
         this.aTC = new ArticleTypeCont();
+        this.cC = new ClientCont();
     }
     
     public boolean addClient(String fName, String lName, String address, int zipCode, String city, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
-            Location l = new Location(0, address, zipCode, city);
-            int lN = lC.addNewLocation(l, con);
-            PrivateClient pC = new PrivateClient(fName, lName, 0, lN);
-            pCC.addNewPrivateClient(pC, con);
+            Location l = lC.findLocation(address, zipCode, city, con);
+            if (l == null) {
+                l = new Location(0, address, zipCode, city); 
+                int lN = lC.addNewLocation(l, con);
+                PrivateClient pC = new PrivateClient(fName, lName, 0, lN);
+                pCC.addNewPrivateClient(pC, con);
+            }
+            else {
+               PrivateClient pC2 = new PrivateClient(fName, lName, 0, l.getNmbr());
+               pCC.addNewPrivateClient(pC2, con);
+            }
             con.commit();
             return true;
         }
@@ -69,32 +78,16 @@ public class Transaction {
     public boolean addClient(String name, int yID, String address, int zipCode, String city, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
-            Location l = new Location(0, address, zipCode, city);
-            int lN = lC.addNewLocation(l, con);
-            CompanyClient cC = new CompanyClient(name, yID, 0, lN);
-            cCC.addNewCompanyClient(cC, con);
-            con.commit();
-            return true;
-        }
-        catch (SQLException e) {
-            con.rollback();
-            return false;
-        }
-    }
-    
-    public boolean addWorkSiteToClient(Client x, String address, int zipCode, String city, double contractPrice, Connection con) throws SQLException {
-        try {
-            con.setAutoCommit(false);
             Location l = lC.findLocation(address, zipCode, city, con);
-            if (l != null) {
-               WorkSite wS = new WorkSite(l.getNmbr(), x.getNmbr(), 0, contractPrice);
-               wSC.addNewWorkSite(wS, con);
-            }
-            else {
+            if (l == null) {
                 l = new Location(0, address, zipCode, city);
                 int lN = lC.addNewLocation(l, con);
-                WorkSite wS2 = new WorkSite(lN, x.getNmbr(), 0, contractPrice);
-                wSC.addNewWorkSite(wS2, con);
+                CompanyClient cC = new CompanyClient(name, yID, 0, lN);
+                cCC.addNewCompanyClient(cC, con);
+            }
+            else {
+                CompanyClient cC2 = new CompanyClient(name, yID, 0, l.getNmbr());
+                cCC.addNewCompanyClient(cC2, con);
             }
             con.commit();
             return true;
@@ -105,6 +98,35 @@ public class Transaction {
         }
     }
     
+    public boolean addWorkSiteToClient(int clientNmbr, String address, int zipCode, String city, double contractPrice, Connection con) throws SQLException {
+        try {
+            boolean oK = false;
+            con.setAutoCommit(false);
+            Client x = cC.findClientByNmbr(clientNmbr, con);
+            if (x != null) {        
+                Location l = lC.findLocation(address, zipCode, city, con);
+                if (l != null) {
+                    WorkSite wS = new WorkSite(l.getNmbr(), x.getNmbr(), 0, contractPrice);
+                    wSC.addNewWorkSite(wS, con);
+                }
+                else {
+                    l = new Location(0, address, zipCode, city);
+                    int lN = lC.addNewLocation(l, con);
+                    WorkSite wS2 = new WorkSite(lN, x.getNmbr(), 0, contractPrice);
+                    wSC.addNewWorkSite(wS2, con);
+                }
+                oK = true;
+            }
+            con.commit();
+            return oK;
+        }
+        catch (SQLException e) {
+            con.rollback();
+            return false;
+        }
+    }
+    
+    //Kesken
     public boolean addHourstoWorkPerformaceofWorkSite(WorkSite x, String wType, int nOHours, int disc, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
@@ -363,6 +385,68 @@ public class Transaction {
             System.out.println("PAHASTI PIELEEN");
             return false;
         }
-        
+    }
+    
+    public ArrayList<String> getWorkSiteInfo(int clientNmbr, Connection con) throws SQLException {
+        ArrayList<String> wSInfo = new ArrayList<String>();
+        try {
+            con.setAutoCommit(false);
+            ArrayList<WorkSite> w = wSC.findWorkSiteByClientNmbr(clientNmbr, con);
+            if (!w.isEmpty()) {
+                for (int i = 0; i < w.size(); i++) {
+                    WorkSite wS = w.get(i);
+                    Location l = lC.findLocationByNmbr(wS.getLocationNmbr(), con);
+                    String s = wS.showString() + " " + l.showString();
+                    wSInfo.add(s);
+                }
+            }
+            con.commit();
+        }
+        catch (SQLException e) {
+            con.rollback();
+        }
+        return wSInfo;
+    }
+    
+    public ArrayList<String> getClientInfo(String fName, String lName, Connection con) throws SQLException {
+        ArrayList<String> cInfo = new ArrayList<String>();
+        try {
+            con.setAutoCommit(false);
+            ArrayList<PrivateClient> c = pCC.findPrivateClientByName(lName, fName, con);
+            if (!c.isEmpty()) {
+                for (int i = 0; i < c.size(); i++) {
+                    PrivateClient pC = c.get(i);
+                    Location l = lC.findLocationByNmbr(pC.getLocationNmbr(), con);
+                    String s = pC.showString() + " " + l.showString();
+                    cInfo.add(s);
+                }
+            }
+            con.commit();
+        }
+        catch (SQLException e) {
+            con.rollback();
+        }
+        return cInfo;
+    }
+    
+    public ArrayList<String> getClientInfo(String name, Connection con) throws SQLException {
+        ArrayList<String> cInfo = new ArrayList<String>();
+        try {
+            con.setAutoCommit(false);
+            ArrayList<CompanyClient> c = cCC.findCompanyClientByName(name, con);
+            if (!c.isEmpty()) {
+                for (int i = 0; i < c.size(); i++) {
+                    CompanyClient cC = c.get(i);
+                    Location l = lC.findLocationByNmbr(cC.getLocationNmbr(), con);
+                    String s = cC.showString() + " " + l.showString();
+                    cInfo.add(s);
+                }
+            }
+            con.commit();
+        }
+        catch (SQLException e) {
+            con.rollback();
+        }
+        return cInfo;
     }
 }

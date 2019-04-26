@@ -44,5 +44,7 @@ public class CompanyClient extends Client{
         return "Yritysasiakas: " + ", Tunnus: " + this.getNmbr() + ", Nimi: " + name + ", Y-Tunnus: " + yIdentifier;
     }
     
-    
+    public String showString() {
+        return "Asiakasnumero: " + this.getNmbr() + " Nimi: " + name + " Y-tunnus: " + yIdentifier;
+    }    
 }

@@ -1,6 +1,7 @@
 package view;
 import dBConnection.dBConnection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import transaction.Transaction;
 
@@ -31,24 +32,25 @@ public class UI {
     private final String ADDWORKPERFORMANCECOMMAND = "4";
     private final String ADDARTICLETOWORSITECOMMAND = "5";
     private final String ADDBACKCOMMAND = "11";
-    private final String SEARHCLIENTCOMMAND = "1";
-    private final String SEARCHWORKSITECOMMAND = "2";
-    private final String SEARCHARTICLECOMMAND = "3";
-    private final String SEARHINVOICECOMMAND = "4";
-    private final String SEARHBACKCOMMAND = "5";
+    private final String SEARCHPRIVCLIENTCOMMAND = "1";
+    private final String SEARCHCOMPLIENTCOMMAND = "2";
+    private final String SEARCHWORKSITECOMMAND = "3";
+    private final String SEARCHARTICLECOMMAND = "4";
+    private final String SEARHINVOICECOMMAND = "5";
+    private final String SEARHBACKCOMMAND = "6";
     
     private final String HELOMESSAGE = "Tervetuloa Tmi Sähkötärsky:n laskutusjärjestelmään!";
     private final String MAINMENUMESSAGE = "1)Lisää 2)Etsi 3)Lopeta";
     private final String ADDMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Työsuoritus työhohteeseen 5)Tarvike työkohteeseen\n"
                                           + "6)Tarvike laskulle 7) Tarviketta varastoon 8)Uusi tarvike varastoon 9)Uusi tarviketyyppi\n"
                                           + "10)Uusi työtyyppi 11)Takaisin";
-    
-    private final String SEARCHMENUMESSAGE = "1)Asiakas 2)Työkohde 3)Tarvike 4)Lasku 5)Takaisin";
+    private final String SEARCHMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tarvike 5)Lasku 6)Takaisin";
     private final String WRONGCOMMANDMESSAGE = "Virheellinen komento.";
     private final String NOTNUMBERMESSAGE = "Syöte virheellinen. Anna numero-muotoinen syöte ilman välilyöntejä.";
     private final String EMPTYINPUTMESSAGE = "Tyhjä syöte ei kelpaa.";
     private final String ADDOKMESSAGE = "Lisäys onnistui.";
     private final String ADDNOTOKMESSAGE = "Lisäys epäonnistui.";
+    private final String NORESULTS = "Ei tuloksia.";
     private final String QUITCONFIRMMESSAGE = "Haluatko varmasti lopettaa? k)Kyllä e)Ei";
     
     public void run() {
@@ -214,34 +216,58 @@ public class UI {
                         
             else if (userCommand.equals(SEARCHCOMMAND)) {
                 while (inSearchMenu) {     
-                    System.out.println(SEARCHMENUMESSAGE);
-                    userCommand = commandReader.nextLine();
+                    try {
+                        System.out.println(SEARCHMENUMESSAGE);
+                        userCommand = commandReader.nextLine();
                     
-                    if (userCommand.equals(SEARHCLIENTCOMMAND)) {
-                        System.out.println("Asiakasnumero:");
-                        tmp1 = commandReader.nextLine();
+                        if (userCommand.equals(SEARCHPRIVCLIENTCOMMAND)) {
+                            System.out.println("Etunimi:");
+                            tmp1 = commandReader.nextLine();
+                            System.out.println("Sukunimi:");
+                            tmp2 = commandReader.nextLine();
+                            ArrayList<String> list = transaction.getClientInfo(tmp1, tmp2, con.getConnection());
+                            printList(list);
+                        }
+                        
+                        else if (userCommand.equals(SEARCHCOMPLIENTCOMMAND)) {
+                            System.out.println("Nimi:");
+                            tmp1 = commandReader.nextLine();
+                            ArrayList<String> list = transaction.getClientInfo(tmp1, con.getConnection());
+                            printList(list);
+                        }
                 
-                    }
+                        else if (userCommand.equals(SEARCHWORKSITECOMMAND)) {
+                            System.out.println("Asiakasnumero:");
+                            tmp1 = commandReader.nextLine();
+                            tmp6 = Integer.parseInt(tmp1);
+                            ArrayList<String> list = transaction.getWorkSiteInfo(tmp6, con.getConnection());
+                            printList(list);
+                        }
                 
-                    else if (userCommand.equals(SEARCHWORKSITECOMMAND)) {
-                        System.out.println("Työkohdenumero:");
-                        tmp1 = commandReader.nextLine();
-                    }
-                
-                    else if (userCommand.equals(SEARCHARTICLECOMMAND)) {
+                        else if (userCommand.equals(SEARCHARTICLECOMMAND)) {
                    
-                    }
+                        }
                 
-                    else if (userCommand.equals(SEARHINVOICECOMMAND)) {
+                        else if (userCommand.equals(SEARHINVOICECOMMAND)) {
                    
-                    }
+                        }
                 
-                    else if (userCommand.equals(SEARHBACKCOMMAND)) {
-                        inSearchMenu = false;
-                    }
+                        else if (userCommand.equals(SEARHBACKCOMMAND)) {
+                            inSearchMenu = false;
+                        }
                 
-                    else {
-                        System.out.println(WRONGCOMMANDMESSAGE);
+                        else {
+                            System.out.println(WRONGCOMMANDMESSAGE);
+                        }
+                    }
+                    catch (NumberFormatException e) {
+                        System.out.println(NOTNUMBERMESSAGE);
+                    }
+                    catch (SQLException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    catch (NullPointerException e) {
+                        System.out.println(EMPTYINPUTMESSAGE);
                     }
                 }
             }
@@ -263,4 +289,16 @@ public class UI {
             }
         }
     }
+    
+    public void printList(ArrayList<String> list) {
+        if (!list.isEmpty()) {
+            for (int i = 0; i < list.size(); i++) {
+                String s = list.get(i);
+                System.out.println(s);
+            }       
+        }
+        else {
+            System.out.print(NORESULTS);
+        }
+    }    
 }

@@ -43,4 +43,7 @@ public class PrivateClient extends Client{
         return "KULUTTAJA-ASIAKAS: " + "Asiakastunnus: " + this.getNmbr() + "Etunimi: " + fName + ", Sukunimi: " + lName;
     }
     
+    public String showString() {
+        return "Asiakasnumero: " + this.getNmbr() + " Nimi: " + fName + " " + lName;
+    }
 }

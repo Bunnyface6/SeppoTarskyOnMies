@@ -59,5 +59,7 @@ public class WorkSite {
         return "TYÖKOHDE: " + "Tunnus: " + nmbr + ", Asiakastunnus: " + clientNmbr + ", Kohdetunnus: " + locationNmbr;
     }
     
-    
+    public String showString() {
+        return "Työkohdenumero: " + nmbr + " Asiakasnumero: " + clientNmbr;
+    }
 }

@@ -188,6 +188,42 @@ public class PrivateClientCont {
     }
     
     /**
+     * Suorittaa tietokantaan kyselyn, jonka avulla haetaan parametrien osoittamien
+     * yksityisasiakkaiden tietoja henkilo- ja asiakas-taulusta.
+     * 
+     * @param lName asiakkaan sukunimi
+     * @param fName asiakkaan etunimi
+     * @param con viite tietokannan yhteys olioon
+     * @return lista yksityisasiakas-olioista, joilla tietokannan henkilo-taulun ja asiakas-taulun tiedot
+     * @throws SQLException jos kysely aiheuttaa virheen
+     */		
+    public ArrayList<PrivateClient> findPrivateClientByName(String lName, String fName, Connection con) throws SQLException{
+        ArrayList<PrivateClient> pCAL = new ArrayList<PrivateClient>();
+	PrivateClient pC = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+	try {
+            pStatement = con.prepareStatement("SELECT henkilo.asiakasnumero, etunimi, sukunimi, asiakas.osoitenumero FROM henkilo, asiakas WHERE asiakas.asiakasnumero = henkilo.asiakasnumero AND sukunimi = ? AND etunimi = ?");
+	    pStatement.setString(1, lName);
+	    pStatement.setString(2, fName);
+            resultSet = pStatement.executeQuery();
+            while (resultSet.next()) {
+		pC = createPrivateClient(resultSet.getString(2), resultSet.getString(3), resultSet.getInt(1), resultSet.getInt(4));
+		pCAL.add(pC);
+            }
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return pCAL;
+    }
+    
+    /**
      * Poistaa parametrin osoittaman asiakkaan tiedot tietokannan henkilo- ja asiakas-tauluista.
      * 
      * @param x yksityisasiakas-olio
