@@ -20,7 +20,14 @@ public class ArticleCont {
 	lastUsed = x;
 	return x;
     }
-	
+    
+    /**
+     * Lisää tietokannan tarvike-tauluun uuden tarvikkeen parametrina saadun olion attribuuttien arvojen perusteella.
+     * 
+     * @param x viite tarvike olioon
+     * @param con viite tietokannan yhteys olioon
+     * @throws SQLException jos lisäyksessä tapahtuu virhe
+     */
     public void addNewArticle(Article x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
         try {
@@ -41,10 +48,18 @@ public class ArticleCont {
             if (pStatement != null) {
                 pStatement.close();
             }
-        }    	
+        }
     }
     
-	//ID:llä	
+    /**
+     * Suorittaa tietokantaan kyselyn, jonka avulla haetaan parametrin osoittaman
+     * tarvikenumeron omaavan tarvikkeen tietoja tarvike-taulusta ja tyyppiyksikkö-taulusta.
+     * 
+     * @param nmbr tarvikenumero
+     * @param con viite tietokannan yhteys olioon
+     * @return tarvike-olio, jolla tietokannan tarvike-taulun ja tyyppiyksikkötaulun tiedot
+     * @throws SQLException jos kysely aiheuttaa virheen
+     */		
     public Article findArticleByNmbr(int nmbr, Connection con) throws SQLException {
         Article a = null;
         PreparedStatement pStatement = null;
@@ -75,7 +90,15 @@ public class ArticleCont {
         return a;
     }
 
-	//Nimellä
+    /**
+     * Suorittaa tietokantaan kyselyn, jonka avulla haetaan parametrin osoittaman
+     * tarvikeen nimen omaavan tarvikkeen tietoja tarvike-taulusta ja tyyppiyksikkö-taulusta.
+     * 
+     * @param name tarvikeen nimi
+     * @param con viite tietokannan yhteys olioon
+     * @return tarvike-olio, jolla tietokannan tarvike-taulun ja tyyppiyksikkötaulun tiedot
+     * @throws SQLException jos kysely aiheuttaa virheen
+     */
     public Article findArticleByName(String name, Connection con) throws SQLException {
         Article a = null;
         PreparedStatement pStatement = null;
@@ -106,7 +129,15 @@ public class ArticleCont {
         return a;
     }
 
-	// sisäänostolla
+    /**
+     * Suorittaa tietokantaan kyselyn, jonka avulla haetaan parametrin osoittaman
+     * tarvikeen sisäänostohinnan omaavien tarvikkeiden tietoja tarvike-taulusta ja tyyppiyksikkö-taulusta.
+     * 
+     * @param buyIn tarvikeen sisäänostohinta
+     * @param con viite tietokannan yhteys olioon
+     * @return lista tarvike-olioista, joilla tietokannan tarvike-taulun ja tyyppiyksikkötaulun tiedot
+     * @throws SQLException jos kysely aiheuttaa virheen
+     */
     public ArrayList<Article> findArticleByBuyIn(double buyIn, Connection con) throws SQLException {
         ArrayList<Article> a = new ArrayList<Article>();
         PreparedStatement pStatement = null;
@@ -137,7 +168,15 @@ public class ArticleCont {
         return a;
     }
 
-	//Varastolla
+    /**
+     * Suorittaa tietokantaan kyselyn, jonka avulla haetaan parametrin osoittaman
+     * tarvikeen maaran omaavien tarvikkeiden tietoja tarvike-taulusta ja tyyppiyksikkö-taulusta.
+     * 
+     * @param storage tarvikeen maara
+     * @param con viite tietokannan yhteys olioon
+     * @return lista tarvike-olioista, joilla tietokannan tarvike-taulun ja tyyppiyksikkötaulun tiedot
+     * @throws SQLException jos kysely aiheuttaa virheen
+     */
     public ArrayList<Article> findArticleByStorage(int storage, Connection con) throws SQLException {
         ArrayList<Article> a = new ArrayList<Article>();
         PreparedStatement pStatement = null;
@@ -168,7 +207,15 @@ public class ArticleCont {
         return a;
     }
 
-	//Myyntihinnalla
+    /**
+     * Suorittaa tietokantaan kyselyn, jonka avulla haetaan parametrin osoittaman
+     * tarvikeen myyntihinnan omaavien tarvikkeiden tietoja tarvike-taulusta ja tyyppiyksikkö-taulusta.
+     * 
+     * @param salePrice tarvikeen myyntihinta
+     * @param con viite tietokannan yhteys olioon
+     * @return lista tarvike-olioista, joilla tietokannan tarvike-taulun ja tyyppiyksikkötaulun tiedot
+     * @throws SQLException jos kysely aiheuttaa virheen
+     */
     public ArrayList<Article> findArticleBySalePrice(double salePrice, Connection con) throws SQLException {
         ArrayList<Article> a = new ArrayList<Article>();
         PreparedStatement pStatement = null;
@@ -199,7 +246,15 @@ public class ArticleCont {
         return a;
     }
 
-	//Yksiköllä
+    /**
+     * Suorittaa tietokantaan kyselyn, jonka avulla haetaan parametrin osoittaman
+     * tarvikeen yksikön omaavien tarvikkeiden tietoja tarvike-taulusta ja tyyppiyksikkö-taulusta.
+     * 
+     * @param unit tarvikeen yksikkö
+     * @param con viite tietokannan yhteys olioon
+     * @return lista tarvike-olioista, joilla tietokannan tarvike-taulun ja tyyppiyksikkötaulun tiedot
+     * @throws SQLException jos kysely aiheuttaa virheen
+     */
     public ArrayList<Article> findArticleByUnit(String unit, Connection con) throws SQLException {
         ArrayList<Article> a = new ArrayList<Article>();
         PreparedStatement pStatement = null;
@@ -231,7 +286,15 @@ public class ArticleCont {
     }
 
 
-    //Tyypillä
+    /**
+     * Suorittaa tietokantaan kyselyn, jonka avulla haetaan parametrin osoittaman
+     * tarvikeen tyypin omaavien tarvikkeiden tietoja tarvike-taulusta ja tyyppiyksikkö-taulusta.
+     * 
+     * @param typeName tarvikeen tyyppi
+     * @param con viite tietokannan yhteys olioon
+     * @return lista tarvike-olioista, joilla tietokannan tarvike-taulun ja tyyppiyksikkötaulun tiedot
+     * @throws SQLException jos kysely aiheuttaa virheen
+     */
     public ArrayList<Article> findArticleByTypeName(String typeName, Connection con) throws SQLException {
         ArrayList<Article> a = new ArrayList<Article>();
         PreparedStatement pStatement = null;
@@ -261,7 +324,15 @@ public class ArticleCont {
         }
         return a;
     }
-    	
+    
+    /**
+     * Poistaa patametrina saadun tarvikeolion avulla olion kanssa samat tiedot omaavan rivin tietokannan tarvike-taulusta.
+     * 
+     * @param x viite tarvike-olioon
+     * @param con viite tietokannan yhteys-olioon
+     * @return viite tarvike-olioon, jonka tiedot tietokannasta on poistettu
+     * @throws SQLException jos poisto aiheuttaa virheen
+     */
     public Article removeArticle(Article x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
         try {
@@ -282,6 +353,14 @@ public class ArticleCont {
         return x;    
     }
     
+    /**
+     * Päivittää parametrina saadun tarvike-olion avulla olion kanssa samat tiedot omaavaa tietokannan tarvike-taulun riviä.
+     * Riviltä päivitetään sisäänostohinta, varastotilanne ja myyntihinta.
+     * 
+     * @param x viite tarvike-olioon
+     * @param con viite tietokannan yhteys-olioon
+     * @throws SQLException jos päivityksessä tapahtuu virhe
+     */
     public void updateArticle(Article x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
         try {
