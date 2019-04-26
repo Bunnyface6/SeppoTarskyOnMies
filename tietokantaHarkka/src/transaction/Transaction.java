@@ -5,9 +5,19 @@
  */
 package transaction;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
+import java.time.*;
+import java.time.*;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 import tietokantaharkka.baseClasses.*;
 import tietokantaharkka.controllers.*;
 /**
@@ -232,5 +242,127 @@ public class Transaction {
             con.rollback();
             return false; 
         }
+    }
+    
+    public ArrayList<Article> findAllOldArticles(ArrayList<Article> newList, ArrayList<Article> updateList, Connection con) throws SQLException{
+        try{
+            con.setAutoCommit(false);
+            ArrayList<Article> oldList = aC.findAllArcticles(con);
+            con.commit();
+            Article rmv;
+            boolean found = false;
+            //SAATTAA OLLA TOIMIMATON, TESTAA!
+            for(Article oldA: oldList){
+                if(found)
+                    updateList.add(rmv);
+                    newList.remove(rmv);
+                    oldList.remove(rmv);
+                found = false;
+                for(Article newA: newList){
+                    
+                    if(oldA.equals(newA)){
+                        
+                        found = true;
+                        break;
+                    }
+                }
+                if(found)
+                    rmv = oldA;
+            }
+            
+            return oldList;
+        }
+        catch(SQLException e){
+            con.rollback();
+            return null;
+        }
+        
+    }
+    
+    public boolean printOldArticles(String path, ArrayList<Article> list){
+        try{
+               ZoneId zoneId = ZoneId.systemDefault() ;
+               LocalDate today = LocalDate.now( zoneId ) ;
+               String day = "/history/" + today.toString()+".txt" ;
+               Path out = Paths.get(day);
+               Files.write(out, list, Charset.defaultCharset());
+               return true;
+        }
+        catch(Exception e){
+           
+           System.out.println("PRINTING FAILED");
+           return false; 
+        }
+        
+    }
+    
+    public ArrayList<Article> readArticlesFromFile(String path){
+        ArrayList<Article> newList = new ArrayList();
+        try (Stream<String> stream = Files.lines( Paths.get(path), StandardCharsets.UTF_8))
+        {  
+            stream.forEach((s) ->{
+             
+                String[] data = s.split(";");
+                Article art = new Article(data[0], Double.parseDouble(data[2]), Integer.parseInt(data[1]), Double.parseDouble(data[3]), 0, 0,data[5], data[4]);
+                newList.add(art);
+            });
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+        return newList;
+    }
+    
+    public boolean updateArticlesFromFile(ArrayList<Article> updateList, Connection con) throws SQLException{
+        try{
+            con.setAutoCommit(false);
+            for(Article art : updateList){
+                aC.updateArticle(art, con);
+            }
+            con.commit();
+            return true;
+        }
+        catch(SQLException e){
+            
+            con.rollback();
+            return false;
+        }
+    }
+    
+    public boolean newArticlesFromFile(ArrayList<Article> newList, Connection con) throws SQLException{
+        try{
+            con.setAutoCommit(false);
+            for(Article art : newList){
+                aC.addNewArticle(art, con);
+            }
+            con.commit();
+            return true;
+        }
+        catch(SQLException e){
+            
+            con.rollback();
+            return false;
+        }
+    }
+    
+    //LIIKUTA ALLA OLEVA METODIKASA JONNEKKIN
+    
+    public boolean fullUpdateFromFile(String nPath, String oPath, Connection con){
+        try{
+            ArrayList<Article> newList = readArticlesFromFile(nPath);
+            ArrayList<Article> updateList = new ArrayList();
+            ArrayList<Article> oldList = findAllOldArticles(newList, updateList, con);
+            printOldArticles(oPath, oldList);
+            updateArticlesFromFile(updateList, con);
+            newArticlesFromFile(updateList, con);
+            return true;
+        }
+        catch(SQLException e){
+            System.out.println("PAHASTI PIELEEN");
+            return false;
+        }
+        
     }
 }

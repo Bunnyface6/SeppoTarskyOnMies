@@ -8,6 +8,7 @@ package tietokantaharkka.controllers;
 import java.util.ArrayList;
 import tietokantaharkka.baseClasses.Article;
 import java.sql.*;
+import tietokantaharkka.baseClasses.ArticleType;
 
 public class ArticleCont {
 	
@@ -37,7 +38,14 @@ public class ArticleCont {
             pStatement.setString(2, x.getName());
             pStatement.setInt(3, x.getStorage());
             pStatement.setDouble(4, x.getSalePrice());
-            pStatement.setInt(5, x.getNmbr());
+            if(x.getNmbr2() != 0){
+                pStatement.setInt(5, x.getNmbr2());
+            }
+            else{
+                ArticleTypeCont aTC = new ArticleTypeCont();
+                ArticleType ArtT = aTC.findArticleTypeByTypeName(x.getTypeName(), con);
+                pStatement.setInt(5, ArtT.getNmbr());
+            }
             pStatement.executeUpdate();
             con.commit();
         }
@@ -325,6 +333,28 @@ public class ArticleCont {
         return a;
     }
     
+    public ArrayList<Article> findAllArcticles(Connection con) throws SQLException {
+        ArrayList<Article> a = new ArrayList<Article>();
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+
+        // Tarkistettava, meneekö näin.
+        pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
+                                          + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero");
+        resultSet = pStatement.executeQuery();
+        while (resultSet.next()) {
+            a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
+        }
+
+        if (resultSet != null) {
+            resultSet.close();
+        }
+        if (pStatement != null) {
+            pStatement.close();
+        }
+
+        return a;
+    }
     /**
      * Poistaa patametrina saadun tarvikeolion avulla olion kanssa samat tiedot omaavan rivin tietokannan tarvike-taulusta.
      * 
@@ -369,7 +399,14 @@ public class ArticleCont {
             pStatement.setDouble(1, x.getBuyIn());
             pStatement.setInt(2, x.getStorage());
             pStatement.setDouble(3, x.getSalePrice());
-            pStatement.setInt(4, x.getNmbr2());
+            if(x.getNmbr() != 0){
+                pStatement.setInt(4, x.getNmbr2());
+            }
+            else{
+                ArticleTypeCont aTC = new ArticleTypeCont();
+                ArticleType ArtT = aTC.findArticleTypeByTypeName(x.getTypeName(), con);
+                pStatement.setInt(4, ArtT.getNmbr());
+            }
             pStatement.executeUpdate();
             con.commit();
         }

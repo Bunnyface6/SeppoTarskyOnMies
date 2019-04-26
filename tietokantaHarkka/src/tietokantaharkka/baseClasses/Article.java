@@ -5,11 +5,13 @@
  */
 package tietokantaharkka.baseClasses;
 
+import java.util.stream.IntStream;
+
 /**
  *
  * @author Cassu
  */
-public class Article extends ArticleType{
+public class Article extends ArticleType implements CharSequence{
     private String name;
     private double buyIn;
     private int storage;
@@ -72,6 +74,39 @@ public class Article extends ArticleType{
     
     @Override
     public String toString() {
-        return "TARVIKE: " + name + ", Kappaleita varastossa: " + storage + ", Ostohinta: " + buyIn + ", Myyntihinta: " + salePrice;
+        return name +";"+ storage +";"+ buyIn +";"+ salePrice +";"+ this.getTypeName()+";"+ this.getUnit();
+    }
+    
+    public String showString(){
+        return "TARVIKE: " + name + ", Kappaleita varastossa: " + storage + this.getUnit() + ", Ostohinta: " + buyIn + ", Myyntihinta: " + salePrice + "Kategoria: " + this.getTypeName();
+    }
+    
+    public boolean equals(Article x){ 
+       
+        if(this.getName().equals(x.getName())){
+            return true;
+        }
+        else
+            return false;
+        
+    }
+            @Override
+        public CharSequence subSequence(int start, int end) {
+            return toString().subSequence(start, end);
+        }
+
+    @Override
+    public int length() {
+        return toString().length();
+    }
+
+    @Override
+    public char charAt(int index) {
+        return toString().charAt(index);
+    }
+
+    @Override
+    public IntStream chars() {
+        return CharSequence.super.chars(); //To change body of generated methods, choose Tools | Templates.
     }
 }
