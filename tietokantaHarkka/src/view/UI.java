@@ -47,6 +47,8 @@ public class UI {
     private final String WRONGCOMMANDMESSAGE = "Virheellinen komento.";
     private final String NOTNUMBERMESSAGE = "Syöte virheellinen. Anna numero-muotoinen syöte ilman välilyöntejä.";
     private final String EMPTYINPUTMESSAGE = "Tyhjä syöte ei kelpaa.";
+    private final String ADDOKMESSAGE = "Lisäys onnistui.";
+    private final String ADDNOTOKMESSAGE = "Lisäys epäonnistui.";
     private final String QUITCONFIRMMESSAGE = "Haluatko varmasti lopettaa? k)Kyllä e)Ei";
     
     public void run() {
@@ -66,7 +68,7 @@ public class UI {
         boolean uIRunning = true;
         boolean inAddMenu;
         boolean inSearchMenu;
-        
+        boolean oK = false;        
         System.out.println(HELOMESSAGE);
         
         while (uIRunning) {
@@ -94,7 +96,14 @@ public class UI {
                             tmp6 = Integer.parseInt(tmp4);
                             System.out.print("Postitoimipaikka: ");
                             tmp5  = commandReader.nextLine();
-                            transaction.addClient(tmp1, tmp2, tmp3, tmp6, tmp5, con.getConnection());
+                            oK = transaction.addClient(tmp1, tmp2, tmp3, tmp6, tmp5, con.getConnection());
+                            if (oK) {
+                                System.out.println(ADDOKMESSAGE);
+                                oK = false;
+                            }
+                            else {
+                                System.out.println(ADDNOTOKMESSAGE);
+                            }
                         }
                         catch (NumberFormatException e) {
                             System.out.println(NOTNUMBERMESSAGE);
@@ -121,7 +130,14 @@ public class UI {
                             tmp7 = Integer.parseInt(tmp4);
                             System.out.print("Postitoimipaikka: ");
                             tmp5  = commandReader.nextLine();
-                            transaction.addClient(tmp1, tmp6, tmp3, tmp7, tmp5, con.getConnection());
+                            oK = transaction.addClient(tmp1, tmp6, tmp3, tmp7, tmp5, con.getConnection());
+                            if (oK) {
+                                System.out.println(ADDOKMESSAGE);
+                                oK = false;
+                            }
+                            else {
+                                System.out.println(ADDNOTOKMESSAGE);
+                            }
                         }
                         catch (NumberFormatException e) {
                             System.out.println(NOTNUMBERMESSAGE);
@@ -149,7 +165,14 @@ public class UI {
                             System.out.print("Urakkahinta(0, jos kohde ei ole urakka): ");
                             tmp5  = commandReader.nextLine();
                             tmp8 = Double.parseDouble(tmp5);
-                            transaction.addWorkSiteToClient(tmp6, tmp2, tmp7, tmp4, tmp8, con.getConnection());
+                            oK = transaction.addWorkSiteToClient(tmp6, tmp2, tmp7, tmp4, tmp8, con.getConnection());
+                            if (oK) {
+                                System.out.println(ADDOKMESSAGE);
+                                oK = false;
+                            }
+                            else {
+                                System.out.println(ADDNOTOKMESSAGE);
+                            }
                         }
                         catch (NumberFormatException e) {
                             System.out.println(NOTNUMBERMESSAGE);
