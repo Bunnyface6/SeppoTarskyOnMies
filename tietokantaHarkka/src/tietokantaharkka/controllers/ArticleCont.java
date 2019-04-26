@@ -11,10 +11,27 @@ import java.sql.*;
 import tietokantaharkka.baseClasses.ArticleType;
 
 public class ArticleCont {
-	
+    
+     /** Viimeisimmät tarvikkeet */
     private ArrayList<Article> recentClients = new ArrayList<Article>();
+    
+    /** Viimeisin tarvike */
     private Article lastUsed;
-	
+    
+    /**
+     * Luo uuden tarvikkeen. Asettaa luodun olion viimeisimpien 
+     * olioiden listalle ja viimeksimmän olion viitteeseen.
+     * 
+     * @param name nimi
+     * @param buyIn sisäänostohinta
+     * @param storage varastotilanne
+     * @param salePrice myyntihinta
+     * @param nmbr tyyppiyksikkonumero
+     * @param nmbr2 tarvikenumero
+     * @param unit yksikkö
+     * @param typeName tyyppi
+     * @return luotu tarvike-olio
+     */
     public Article createArticle(String name, double buyIn, int storage, double salePrice, int nmbr, int nmbr2, String unit, String typeName){
         Article x = new Article(name, buyIn, storage, salePrice, nmbr, nmbr2, unit, typeName);
 	recentClients.add(x);
@@ -32,7 +49,6 @@ public class ArticleCont {
     public void addNewArticle(Article x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("INSERT INTO tarvike(sisaanostohinta, nimi, varastotilanne, myyntihinta, tyyppiyksikkonumero) VALUES(?, ?, ?, ?, ?)");
             pStatement.setDouble(1, x.getBuyIn());
             pStatement.setString(2, x.getName());
@@ -47,10 +63,6 @@ public class ArticleCont {
                 pStatement.setInt(5, ArtT.getNmbr());
             }
             pStatement.executeUpdate();
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (pStatement != null) {
@@ -73,8 +85,6 @@ public class ArticleCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
-            // Tarkistettava, meneekö näin.
             pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND tarvikenumero = ?");
             pStatement.setInt(1, nmbr);
@@ -82,10 +92,6 @@ public class ArticleCont {
             if (resultSet.next()) {
                 a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -112,8 +118,6 @@ public class ArticleCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
-            // Tarkistettava, meneekö näin.
             pStatement = con.prepareStatement("SELECT tarvikenumero, sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.nimi = ?");
             pStatement.setString(1, name);
@@ -121,10 +125,6 @@ public class ArticleCont {
             if (resultSet.next()) {
                 a = createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -151,8 +151,6 @@ public class ArticleCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
-            // Tarkistettava, meneekö näin.
             pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND sisaanostohinta = ?");
             pStatement.setDouble(1, buyIn);
@@ -160,10 +158,6 @@ public class ArticleCont {
             while (resultSet.next()) {
                 a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -190,8 +184,6 @@ public class ArticleCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
-            // Tarkistettava, meneekö näin.
             pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND varastotilanne = ?");
             pStatement.setInt(1, storage);
@@ -199,10 +191,6 @@ public class ArticleCont {
             while (resultSet.next()) {
                 a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -229,8 +217,6 @@ public class ArticleCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
-            // Tarkistettava, meneekö näin.
             pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND myyntihinta = ?");
             pStatement.setDouble(1, salePrice);
@@ -238,10 +224,6 @@ public class ArticleCont {
             while (resultSet.next()) {
                 a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -268,8 +250,6 @@ public class ArticleCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
-            // Tarkistettava, meneekö näin.
             pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND yksikko = ?");
             pStatement.setString(1, unit);
@@ -277,10 +257,6 @@ public class ArticleCont {
             while (resultSet.next()) {
                 a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -308,8 +284,6 @@ public class ArticleCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
-            // Tarkistettava, meneekö näin.
             pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
                                               + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero AND tyyppi = ?");
             pStatement.setString(1, typeName);
@@ -317,10 +291,6 @@ public class ArticleCont {
             while (resultSet.next()) {
                 a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -333,28 +303,36 @@ public class ArticleCont {
         return a;
     }
     
+    /**
+     * Etsii kaikki tarvikkeet tietokannasta.
+     * 
+     * @param con viite tietokannan yhteys-oilioon
+     * @return lista kaikista tarvikkeista
+     * @throws SQLException jos haku ei onnistu
+     */
     public ArrayList<Article> findAllArcticles(Connection con) throws SQLException {
         ArrayList<Article> a = new ArrayList<Article>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
-
-        // Tarkistettava, meneekö näin.
-        pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
-                                          + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero");
-        resultSet = pStatement.executeQuery();
-        while (resultSet.next()) {
-            a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
+        try {
+            pStatement = con.prepareStatement("SELECT tarvikenumero ,sisaanostohinta, nimi, varastotilanne, myyntihinta, tarvike.tyyppiyksikkonumero, tyyppi, yksikko " 
+                                              + "FROM tarvike, tyyppiyksikko WHERE tarvike.tyyppiyksikkonumero = tyyppiyksikko.tyyppiyksikkonumero");
+            resultSet = pStatement.executeQuery();
+            while (resultSet.next()) {
+                a.add(createArticle(resultSet.getString(3), resultSet.getDouble(2), resultSet.getInt(4), resultSet.getDouble(5), resultSet.getInt(6), resultSet.getInt(1), resultSet.getString(8), resultSet.getString(7)));
+            }
         }
-
-        if (resultSet != null) {
-            resultSet.close();
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
         }
-        if (pStatement != null) {
-            pStatement.close();
-        }
-
         return a;
     }
+    
     /**
      * Poistaa patametrina saadun tarvikeolion avulla olion kanssa samat tiedot omaavan rivin tietokannan tarvike-taulusta.
      * 
@@ -366,15 +344,10 @@ public class ArticleCont {
     public Article removeArticle(Article x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("DELETE FROM tarvike WHERE tarvikenumero = ?");
             pStatement.setInt(1, x.getNmbr2());
             pStatement.executeUpdate();
-            con.commit();
         }
-        catch(SQLException e) {
-            con.rollback(); 
-            }
         finally {
             if (pStatement != null) {
                 pStatement.close();
@@ -394,7 +367,6 @@ public class ArticleCont {
     public void updateArticle(Article x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("UPDATE tarvike SET sisaanostohinta = ?,varastotilanne = ?, myyntihinta = ? WHERE tarvikenumero = ?");
             pStatement.setDouble(1, x.getBuyIn());
             pStatement.setInt(2, x.getStorage());
@@ -408,10 +380,6 @@ public class ArticleCont {
                 pStatement.setInt(4, ArtT.getNmbr());
             }
             pStatement.executeUpdate();
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (pStatement != null) {
