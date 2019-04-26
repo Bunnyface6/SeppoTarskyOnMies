@@ -22,10 +22,10 @@ public class dBConnection {
     private final String USERNAME = "na428043";
     private final String PASSWORD = "Velimatti1";
     private Connection con;
-    static int lport;
-    static String rhost;
-    static int rport;
-    Session session;
+    private static int lport;
+    private static String rhost;
+    private static int rport;
+    private Session session;
     
     public Connection createConnection() {
         try {
@@ -58,9 +58,10 @@ public class dBConnection {
 	    return false;
 	}			
     }
+    
     public void go(){
         String user = "ja427770";
-        String password = "Predator669";
+        String password = "";
         String host = "shell.sis.uta.fi";
         int port=22;
         try
