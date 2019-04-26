@@ -44,6 +44,10 @@ public class dBConnection {
         }
     }
     
+    public Connection getConnection() {
+        return con;
+    }
+    
     public boolean closeConnection() {
         try {
 	    if (con != null) {
