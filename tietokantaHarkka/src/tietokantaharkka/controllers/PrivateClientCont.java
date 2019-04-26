@@ -15,10 +15,22 @@ import java.sql.*;
  */
 public class PrivateClientCont {
     
+     /** Viimeisimmät yksityisasiakkaat */
     private ArrayList<PrivateClient> recentPrivateClients = new ArrayList<PrivateClient>();
     
+    /** Viimeisin yksityisasiakas */
     private PrivateClient lastUsed;
     
+    /**
+     * Luo uuden yksityisasiakkaan. Asettaa luodun olion viimeisimpien 
+     * olioiden listalle ja viimeksimmän olion viitteeseen.
+     * 
+     * @param fName etunimi
+     * @param lName sukunimi
+     * @param pCNmbr asiakasnumero
+     * @param locationNmbr osoitenumero
+     * @return yksityisasiakas-olio
+     */
     public PrivateClient createPrivateClient(String fName, String lName, int pCNmbr, int locationNmbr) {
         PrivateClient x = new PrivateClient(fName, lName, pCNmbr, locationNmbr);
         recentPrivateClients.add(x);
