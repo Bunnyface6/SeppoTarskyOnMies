@@ -1,7 +1,10 @@
 package view;
 import dBConnection.dBConnection;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 import transaction.Transaction;
 
@@ -22,10 +25,10 @@ public class UI {
     
     private final String ADDCOMMAND = "1";
     private final String SEARCHCOMMAND = "2";
-    //private final String HELPCOMMAND = "ohje";
+    private final String INVOICINGCOMMAND = "3";
     private final String NOCOMMAND = "k";
     private final String YESCOMMAND = "e";
-    private final String QUITCOMMAND = "3";
+    private final String QUITCOMMAND = "4";
     private final String ADDPRIVCLIENTCOMMAND = "1";
     private final String ADDCOMPCLIENTCOMMAND = "2";
     private final String ADDWORKSITECOMMAND = "3";
@@ -35,21 +38,27 @@ public class UI {
     private final String SEARCHPRIVCLIENTCOMMAND = "1";
     private final String SEARCHCOMPLIENTCOMMAND = "2";
     private final String SEARCHWORKSITECOMMAND = "3";
-    private final String SEARCHARTICLECOMMAND = "4";
+    private final String SEARCHARTICLESCOMMAND = "4";
     private final String SEARHINVOICECOMMAND = "5";
     private final String SEARHBACKCOMMAND = "6";
-    
+    private final String CREATEINVOICECOMMAND = "1";
+    private final String CREATE2NDINVOICECOMMAND = "2";
+    private final String CREATE3THINVOICECOMMAND = "3";
+    private final String PRINTINVOICECOMMAND = "4";
+    private final String INVOICEBACKCOMMAND = "5";
     private final String HELOMESSAGE = "Tervetuloa Tmi Sähkötärsky:n laskutusjärjestelmään!";
-    private final String MAINMENUMESSAGE = "1)Lisää 2)Etsi 3)Lopeta";
+    private final String MAINMENUMESSAGE = "1)Lisää 2)Etsi 3)Laskutus 4)Lopeta";
     private final String ADDMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Työsuoritus työhohteeseen 5)Tarvike työkohteeseen\n"
                                           + "6)Tarvike laskulle 7) Tarviketta varastoon 8)Uusi tarvike varastoon 9)Uusi tarviketyyppi\n"
                                           + "10)Uusi työtyyppi 11)Takaisin";
-    private final String SEARCHMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tarvike 5)Lasku 6)Takaisin";
+    private final String SEARCHMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tarvikeet 5)Lasku 6)Takaisin";
+    private final String INVOICINGMENUMESSAGE = "1)Luo lasku 2)Luo muitutuslaskut maksamattomista 3)Luo karhulaskut maksamattomista 4)Näytä lasku 5)Takaisin";
     private final String WRONGCOMMANDMESSAGE = "Virheellinen komento.";
     private final String NOTNUMBERMESSAGE = "Syöte virheellinen. Anna numero-muotoinen syöte ilman välilyöntejä.";
+    private final String NOTDATEMESSAGE = "Syöte virheellinen. Anna oikean muotoinen pävämäärä.";
     private final String EMPTYINPUTMESSAGE = "Tyhjä syöte ei kelpaa.";
-    private final String ADDOKMESSAGE = "Lisäys onnistui.";
-    private final String ADDNOTOKMESSAGE = "Lisäys epäonnistui.";
+    private final String ADDOKMESSAGE = "Toiminto onnistui.";
+    private final String ADDNOTOKMESSAGE = "Toiminto epäonnistui.";
     private final String NORESULTS = "Ei tuloksia.";
     private final String QUITCONFIRMMESSAGE = "Haluatko varmasti lopettaa? k)Kyllä e)Ei";
     
@@ -58,6 +67,7 @@ public class UI {
         con = new dBConnection();
         con.createConnection();
         Scanner commandReader = new Scanner(System.in);
+        ArrayList<String> list = new ArrayList<String>();
         String userCommand = "";
         String tmp1 = "";
         String tmp2 = "";
@@ -67,26 +77,30 @@ public class UI {
         int tmp6;
         int tmp7;
         double tmp8;
+        Date tmp9;
+        Date tmp10;
         boolean uIRunning = true;
         boolean inAddMenu;
         boolean inSearchMenu;
+        boolean inInvoicingMenu;
         boolean oK = false;        
         System.out.println(HELOMESSAGE);
         
         while (uIRunning) {
             inAddMenu = true;
             inSearchMenu = true;
+            inInvoicingMenu = true;
             System.out.println(MAINMENUMESSAGE);
             userCommand = commandReader.nextLine();
             
             
             if (userCommand.equals(ADDCOMMAND)) {
                 while (inAddMenu) {    
-                    System.out.println(ADDMENUMESSAGE);
-                    userCommand = commandReader.nextLine();
+                    try {
+                        System.out.println(ADDMENUMESSAGE);
+                        userCommand = commandReader.nextLine();
                 
-                    if (userCommand.equals(ADDPRIVCLIENTCOMMAND)) {
-                        try {
+                        if (userCommand.equals(ADDPRIVCLIENTCOMMAND)) {
                             System.out.print("Etunimi: ");
                             tmp1 = commandReader.nextLine();
                             System.out.print("Sukunimi: ");
@@ -107,19 +121,8 @@ public class UI {
                                 System.out.println(ADDNOTOKMESSAGE);
                             }
                         }
-                        catch (NumberFormatException e) {
-                            System.out.println(NOTNUMBERMESSAGE);
-                        }
-                        catch (SQLException e) {
-                            System.out.println(e.getMessage());
-                        }
-                        catch (NullPointerException e) {
-                            System.out.println(EMPTYINPUTMESSAGE);
-                        }
-                    }
                 
-                    else if (userCommand.equals(ADDCOMPCLIENTCOMMAND)) {
-                        try {
+                        else if (userCommand.equals(ADDCOMPCLIENTCOMMAND)) {
                             System.out.print("Nimi: ");
                             tmp1 = commandReader.nextLine();
                             System.out.print("YTunnus: ");
@@ -141,19 +144,8 @@ public class UI {
                                 System.out.println(ADDNOTOKMESSAGE);
                             }
                         }
-                        catch (NumberFormatException e) {
-                            System.out.println(NOTNUMBERMESSAGE);
-                        }
-                        catch (SQLException e) {
-                            System.out.println(e.getMessage());
-                        }
-                        catch (NullPointerException e) {
-                            System.out.println(EMPTYINPUTMESSAGE);
-                        }
-                    }
                 
-                    else if (userCommand.equals(ADDWORKSITECOMMAND)) {
-                        try {
+                        else if (userCommand.equals(ADDWORKSITECOMMAND)) {
                             System.out.print("Asiakasnumero: ");
                             tmp1 = commandReader.nextLine();
                             tmp6 = Integer.parseInt(tmp1);
@@ -176,41 +168,40 @@ public class UI {
                                 System.out.println(ADDNOTOKMESSAGE);
                             }
                         }
-                        catch (NumberFormatException e) {
-                            System.out.println(NOTNUMBERMESSAGE);
-                        }
-                        catch (SQLException e) {
-                            System.out.println(e.getMessage());
-                        }
-                        catch (NullPointerException e) {
-                            System.out.println(EMPTYINPUTMESSAGE);
-                        }
-                    }
                 
-                    else if (userCommand.equals(ADDWORKPERFORMANCECOMMAND)) {
-                        System.out.print("Työkohdenumero: ");
-                        tmp1 = commandReader.nextLine();
-                        System.out.print("Työtyyppi: ");
-                        tmp2 = commandReader.nextLine();
-                        System.out.print("Tunnit: ");
-                        tmp3 = commandReader.nextLine();
-                        System.out.print("Alennus: ");
-                        tmp4 = commandReader.nextLine();
-                        // Tähän metodi, jolla lisätään työsuoritus. INTit tarkistettvava.
-                    }
+                        else if (userCommand.equals(ADDWORKPERFORMANCECOMMAND)) {
+                            System.out.print("Työkohdenumero: ");
+                            tmp1 = commandReader.nextLine();
+                            System.out.print("Työtyyppi: ");
+                            tmp2 = commandReader.nextLine();
+                            System.out.print("Tunnit: ");
+                            tmp3 = commandReader.nextLine();
+                            System.out.print("Alennus: ");
+                            tmp4 = commandReader.nextLine();
+                            // Tähän metodi, jolla lisätään työsuoritus. INTit tarkistettvava.
+                        }
                 
-                    else if (userCommand.equals(ADDARTICLETOWORSITECOMMAND)) {
+                        else if (userCommand.equals(ADDARTICLETOWORSITECOMMAND)) {
                    
-                    }
+                       }
                 
-                    else if (userCommand.equals(ADDBACKCOMMAND)) {
-                        inAddMenu = false;
-                    }
+                        else if (userCommand.equals(ADDBACKCOMMAND)) {
+                            inAddMenu = false;
+                        }
                   
-                    else {
-                        System.out.println(WRONGCOMMANDMESSAGE);
+                        else {
+                            System.out.println(WRONGCOMMANDMESSAGE);
+                        }
                     }
-                
+                    catch (NumberFormatException e) {
+                        System.out.println(NOTNUMBERMESSAGE);
+                    }
+                    catch (SQLException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    catch (NullPointerException e) {
+                        System.out.println(EMPTYINPUTMESSAGE);
+                    }
                 }
             }
                         
@@ -225,14 +216,14 @@ public class UI {
                             tmp1 = commandReader.nextLine();
                             System.out.println("Sukunimi:");
                             tmp2 = commandReader.nextLine();
-                            ArrayList<String> list = transaction.getClientInfo(tmp1, tmp2, con.getConnection());
+                            list = transaction.getClientInfo(tmp1, tmp2, con.getConnection());
                             printList(list);
                         }
                         
                         else if (userCommand.equals(SEARCHCOMPLIENTCOMMAND)) {
                             System.out.println("Nimi:");
                             tmp1 = commandReader.nextLine();
-                            ArrayList<String> list = transaction.getClientInfo(tmp1, con.getConnection());
+                            list = transaction.getClientInfo(tmp1, con.getConnection());
                             printList(list);
                         }
                 
@@ -240,12 +231,13 @@ public class UI {
                             System.out.println("Asiakasnumero:");
                             tmp1 = commandReader.nextLine();
                             tmp6 = Integer.parseInt(tmp1);
-                            ArrayList<String> list = transaction.getWorkSiteInfo(tmp6, con.getConnection());
+                            list = transaction.getWorkSiteInfo(tmp6, con.getConnection());
                             printList(list);
                         }
                 
-                        else if (userCommand.equals(SEARCHARTICLECOMMAND)) {
-                   
+                        else if (userCommand.equals(SEARCHARTICLESCOMMAND)) {
+                            list = transaction.getAllArticles(con.getConnection());
+                            printList(list);     
                         }
                 
                         else if (userCommand.equals(SEARHINVOICECOMMAND)) {
@@ -268,6 +260,78 @@ public class UI {
                     }
                     catch (NullPointerException e) {
                         System.out.println(EMPTYINPUTMESSAGE);
+                    }
+                }
+            }
+            
+            else if (userCommand.equals(INVOICINGCOMMAND)) {
+                while (inInvoicingMenu) {
+                    try {
+                        System.out.println(INVOICINGMENUMESSAGE);
+                        userCommand = commandReader.nextLine();
+                
+                        if (userCommand.equals(CREATEINVOICECOMMAND)) {
+                            System.out.print("Anna päivämäärä(dd/mm/yyyy) :");
+                            tmp1 = commandReader.nextLine();
+                            tmp9 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
+                            System.out.print("Anna eräpäivä(dd/mm/yyyy): ");
+                            tmp2 = commandReader.nextLine();
+                            tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp2);
+                            oK = transaction.createReminderOfUnpaidInvoices(tmp10, tmp9, con.getConnection());
+                            if (oK) {
+                                System.out.println(ADDOKMESSAGE);
+                                oK = false;
+                            }
+                            else {
+                                System.out.println(ADDNOTOKMESSAGE);
+                            }
+                        }
+                
+                        else if (userCommand.equals(CREATE2NDINVOICECOMMAND)) {
+                            System.out.print("Anna päivämäärä(dd/mm/yyyy) :");
+                            tmp1 = commandReader.nextLine();
+                            tmp9 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
+                            System.out.print("Anna eräpäivä(dd/mm/yyyy): ");
+                            tmp2 = commandReader.nextLine();
+                            tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp2);
+                            oK = transaction.createSecondReminderOfUnpaidInvoice(tmp9, tmp10, con.getConnection());
+                            if (oK) {
+                                System.out.println(ADDOKMESSAGE);
+                                oK = false;
+                            }
+                            else {
+                                System.out.println(ADDNOTOKMESSAGE);
+                            }
+                
+                        }
+                
+                        else if (userCommand.equals(CREATE3THINVOICECOMMAND)) {
+                
+                        }
+                
+                        else if (userCommand.equals(PRINTINVOICECOMMAND)) {
+                
+                        }
+                
+                        else if (userCommand.equals(INVOICEBACKCOMMAND)) {
+                            inInvoicingMenu = false;
+                        }
+                
+                        else {
+                            System.out.println(WRONGCOMMANDMESSAGE);
+                        }
+                    }
+                    catch (NumberFormatException e) {
+                        System.out.println(NOTNUMBERMESSAGE);
+                    }
+                    catch (SQLException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    catch (NullPointerException e) {
+                        System.out.println(EMPTYINPUTMESSAGE);
+                    }
+                    catch (ParseException e) {
+                       System.out.println(NOTDATEMESSAGE);
                     }
                 }
             }
