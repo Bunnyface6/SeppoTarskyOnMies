@@ -225,13 +225,18 @@ public class Transaction {
         }
     }
     
-    public boolean addArticle(String name, double buyIn, int storage, double salePrice, int typeNmbr, Connection con) throws SQLException {
+    public boolean addArticle(String name, double buyIn, double salePrice, int storage, String type, Connection con) throws SQLException {
+        boolean oK = false;
         try {
             con.setAutoCommit(false);
-            Article a = new Article(name, buyIn, storage, salePrice, typeNmbr, 0, null, null);
-            aC.addNewArticle(a, con);
+            ArticleType x = aTC.findArticleTypeByTypeName(type, con);
+            if (x != null) {
+                Article a = new Article(name, buyIn, storage, salePrice, x.getNmbr(), 0, x.getUnit(), x.getTypeName());
+                aC.addNewArticle(a, con);
+                oK = true;
+            }
             con.commit();
-            return true;
+            return oK;
         }
         catch (SQLException e) {
             con.rollback();
@@ -253,13 +258,18 @@ public class Transaction {
         }
     }
     
-    public boolean updateStorage(Article x, int newAmount, Connection con) throws SQLException {
+    public boolean updateStorage(int articleNmbr, int newAmount, Connection con) throws SQLException {
+        boolean oK = false;
         try {
             con.setAutoCommit(false);
-            x.setStorage(newAmount);
-            aC.updateArticle(x, con);
+            Article x = aC.findArticleByNmbr(articleNmbr, con);
+            if (x != null && newAmount > 0) {
+                x.setStorage(newAmount);
+                aC.updateArticle(x, con);
+                oK = true;
+            }
             con.commit();
-            return true;
+            return oK;
         }
         catch (SQLException e) {
             con.rollback();
