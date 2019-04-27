@@ -387,6 +387,46 @@ public class Transaction {
         }
     }
     
+    public String getArticleTypes(Connection con) throws SQLException {
+        String aTypes = "";
+        try {
+            con.setAutoCommit(false);
+            ArrayList<ArticleType> a = aTC.findArticleTypes(con);
+            if(!a.isEmpty()) {
+                aTypes = "Tarviketyypit:";
+                for (int i = 0; i < a.size(); i++) {
+                    ArticleType aT = a.get(i);
+                    aTypes = aTypes + " " + aT.getTypeName();
+                }
+            }
+            con.commit();
+        }
+        catch (SQLException e) {
+            con.rollback();
+        }
+        return aTypes;
+    }
+    
+    public ArrayList<String> getAllArticles(Connection con) throws SQLException {
+        ArrayList<String> aList = new ArrayList<String>();
+        try {
+            con.setAutoCommit(false);
+            ArrayList<Article> a = aC.findAllArcticles(con);
+            if(!a.isEmpty()) {
+                for (int i = 0; i < a.size(); i++) {
+                    Article article = a.get(i);
+                    String s = article.showString2();
+                    aList.add(s);
+                }
+            }
+            con.commit();
+        }    
+        catch (SQLException e) {
+            con.rollback();
+        }
+        return aList;        
+    }
+    
     public ArrayList<String> getWorkSiteInfo(int clientNmbr, Connection con) throws SQLException {
         ArrayList<String> wSInfo = new ArrayList<String>();
         try {

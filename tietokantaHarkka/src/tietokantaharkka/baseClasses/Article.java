@@ -91,6 +91,10 @@ public class Article extends ArticleType implements CharSequence{
         return "TARVIKE: " + name + ", Kappaleita varastossa: " + storage + this.getUnit() + ", Ostohinta: " + buyIn + ", Myyntihinta: " + salePrice + "Kategoria: " + this.getTypeName();
     }
     
+    public String showString2(){
+        return "Tarvikenumero: " + nmbr2 + " Nimi: " + name + " Kappaleita varastossa: " + storage + this.getUnit() + " Ostohinta: " + buyIn + " Myyntihinta: " + salePrice + " Tyyppi: " + this.getTypeName();
+    }
+    
     public boolean equals(Article x){ 
        
         if(this.getName().equals(x.getName())){
