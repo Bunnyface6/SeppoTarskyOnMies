@@ -10,7 +10,7 @@ import tietokantaharkka.baseClasses.PrivateClient;
 import java.sql.*;
 
 /**
- *
+ * Yksityisasiakas controlleri.
  * @author Jipsu
  */
 public class PrivateClientCont {

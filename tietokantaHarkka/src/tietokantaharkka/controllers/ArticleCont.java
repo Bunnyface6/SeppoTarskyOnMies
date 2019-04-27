@@ -10,6 +10,10 @@ import tietokantaharkka.baseClasses.Article;
 import java.sql.*;
 import tietokantaharkka.baseClasses.ArticleType;
 
+/**
+ * Tarvike controlleri.
+ * @author Jipsu
+ */
 public class ArticleCont {
     
      /** Viimeisimmät tarvikkeet */

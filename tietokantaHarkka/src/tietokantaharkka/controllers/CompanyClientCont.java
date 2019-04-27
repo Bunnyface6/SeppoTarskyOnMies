@@ -10,7 +10,7 @@ import tietokantaharkka.baseClasses.CompanyClient;
 import java.util.ArrayList;
 
 /**
- *
+ * Yritysasiakas controlleri.
  * @author Jipsu
  */
 public class CompanyClientCont {

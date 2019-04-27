@@ -8,14 +8,24 @@ package tietokantaharkka.baseClasses;
 import java.util.stream.IntStream;
 
 /**
- *
+ * Tarvike-luokka.
  * @author Cassu
  */
 public class Article extends ArticleType implements CharSequence{
+    
+     /** Nimi */
     private String name;
+    
+     /** Sisäänostohinta */
     private double buyIn;
+    
+     /** Varastotilanne */
     private int storage;
+    
+     /** Myyntihinta */
     private double salePrice;
+    
+     /** Tarvikenumero */
     private int nmbr2;
 
     public Article(String name, double buyIn, int storage, double salePrice, int nmbr, int nmbr2, String unit, String typeName) {

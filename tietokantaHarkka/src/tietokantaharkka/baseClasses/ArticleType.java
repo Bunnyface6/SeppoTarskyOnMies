@@ -6,12 +6,18 @@
 package tietokantaharkka.baseClasses;
 
 /**
- *
+ * Tyyppiyksikkö-luokka
  * @author Cassu
  */
 public class ArticleType {
+    
+    /** Tyyppiyksikkönumero */
     private int nmbr;
+    
+    /** Yksikkö */
     private String unit;
+    
+    /** Tyyppi */
     private String typeName;
 
     public ArticleType(int nmbr, String unit, String typeName) {

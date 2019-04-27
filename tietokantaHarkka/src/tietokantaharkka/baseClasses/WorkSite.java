@@ -6,13 +6,21 @@
 package tietokantaharkka.baseClasses;
 
 /**
- *
+ * Työkohde-luokka
  * @author Cassu
  */
 public class WorkSite {
+    
+    /** Osoitenumero */
     private int locationNmbr;
+   
+    /** Asiakasnumero */
     private int clientNmbr;
+   
+    /** Työkohdenumero */
     private int nmbr;
+    
+     /** Urakkahinta */
     private double contractPrice;
 
     public WorkSite(int locationNmbr, int clientNmbr, int nmbr, double contractPrice) {
@@ -53,13 +61,27 @@ public class WorkSite {
     public void setClientNmbr(int clientNmbr) {
         this.clientNmbr = clientNmbr;
     }
-
+    
+    /**
+     * Palauttaa attribuuttien merkkijonoesityksen.
+     * 
+     * @return attribuuttien merkkijonoesitys
+     */
     @Override
     public String toString() {
         return "TYÖKOHDE: " + "Tunnus: " + nmbr + ", Asiakastunnus: " + clientNmbr + ", Kohdetunnus: " + locationNmbr;
     }
     
+    /**
+     * Palauttaa attribuuttien merkkijonoesityksen.
+     * 
+     * @return attribuuttien merkkijonoesitys
+     */
     public String showString() {
-        return "Työkohdenumero: " + nmbr + " Asiakasnumero: " + clientNmbr;
+        String contract = "Ei";
+        if (contractPrice > 0) {
+            contract = "Kyllä";
+        }
+        return "Työkohdenumero: " + nmbr + " Asiakasnumero: " + clientNmbr + " Urakka: " + contract;
     }
 }
