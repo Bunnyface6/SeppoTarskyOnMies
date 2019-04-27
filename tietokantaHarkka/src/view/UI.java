@@ -65,6 +65,7 @@ public class UI {
     public void run() {
         transaction = new Transaction();
         con = new dBConnection();
+        con.go();
         con.createConnection();
         Scanner commandReader = new Scanner(System.in);
         ArrayList<String> list = new ArrayList<String>();
