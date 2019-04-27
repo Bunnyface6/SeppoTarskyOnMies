@@ -22,6 +22,7 @@ public class InvoiceGenerator {
         String partOne;
         String partTwo = "";
         String partThree = "";
+        double totalPrice = 0;
         
         Client client;
         CompanyClient cC;
@@ -83,12 +84,14 @@ public class InvoiceGenerator {
                    sb.append(stor.name + " ");
                    sb.append(" Tuntimäärä " + stor.hours);
                    sb.append(" Tuntiveloitus " + stor.hPrice );
-                   sb.append(" Alennus " + stor.reduction + "%");
+                   if(stor.reduction != 0)
+                       sb.append(" Alennus " + stor.reduction + "%");
                    sb.append(" Kokonaishinta " + stor.total);
                    total = total + stor.total;
                    sb.append("\n");
                }
                sb.append("\nKOKONAISHINTA TYÖSTÄ: " + total);
+               totalPrice = totalPrice + total;
                partTwo = sb.toString();
            }
            if(sA != null){
@@ -106,8 +109,10 @@ public class InvoiceGenerator {
                      total += price;
 
                 }
+                totalPrice = totalPrice + total;
                 partThree = partThree + "\n\n\t\t\tYhteensä: " + total + " €";
            }
+           
            finString = partOne + partTwo + partThree;
 
            return finString;
@@ -117,6 +122,7 @@ public class InvoiceGenerator {
            return null;
        }
     }
+
     
     public ArrayList<Storage> calculate(WorkPerformance wP, Connection con){
 
@@ -152,6 +158,61 @@ public class InvoiceGenerator {
             return null;
         }
     }
+    
+    public String printEstimate(int planWork, int work, int helpWork, ArrayList<SoldArticle> sA, Connection con){
+        double total = 0;
+        
+        ArticleCont artCont = new ArticleCont();
+        ArticleTypeCont artTypeCont = new ArticleTypeCont();
+        WorkPriceCont wPC = new WorkPriceCont();
+        
+        Article art;
+        ArticleType artType;
+        
+        StringBuilder sb = new StringBuilder();
+
+        try{
+            WorkPrice planWorkPrice = wPC.findWorkPriceByWorkType("Suunnittelutyö", con);
+            WorkPrice workPrice = wPC.findWorkPriceByWorkType("Työ", con);
+            WorkPrice helpWorkPrice = wPC.findWorkPriceByWorkType("Aputyö", con);
+
+
+            sb.append("HINTA-ARVIO:\n");
+            sb.append("\n\t");
+            sb.append("SUUNNITTELUTYÖ: " + planWork + " Tuntia; Hinta: " + (planWork * planWorkPrice.getPrice()) + "€");
+            total = planWork * planWorkPrice.getPrice();
+            sb.append("\n\t");
+            sb.append("TYÖ: " + work + " Tuntia; Hinta: " + (work * workPrice.getPrice()) + "€");
+            total = work * workPrice.getPrice();
+            sb.append("\n\t");
+            sb.append("SUUNNITTELUTYÖ: " + helpWork + " Tuntia; Hinta: " + (helpWork * helpWorkPrice.getPrice()) + "€");
+            total = helpWork * helpWorkPrice.getPrice();
+
+            sb.append("TYÖ YHTEENSÄ: " + total + "€");
+
+            if(sA != null){
+                    sb.append("\n\nLASKUTETTAVAT TYÖTARVIKKEET:");
+                    for(SoldArticle x : sA){
+
+                         art = artCont.findArticleByNmbr(x.getArticleNmbr(), con);
+
+                         artType = artTypeCont.findArticleTypeByNmbr(art.getNmbr2(), con);
+
+                         double price = art.getSalePrice() * x.getNmbrOfSold();
+
+                         sb.append("\n\t" + art.getName() + "\t" + x.getNmbrOfSold() + " " + artType.getUnit() + "\t" + art.getSalePrice() + " €" + "\tYht. " + price);
+                         total += price;
+
+                    }
+                    sb.append("\n\n\t\t\tYhteensä: " + total + " €");
+               }
+               return sb.toString();
+        }
+        catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 
     class Storage{
         String name;
@@ -174,6 +235,6 @@ public class InvoiceGenerator {
         public void calculateTotal(){
             this.total = hours * hPrice * (reduction / 100);
         }
-    }    
+    }
 }
 
