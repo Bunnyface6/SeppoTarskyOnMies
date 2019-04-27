@@ -65,7 +65,7 @@ public class dBConnection {
     
     public void go(){
         String user = "ja427770";
-        String password = "Predator669";
+        String password = "";
         String host = "shell.sis.uta.fi";
         int port=22;
         try

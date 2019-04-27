@@ -99,29 +99,19 @@ public class WorkSiteCont {
 	ArrayList<WorkSite> wSAL = new ArrayList<WorkSite>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
-	int rows = 0;
         try {
-            con.setAutoCommit(false);
-	    pStatement = con.prepareStatement("SELECT COUNT(*) FROM tyokohde WHERE asiakasnro = ?");
-	    pStatement.setInt(1, clientNmbr);
-	    resultSet = pStatement.executeQuery();
-            resultSet.next();
-            rows = resultSet.getInt(1);
-	    for (int i = 0; i < rows; i++) {
-	         pStatement = con.prepareStatement("SELECT tyokohde.tyokohdenumero, tyokohde.osoitenumero, tyokohde.asiakasnro, urakka.urakkahinta ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum "
-                                              + "FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.asiakasnro = ? AND rownum = ?");
+	         pStatement = con.prepareStatement("SELECT tyokohde.tyokohdenumero, tyokohde.osoitenumero, tyokohde.asiakasnro, urakka.urakkahinta FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.asiakasnro = ?");
 	         pStatement.setInt(1, clientNmbr);
-		 pStatement.setInt(2, i+1);
                  resultSet = pStatement.executeQuery();
-                 resultSet.next();
-		 Double d = resultSet.getDouble(4);
+                         
+            while(resultSet.next()){
+                Double d = resultSet.getDouble(4);
                      if (d.isNaN()) {
                          d = new Double(0); 
                      }
 		 wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
 		 wSAL.add(wS);
-	    }
-            con.commit();
+            }
         }
         catch(SQLException e) {
             con.rollback(); 

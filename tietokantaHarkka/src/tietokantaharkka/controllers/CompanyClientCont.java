@@ -112,7 +112,7 @@ public class CompanyClientCont {
       * @return lista yritysasiakas-oliosta, joilla tietokannan yritys-taulun ja asiakas-taulun tiedot
       * @throws SQLException jos kysely aiheuttaa virheen
       */		
-    public ArrayList<CompanyClient> findCompanyClientByName(String name, Connection con) throws SQLException{
+    public ArrayList<CompanyClient> findCompanyClientByName2(String name, Connection con) throws SQLException{
         ArrayList<CompanyClient> cCAL = new ArrayList<CompanyClient>();
 	CompanyClient cC = null;
         PreparedStatement pStatement = null;
@@ -232,5 +232,30 @@ public class CompanyClientCont {
             }
         }
         return l;
+    }
+    
+    public ArrayList<CompanyClient> findCompanyClientByName(String name, Connection con) throws SQLException{
+        ArrayList<CompanyClient> cCAL = new ArrayList<CompanyClient>();
+	CompanyClient cC = null;
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+	        pStatement = con.prepareStatement("SELECT yritys.asiakasnumero, ytunnus, nimi, asiakas.osoitenumero FROM yritys, asiakas WHERE asiakas.asiakasnumero = yritys.asiakasnumero AND nimi = ?");
+	        pStatement.setString(1, name);
+                resultSet = pStatement.executeQuery();
+                while(resultSet.next()){
+                    cC = createCompanyClient(resultSet.getString(3), resultSet.getInt(2), resultSet.getInt(1), resultSet.getInt(4));
+                    cCAL.add(cC);
+                }
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return cCAL;
     }
 }
