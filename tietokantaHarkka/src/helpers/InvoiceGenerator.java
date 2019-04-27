@@ -19,10 +19,12 @@ public class InvoiceGenerator {
     public String generateInvoice(Invoice invoice, Connection con){
         
         String finString;
-        String partOne;
+        String partOne = "";
         String partTwo = "";
         String partThree = "";
         double totalPrice = 0;
+        double contractPrice = 0;
+        boolean agreement = false;
         
         Client client;
         CompanyClient cC;
@@ -48,34 +50,40 @@ public class InvoiceGenerator {
 
         
        try{
-                client = clientCont.findClientByNmbr(invoice.getClientNmbr(), con);
+            client = clientCont.findClientByNmbr(invoice.getClientNmbr(), con);
 
-                if(compCont.findCompanyClient(client.getNmbr(), con) != null){
-                    cC = compCont.findCompanyClient(client.getNmbr(), con);
-                    partOne = 
-                        "LASKU \n\n" +
-                        cC.getName() + "\n" +
-                        cC.getyIdentifier()
-                    ;
-                }
-                else{
-                    pC = privCont.findPrivateClient(client.getNmbr(), con);
-                    partOne =
-                        "LASKU \n\n" +
-                        pC.getfName() + " " + pC.getlName();
-                }
+            if(compCont.findCompanyClient(client.getNmbr(), con) != null){
+                cC = compCont.findCompanyClient(client.getNmbr(), con);
+                partOne = 
+                    "LASKU \n\n" +
+                    cC.getName() + "\n" +
+                    cC.getyIdentifier()
+                ;
+            }
+            else{
+                pC = privCont.findPrivateClient(client.getNmbr(), con);
+                partOne =
+                    "LASKU \n\n" +
+                    pC.getfName() + " " + pC.getlName();
+            }
 
-                clientLoc = locCont.findLocationByNmbr(client.getLocationNmbr(), con);
+            clientLoc = locCont.findLocationByNmbr(client.getLocationNmbr(), con);
 
-                sA = soldCont.findSoldArticlesOfInvoice(invoice.getIvNmbr(), con);
+            sA = soldCont.findSoldArticlesOfInvoice(invoice.getIvNmbr(), con);
 
-                wP = wPCont.findWorkPerformanceByNmbr(invoice.getWorkPerformanceNmbr(), con);
+            wP = wPCont.findWorkPerformanceByNmbr(invoice.getWorkPerformanceNmbr(), con);
 
-                wS = workSiteCont.findWorkSiteByNmbr(wP.getWorkSiteNmbr(), con);
+            wS = workSiteCont.findWorkSiteByNmbr(wP.getWorkSiteNmbr(), con);
 
-                wSLoc = locCont.findLocationByNmbr(wS.getLocationNmbr(), con);
+            wSLoc = locCont.findLocationByNmbr(wS.getLocationNmbr(), con);
 
            ArrayList<Storage> hours = calculate(wP, con);
+           
+           contractPrice = wS.getContractPrice();
+           if(contractPrice != 0){
+               agreement = true;
+           }
+           
            if(hours != null){
                double total = 0;
                StringBuilder sb = new StringBuilder("TEHDYT TUNNIT:\n\n");
@@ -83,14 +91,19 @@ public class InvoiceGenerator {
                    
                    sb.append(stor.name + " ");
                    sb.append(" Tuntimäärä " + stor.hours);
-                   sb.append(" Tuntiveloitus " + stor.hPrice );
+                   if(!agreement)
+                       sb.append(" Tuntiveloitus " + stor.hPrice );
                    if(stor.reduction != 0)
                        sb.append(" Alennus " + stor.reduction + "%");
-                   sb.append(" Kokonaishinta " + stor.total);
-                   total = total + stor.total;
+                   if(!agreement){
+                       sb.append(" Kokonaishinta " + stor.total);
+                       total = total + stor.total;
+                   }
                    sb.append("\n");
                }
-               sb.append("\nKOKONAISHINTA TYÖSTÄ: " + total);
+               if(!agreement){
+                    sb.append("\nKOKONAISHINTA TYÖSTÄ: " + total);
+               }
                totalPrice = totalPrice + total;
                partTwo = sb.toString();
            }
@@ -110,9 +123,11 @@ public class InvoiceGenerator {
 
                 }
                 totalPrice = totalPrice + total;
-                partThree = partThree + "\n\n\t\t\tYhteensä: " + total + " €";
+                partThree = partThree + "\n\n\t\t\tTyötarvikkeet yhteensä: " + total + " €";
            }
-           
+           if(agreement)
+               totalPrice = contractPrice;
+           partThree = partThree + "\n\n\nYHTEENSÄ: " + totalPrice + "€";
            finString = partOne + partTwo + partThree;
 
            return finString;
