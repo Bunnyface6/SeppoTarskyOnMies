@@ -58,7 +58,7 @@ public class CompanyClientCont {
             pStatement = con.prepareStatement("INSERT INTO yritys(asiakasnumero, y-tunnus, nimi) VALUES(?, ?, ?)");
             pStatement.setInt(1, resultSet.getInt(1));
             pStatement.setInt(2, x.getyIdentifier());
-            pStatement.setString(2, x.getName());
+            pStatement.setString(3, x.getName());
             pStatement.executeUpdate();
         }
         finally {
