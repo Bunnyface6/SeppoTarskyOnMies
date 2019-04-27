@@ -176,8 +176,11 @@ public class UI {
                         else if (userCommand.equals(ADDHOURSANDARTICLESCOMMAND)) {
                             System.out.print("Työkohdenumero: ");
                             tmp1 = commandReader.nextLine();
-                            System.out.print("Työtyyppi: ");
-                            tmp2 = commandReader.nextLine();
+                            tmp6 = Integer.parseInt(tmp1);
+                            System.out.print("Asennustyö(tunnit): ");
+                            tmp1 = commandReader.nextLine();
+                            tmp7 = Integer.parseInt(tmp1);
+                            
                             System.out.print("Tunnit: ");
                             tmp3 = commandReader.nextLine();
                             System.out.print("Alennus: ");

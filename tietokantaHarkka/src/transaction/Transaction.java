@@ -32,19 +32,19 @@ public class Transaction {
     private ClientCont cC;
     private WorkSiteCont wSC;
     private WorkPerformanceCont wPC;
-    private PerformedWorkCont pVC;
+    private PerformedWorkCont perfWC;
     private InvoiceCont iC;
     private WorkPriceCont wPrC;
     private ArticleCont aC;
     private ArticleTypeCont aTC;
-
+    
     public Transaction() {
         this.lC = new LocationCont();
         this.pCC = new PrivateClientCont();
         this.cCC = new CompanyClientCont();
         this.wSC = new WorkSiteCont();
         this.wPC = new WorkPerformanceCont();
-        this.pVC = new PerformedWorkCont();
+        this.perfWC = new PerformedWorkCont();
         this.iC = new InvoiceCont();
         this.wPrC = new WorkPriceCont();
         this.aC = new ArticleCont();
@@ -128,7 +128,7 @@ public class Transaction {
     }
     
     //Kesken
-    public boolean addHourstoWorkPerformaceofWorkSite(WorkSite x, String wType, int nOHours, int disc, Connection con) throws SQLException {
+    public boolean addHoursAndArticles(int worksiteNumber, String workType, int nOHours, int wPDisc, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
             WorkPerformance w = wPC.findWorkPerformanceByWorkSiteNmbr(x.getNmbr(), con);
@@ -396,6 +396,42 @@ public class Transaction {
             System.out.println("PAHASTI PIELEEN");
             return false;
         }
+    }
+    
+    public ArrayList<String> getWorkTypesAndDiscounts(int wSiteNmbr, Connection con) throws SQLException {
+        ArrayList<String> wTAD = new ArrayList<String>(); 
+        try {
+            con.setAutoCommit(false);
+            ArrayList<WorkPrice> wPr = wPrC.findWorkPrices(con);
+            if (!wPr.isEmpty()) {
+                ArrayList<WorkPerformance> wP  = wPC.findWorkPerformanceByWorkSiteNmbr(wSiteNmbr, con);
+                if (wP.isEmpty()) {
+                    for (int i = 0; i < wPr.size(); i++) {
+                        WorkPrice w = wPr.get(i);
+                        wTAD.add(w.getWorkType());
+                        wTAD.add("0%");
+                    }
+                }
+                else {
+                    for (int j = 0; j < wP.size(); j++) {
+                        WorkPerformance p = wP.get(j);
+                        if(!iC.invoiceIsCreated(p.getNmbr(), con)) {
+                            PerformedWork perfW = perfWC.findPerformedWorkOfWorkPerformance(type, p.getNmbr(), con);
+                        }
+                    }
+                }
+            }
+             
+            
+                
+                
+            
+            con.commit();
+        }
+        catch (SQLException e) {
+            con.rollback();
+        }
+        return wTAD;
     }
     
     public String getArticleTypes(Connection con) throws SQLException {

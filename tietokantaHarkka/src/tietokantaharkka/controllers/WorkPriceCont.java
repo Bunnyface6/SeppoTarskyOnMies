@@ -74,6 +74,28 @@ public class WorkPriceCont {
         return wP;
     }
     
+    public ArrayList<WorkPrice> findWorkPrices(Connection con) throws SQLException {
+        ArrayList<WorkPrice> wP = new ArrayList<WorkPrice>();
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            pStatement = con.prepareStatement("SELECT tyyppi, hinta FROM tyohinnasto");
+            resultSet = pStatement.executeQuery();
+            while (resultSet.next()) {
+                wP.add(createWorkPrice(resultSet.getString(1), resultSet.getDouble(2)));
+            }
+        }    
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+        return wP;
+    }
+    
     public WorkPrice removeWorkPrice(WorkPrice x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
         try {

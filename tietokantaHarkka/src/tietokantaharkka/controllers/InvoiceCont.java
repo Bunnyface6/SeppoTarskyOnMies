@@ -310,4 +310,28 @@ public class InvoiceCont {
         }
         return oK;        
     }
+     
+    public boolean invoiceIsCreated(int workPerformanceNmbr, Connection con) throws SQLException {
+        PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        try {
+            pStatement = con.prepareStatement("SELECT laskutunnus FROM lasku WHERE tyosuoritusnumero = ? AND erapaiva NOT NULL"); 
+            pStatement.setInt(1, workPerformanceNmbr);
+            resultSet = pStatement.executeQuery();
+            if (resultSet.next()) {
+                return true;  
+            }
+            else {
+                return false;
+            }
+        }
+        finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }
+    }
 }
