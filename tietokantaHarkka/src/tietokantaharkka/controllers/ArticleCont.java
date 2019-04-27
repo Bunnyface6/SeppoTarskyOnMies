@@ -58,8 +58,8 @@ public class ArticleCont {
             pStatement.setString(2, x.getName());
             pStatement.setInt(3, x.getStorage());
             pStatement.setDouble(4, x.getSalePrice());
-            if(x.getNmbr2() != 0){
-                pStatement.setInt(5, x.getNmbr2());
+            if(x.getNmbr() != 0){
+                pStatement.setInt(5, x.getNmbr());
             }
             else{
                 ArticleTypeCont aTC = new ArticleTypeCont();
