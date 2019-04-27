@@ -55,7 +55,7 @@ public class CompanyClientCont {
             resultSet = pStatement.getGeneratedKeys();
             resultSet.next();
             pStatement.clearParameters();
-            pStatement = con.prepareStatement("INSERT INTO yritys(asiakasnumero, y-tunnus, nimi) VALUES(?, ?, ?)");
+            pStatement = con.prepareStatement("INSERT INTO yritys(asiakasnumero, ytunnus, nimi) VALUES(?, ?, ?)");
             pStatement.setInt(1, resultSet.getInt(1));
             pStatement.setInt(2, x.getyIdentifier());
             pStatement.setString(3, x.getName());
@@ -85,7 +85,7 @@ public class CompanyClientCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            pStatement = con.prepareStatement("SELECT yritys.asiakasnumero, yritys.y-tunnus, yritys.nimi, asiakas.osoitenumero FROM yritys, asiakas WHERE asiakas.asiakasnumero = yritys.asiakasnumero AND yritys.asiakasnumero = ?");
+            pStatement = con.prepareStatement("SELECT yritys.asiakasnumero, yritys.ytunnus, yritys.nimi, asiakas.osoitenumero FROM yritys, asiakas WHERE asiakas.asiakasnumero = yritys.asiakasnumero AND yritys.asiakasnumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
             if (resultSet.next()) {
@@ -125,7 +125,7 @@ public class CompanyClientCont {
 	    resultSet.next();
             rows = resultSet.getInt(1);
 	    for (int i = 0; i < rows; i++) {
-	        pStatement = con.prepareStatement("SELECT yritys.asiakasnumero, y-tunnus, nimi, asiakas.osoitenumero, ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum FROM yritys, asiakas WHERE asiakas.asiakasnumero = yritys.asiakasnumero AND nimi = ? AND rownum = ?");
+	        pStatement = con.prepareStatement("SELECT yritys.asiakasnumero, ytunnus, nimi, asiakas.osoitenumero, ROW_NUMBER() over (ORDER BY asiakasnumero) as rownum FROM yritys, asiakas WHERE asiakas.asiakasnumero = yritys.asiakasnumero AND nimi = ? AND rownum = ?");
 	        pStatement.setString(1, name);
 		pStatement.setInt(2, i+1);
                 resultSet = pStatement.executeQuery();
@@ -160,7 +160,7 @@ public class CompanyClientCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            pStatement = con.prepareStatement("SELECT yritys.asiakasnumero, yritys.y-tunnus, yritys.nimi, asiakas.osoitenumero FROM yritys, asiakas WHERE asiakas.asiakasnumero = yritys.asiakasnumero AND yritys.y-tunnus = ?");
+            pStatement = con.prepareStatement("SELECT yritys.asiakasnumero, yritys.ytunnus, yritys.nimi, asiakas.osoitenumero FROM yritys, asiakas WHERE asiakas.asiakasnumero = yritys.asiakasnumero AND yritys.y-tunnus = ?");
             pStatement.setInt(1, yIdentifier);
             resultSet = pStatement.executeQuery();
             if (resultSet.next()) {
@@ -217,7 +217,7 @@ public class CompanyClientCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            pStatement = con.prepareStatement("\"SELECT yritys.asiakasnumero, yritys.y-tunnus, yritys.nimi, asiakas.osoitenumero FROM yritys, asiakas, lasku WHERE asiakas.asiakasnumero = yritys.asiakasnumero AND lasku.asiakasnumero = henkilo.asiakasnumero AND maksupaiva IS NULL");
+            pStatement = con.prepareStatement("\"SELECT yritys.asiakasnumero, yritys.ytunnus, yritys.nimi, asiakas.osoitenumero FROM yritys, asiakas, lasku WHERE asiakas.asiakasnumero = yritys.asiakasnumero AND lasku.asiakasnumero = henkilo.asiakasnumero AND maksupaiva IS NULL");
             resultSet = pStatement.executeQuery();
             while (resultSet.next()) {
                 l.add(createCompanyClient(resultSet.getString(3), resultSet.getInt(2), resultSet.getInt(1), resultSet.getInt(4)));
