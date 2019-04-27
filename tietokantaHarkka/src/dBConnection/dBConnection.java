@@ -65,7 +65,7 @@ public class dBConnection {
     
     public void go(){
         String user = "ja427770";
-        String password = "";
+        String password = "Predator6694";
         String host = "shell.sis.uta.fi";
         int port=22;
         try
@@ -86,7 +86,7 @@ public class dBConnection {
     }
          
    public void disconnect(){
-       System.out.println("SUljetaan");
+       System.out.println("Suljetaan");
        try{
         con.close();
        }
@@ -94,6 +94,6 @@ public class dBConnection {
            System.out.println("JOTAIN MENI PIELEEN");
        }
        session.disconnect();
-       System.out.println("SUljetaan");
+       System.out.println("Suljetaan");
    }
 }
