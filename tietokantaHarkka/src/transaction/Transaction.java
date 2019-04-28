@@ -176,7 +176,7 @@ public class Transaction {
             perfWC.addNewPerformedWork(pWork2, con);
             perfWC.addNewPerformedWork(pWork3, con);
             
-            inv = iC.findInvoiceByWorkPerformanceNmbr(perfNum, con);
+            inv = iC.chooseLatest(iC.findInvoiceByWorkPerformanceNmbr(perfNum, con));
             
             while (j < articlesAndDisc.size()) {
                 

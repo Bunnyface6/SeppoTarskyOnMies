@@ -436,4 +436,18 @@ public class InvoiceCont {
             }
         }
     }
+    
+    public Invoice chooseLatest(ArrayList<Invoice> x){
+        
+        Invoice rtn = x.get(0);
+        
+        for(Invoice y : x){
+            
+            if(y.getIvNmbr() > rtn.getIvNmbr()){
+                rtn = y;
+            }
+            
+        }
+        return rtn;
+    }
 }
