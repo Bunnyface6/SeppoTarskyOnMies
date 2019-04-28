@@ -179,7 +179,7 @@ public class Transaction {
                     sAC.addNewSoldArticle(sA, con);
                 }
                 catch (IllegalArgumentException e) {
-                    
+                    System.out.println(e.getMessage());    
                 }
             }
             con.commit();
@@ -188,6 +188,32 @@ public class Transaction {
         catch(SQLException e) {
             con.rollback();
             return false;
+        }
+    }
+    
+    public boolean addArticlesToInvoice(int clientNmbr, ArrayList<Integer> aList, Date today, Date fPDate, Connection con) throws SQLException {
+        int iN;
+        int j = 0;
+        try {
+            con.setAutoCommit(false);
+            Invoice inv = new Invoice(fPDate, 0, today, null, 1, 0, clientNmbr, 0);
+            iN = iC.addNewInvoice(inv, con);
+            while (j < aList.size())  {
+                SoldArticle sA = new SoldArticle(iN, aList.get(j), aList.get(j + 2), aList.get(j + 1));
+                j = j + 3;
+                try {
+                    sAC.addNewSoldArticle(sA, con);
+                }
+                catch (IllegalArgumentException e) {
+                   System.out.println(e.getMessage());
+                }
+            }
+            con.commit();
+            return true;
+        }
+        catch (SQLException e) {
+            con.rollback();
+            return false; 
         }
     }
         
@@ -421,43 +447,7 @@ public class Transaction {
             return false;
         }
     }
-    
-    public ArrayList<String> getWorkTypesAndDiscounts(int wSiteNmbr, Connection con) throws SQLException {
-        ArrayList<String> wTAD = new ArrayList<String>(); 
-        try {
-            con.setAutoCommit(false);
-            ArrayList<WorkPrice> wPr = wPrC.findWorkPrices(con);
-            if (!wPr.isEmpty()) {
-                ArrayList<WorkPerformance> wP  = wPC.findWorkPerformanceByWorkSiteNmbr(wSiteNmbr, con);
-                if (wP.isEmpty()) {
-                    for (int i = 0; i < wPr.size(); i++) {
-                        WorkPrice w = wPr.get(i);
-                        wTAD.add(w.getWorkType());
-                        wTAD.add("0%");
-                    }
-                }
-                else {
-                    for (int j = 0; j < wP.size(); j++) {
-                        WorkPerformance p = wP.get(j);
-                        if(!iC.invoiceIsCreated(p.getNmbr(), con)) {
-                            PerformedWork perfW = perfWC.findPerformedWorkOfWorkPerformance(type, p.getNmbr(), con);
-                        }
-                    }
-                }
-            }
-             
-            
-                
-                
-            
-            con.commit();
-        }
-        catch (SQLException e) {
-            con.rollback();
-        }
-        return wTAD;
-    }
-    
+         
     public String getArticleTypes(Connection con) throws SQLException {
         String aTypes = "";
         try {

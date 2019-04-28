@@ -53,9 +53,9 @@ public class UI {
     private final String HELOMESSAGE = "Tervetuloa Tmi Sähkötärsky:n laskutusjärjestelmään!";
     private final String MAINMENUMESSAGE = "1)Lisää 2)Etsi 3)Laskutus 4)Lopeta";
     private final String ADDMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tunnit ja tarvikkeet työkohteeseen 5)Tarvike laskulle\n"
-                                          + "6)Tarviketta varastoon 7)Uusi tarvike varastoon 8)Uusi tarvikelista 9)Takaisin";
-    private final String SEARCHMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tarvikeet 5)Lasku 6)Takaisin";
-    private final String INVOICINGMENUMESSAGE = "1)Luo lasku 2)Luo muitutuslaskut maksamattomista 3)Luo karhulaskut maksamattomista 4)Näytä lasku 5)Takaisin";
+                                          + "6)Tarvikeen varastosaldo 7)Uusi tarvike varastoon 8)Uusi tarvikelista 9)Takaisin";
+    private final String SEARCHMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tarvikeet 5)Lasku/laskupohja 6)Takaisin";
+    private final String INVOICINGMENUMESSAGE = "1)Luo lasku 2)Luo muitutuslaskut maksamattomista 3)Luo karhulaskut maksamattomista 4)Tulosta lasku 5)Takaisin";
     private final String WANTTOADDARTICLE = "Lisätäänkö tarvikeita? k)Kyllä e)Ei t)Näytä tarvikelista";
     private final String WRONGCOMMANDMESSAGE = "Virheellinen komento.";
     private final String NOTNUMBERMESSAGE = "Syöte virheellinen. Anna numero-muotoinen syöte ilman välilyöntejä.";
@@ -102,13 +102,14 @@ public class UI {
             System.out.println(MAINMENUMESSAGE);
             userCommand = commandReader.nextLine();
             
-            
+            // Jos valitaan Lisää-vaihtoehto.
             if (userCommand.equals(ADDCOMMAND)) {
                 while (inAddMenu) {    
                     try {
                         System.out.println(ADDMENUMESSAGE);
                         userCommand = commandReader.nextLine();
-                
+                        
+                        // Jos valitaan yksityisasiakkaan lisäys.
                         if (userCommand.equals(ADDPRIVCLIENTCOMMAND)) {
                             System.out.print("Etunimi: ");
                             tmp1 = commandReader.nextLine();
@@ -130,7 +131,8 @@ public class UI {
                                 System.out.println(ADDNOTOKMESSAGE);
                             }
                         }
-                
+                        
+                        // Jos valitaan yritysasiakkaan lisäys.
                         else if (userCommand.equals(ADDCOMPCLIENTCOMMAND)) {
                             System.out.print("Nimi: ");
                             tmp1 = commandReader.nextLine();
@@ -153,7 +155,8 @@ public class UI {
                                 System.out.println(ADDNOTOKMESSAGE);
                             }
                         }
-                
+                        
+                        // Jos valitaan työkohteen lisäys.
                         else if (userCommand.equals(ADDWORKSITECOMMAND)) {
                             System.out.print("Asiakasnumero: ");
                             tmp1 = commandReader.nextLine();
@@ -177,7 +180,8 @@ public class UI {
                                 System.out.println(ADDNOTOKMESSAGE);
                             }
                         }
-                
+                        
+                        // Jos valitaan tuntien ja tarvikkeiden lisäys työkohteeseen.
                         else if (userCommand.equals(ADDHOURSANDARTICLESCOMMAND)) {
                             tmp12 = new int[7];
                             System.out.print("Työkohdenumero: ");
@@ -201,9 +205,9 @@ public class UI {
                             System.out.print("Aputyö(alennusprosentti): ");
                             tmp1 = commandReader.nextLine();
                             tmp12[6] = Integer.parseInt(tmp1);
+                            list2 = new ArrayList<Integer>();
                             do {
                                 System.out.print(WANTTOADDARTICLE);
-                                list2 = new ArrayList<Integer>();
                                 userCommand = commandReader.nextLine();
                                 if (userCommand.equals(YESCOMMAND)) {
                                     System.out.print("Tarvikenumero: ");
@@ -229,13 +233,64 @@ public class UI {
                             }
                             while (inAdding);
                             inAdding = true;
-                            transaction.addHoursAndArticles(tmp12, list2, con.getConnection());
-                        }
-                
-                        else if (userCommand.equals(ADDARTICLETOINVOICECOMMAND)) {
-                   
+                            oK = transaction.addHoursAndArticles(tmp12, list2, con.getConnection());
+                            if (oK) {
+                                System.out.println(ADDOKMESSAGE);
+                                oK = false;
+                            }
+                            else {
+                                System.out.println(ADDNOTOKMESSAGE);
+                            }
                         }
                         
+                        // Jos valitaan tarvikkeen lisäys laskulle(tarvikkeiden myynti, ilman työkohdetta).
+                        else if (userCommand.equals(ADDARTICLETOINVOICECOMMAND)) {
+                            list2 = new ArrayList<Integer>();
+                            System.out.print("Asiakasnumero: ");
+                            tmp1 = commandReader.nextLine();
+                            tmp6 = Integer.parseInt(tmp1);
+                            do {
+                                System.out.print("Tarvikenumero: ");
+                                tmp1 = commandReader.nextLine();
+                                list2.add(Integer.parseInt(tmp1));
+                                System.out.print("Määrä: ");
+                                tmp1 = commandReader.nextLine();
+                                list2.add(Integer.parseInt(tmp1));
+                                System.out.print("Alennusprosentti: ");
+                                tmp1 = commandReader.nextLine();
+                                list2.add(Integer.parseInt(tmp1));
+                                System.out.print(WANTTOADDARTICLE);
+                                userCommand = commandReader.nextLine();
+                                if (userCommand.equals(NOCOMMAND)){
+                                    inAdding = false;
+                                }
+                                if (userCommand.equals(ARTLISTCOMMAND)){
+                                    list = transaction.getAllArticles(con.getConnection());
+                                    printList(list);     
+                                }
+                                if (!userCommand.equals(YESCOMMAND) && !userCommand.equals(ARTLISTCOMMAND) && !userCommand.equals(NOCOMMAND)) {
+                                    System.out.print(WRONGCOMMANDMESSAGE);
+                                }
+                            }
+                            while (inAdding);
+                            inAdding = true;
+                            System.out.print("Anna päivämäärä laskulle(dd/mm/yyyy) :");
+                            tmp1 = commandReader.nextLine();
+                            tmp9 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
+                            System.out.print("Anna eräpäivä laskulle(dd/mm/yyyy): ");
+                            tmp2 = commandReader.nextLine();
+                            tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp2);
+                            oK = transaction.addArticlesToInvoice(tmp6, list2, tmp9, tmp10, con.getConnection());
+                            if (oK) {
+                                System.out.println(ADDOKMESSAGE);
+                                oK = false;
+                            }
+                            else {
+                                System.out.println(ADDNOTOKMESSAGE);
+                            }
+                        }
+                        
+                        // Jos valitaan tarvikkeen varastosaldon lisäys.
                         else if (userCommand.equals(ADDARTICLETOSTORAGECOMMAND)) {
                             System.out.print("Tarvikenumero: ");
                             tmp1 = commandReader.nextLine();
@@ -253,6 +308,7 @@ public class UI {
                             }
                         }
                         
+                        // Jos valitaan uuden tarvikkeen lisäys varastoon.
                         else if (userCommand.equals(ADDNEWARTICLECOMMAND)) {
                             System.out.print("Tarvikeen nimi: ");
                             tmp1 = commandReader.nextLine();
@@ -278,140 +334,17 @@ public class UI {
                             }
                         }
                         
+                        // Jos valitaan tarvikelistan lisäys(tavikkeiden lisäys tiedostosta ja vanhojen kirjoittaminen tiedostoon).
                         else if (userCommand.equals(ADDARTICLELISTCOMMAND)) {
                    
                         }
-                
+                        
+                        // Jos valitaan takaisin.
                         else if (userCommand.equals(ADDBACKCOMMAND)) {
                             inAddMenu = false;
                         }
-                  
-                        else {
-                            System.out.println(WRONGCOMMANDMESSAGE);
-                        }
-                    }
-                    catch (NumberFormatException e) {
-                        System.out.println(NOTNUMBERMESSAGE);
-                    }
-                    catch (SQLException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    catch (NullPointerException e) {
-                        System.out.println(EMPTYINPUTMESSAGE);
-                    }
-                }
-            }
                         
-            else if (userCommand.equals(SEARCHCOMMAND)) {
-                while (inSearchMenu) {     
-                    try {
-                        System.out.println(SEARCHMENUMESSAGE);
-                        userCommand = commandReader.nextLine();
-                    
-                        if (userCommand.equals(SEARCHPRIVCLIENTCOMMAND)) {
-                            System.out.println("Etunimi:");
-                            tmp1 = commandReader.nextLine();
-                            System.out.println("Sukunimi:");
-                            tmp2 = commandReader.nextLine();
-                            list = transaction.getClientInfo(tmp1, tmp2, con.getConnection());
-                            printList(list);
-                        }
-                        
-                        else if (userCommand.equals(SEARCHCOMPLIENTCOMMAND)) {
-                            System.out.println("Nimi:");
-                            tmp1 = commandReader.nextLine();
-                            list = transaction.getClientInfo(tmp1, con.getConnection());
-                            printList(list);
-                        }
-                
-                        else if (userCommand.equals(SEARCHWORKSITECOMMAND)) {
-                            System.out.println("Asiakasnumero:");
-                            tmp1 = commandReader.nextLine();
-                            tmp6 = Integer.parseInt(tmp1);
-                            list = transaction.getWorkSiteInfo(tmp6, con.getConnection());
-                            printList(list);
-                        }
-                
-                        else if (userCommand.equals(SEARCHARTICLESCOMMAND)) {
-                            list = transaction.getAllArticles(con.getConnection());
-                            printList(list);     
-                        }
-                
-                        else if (userCommand.equals(SEARHINVOICECOMMAND)) {
-                   
-                        }
-                
-                        else if (userCommand.equals(SEARHBACKCOMMAND)) {
-                            inSearchMenu = false;
-                        }
-                
-                        else {
-                            System.out.println(WRONGCOMMANDMESSAGE);
-                        }
-                    }
-                    catch (NumberFormatException e) {
-                        System.out.println(NOTNUMBERMESSAGE);
-                    }
-                    catch (SQLException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    catch (NullPointerException e) {
-                        System.out.println(EMPTYINPUTMESSAGE);
-                    }
-                }
-            }
-            
-            else if (userCommand.equals(INVOICINGCOMMAND)) {
-                while (inInvoicingMenu) {
-                    try {
-                        System.out.println(INVOICINGMENUMESSAGE);
-                        userCommand = commandReader.nextLine();
-                
-                        if (userCommand.equals(CREATEINVOICECOMMAND)) {
-                        
-                        }    
-                        else if (userCommand.equals(CREATE2NDINVOICECOMMAND)) {
-                            System.out.print("Anna päivämäärä(dd/mm/yyyy) :");
-                            tmp1 = commandReader.nextLine();
-                            tmp9 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
-                            System.out.print("Anna eräpäivä(dd/mm/yyyy): ");
-                            tmp2 = commandReader.nextLine();
-                            tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp2);
-                            oK = transaction.createReminderOfUnpaidInvoices(tmp10, tmp9, con.getConnection());
-                            if (oK) {
-                                System.out.println(ADDOKMESSAGE);
-                                oK = false;
-                            }
-                            else {
-                                System.out.println(ADDNOTOKMESSAGE);
-                            }
-                        }
-                
-                        else if (userCommand.equals(CREATE3THINVOICECOMMAND)) {
-                            System.out.print("Anna päivämäärä(dd/mm/yyyy) :");
-                            tmp1 = commandReader.nextLine();
-                            tmp9 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
-                            System.out.print("Anna eräpäivä(dd/mm/yyyy): ");
-                            tmp2 = commandReader.nextLine();
-                            tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp2);
-                            oK = transaction.createSecondReminderOfUnpaidInvoice(tmp9, tmp10, con.getConnection());
-                            if (oK) {
-                                System.out.println(ADDOKMESSAGE);
-                                oK = false;
-                            }
-                            else {
-                                System.out.println(ADDNOTOKMESSAGE);
-                            }
-                        }
-                
-                        else if (userCommand.equals(PRINTINVOICECOMMAND)) {
-                
-                        }
-                
-                        else if (userCommand.equals(INVOICEBACKCOMMAND)) {
-                            inInvoicingMenu = false;
-                        }
-                
+                        // Muuten, komento on virheellinen.
                         else {
                             System.out.println(WRONGCOMMANDMESSAGE);
                         }
@@ -431,9 +364,156 @@ public class UI {
                 }
             }
             
+            // Jos valitaan etsi.            
+            else if (userCommand.equals(SEARCHCOMMAND)) {
+                while (inSearchMenu) {     
+                    try {
+                        System.out.println(SEARCHMENUMESSAGE);
+                        userCommand = commandReader.nextLine();
+                        
+                        // Jos valitaan etsi yksityisasiakas.  
+                        if (userCommand.equals(SEARCHPRIVCLIENTCOMMAND)) {
+                            System.out.println("Etunimi:");
+                            tmp1 = commandReader.nextLine();
+                            System.out.println("Sukunimi:");
+                            tmp2 = commandReader.nextLine();
+                            list = transaction.getClientInfo(tmp1, tmp2, con.getConnection());
+                            printList(list);
+                        }
+                        
+                        // Jos valitaan etsi yriysasiakas.  
+                        else if (userCommand.equals(SEARCHCOMPLIENTCOMMAND)) {
+                            System.out.println("Nimi:");
+                            tmp1 = commandReader.nextLine();
+                            list = transaction.getClientInfo(tmp1, con.getConnection());
+                            printList(list);
+                        }
+                        
+                        // Jos valitaan etsi työkohde.  
+                        else if (userCommand.equals(SEARCHWORKSITECOMMAND)) {
+                            System.out.println("Asiakasnumero:");
+                            tmp1 = commandReader.nextLine();
+                            tmp6 = Integer.parseInt(tmp1);
+                            list = transaction.getWorkSiteInfo(tmp6, con.getConnection());
+                            printList(list);
+                        }
+                        
+                        // Jos valitaan etsi tarvikkeet.  
+                        else if (userCommand.equals(SEARCHARTICLESCOMMAND)) {
+                            list = transaction.getAllArticles(con.getConnection());
+                            printList(list);     
+                        }
+                        
+                        // Jos valitaan etsi laskupohja.  
+                        else if (userCommand.equals(SEARHINVOICECOMMAND)) {
+                   
+                        }
+                        
+                        // Jos valitaan takaisin.  
+                        else if (userCommand.equals(SEARHBACKCOMMAND)) {
+                            inSearchMenu = false;
+                        }
+                        
+                        // Muuten, komento on virheellinen.  
+                        else {
+                            System.out.println(WRONGCOMMANDMESSAGE);
+                        }
+                    }
+                    catch (NumberFormatException e) {
+                        System.out.println(NOTNUMBERMESSAGE);
+                    }
+                    catch (SQLException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    catch (NullPointerException e) {
+                        System.out.println(EMPTYINPUTMESSAGE);
+                    }
+                }
+            }
+            
+            // Jos valitaan laskutus.
+            else if (userCommand.equals(INVOICINGCOMMAND)) {
+                while (inInvoicingMenu) {
+                    try {
+                        System.out.println(INVOICINGMENUMESSAGE);
+                        userCommand = commandReader.nextLine();
+                        
+                        // Jos valitaan luo lasku.
+                        if (userCommand.equals(CREATEINVOICECOMMAND)) {
+                        
+                        } 
+                        
+                        // Jos valitaan luo muistutuslaskut maksamattomista laskuista.
+                        else if (userCommand.equals(CREATE2NDINVOICECOMMAND)) {
+                            System.out.print("Anna päivämäärä(dd/mm/yyyy) :");
+                            tmp1 = commandReader.nextLine();
+                            tmp9 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
+                            System.out.print("Anna eräpäivä(dd/mm/yyyy): ");
+                            tmp2 = commandReader.nextLine();
+                            tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp2);
+                            oK = transaction.createReminderOfUnpaidInvoices(tmp10, tmp9, con.getConnection());
+                            if (oK) {
+                                System.out.println(ADDOKMESSAGE);
+                                oK = false;
+                            }
+                            else {
+                                System.out.println(ADDNOTOKMESSAGE);
+                            }
+                        }
+                        
+                        // Jos valitaan luo karhulaskut maksamattomista muistutuslaskuista.
+                        else if (userCommand.equals(CREATE3THINVOICECOMMAND)) {
+                            System.out.print("Anna päivämäärä(dd/mm/yyyy) :");
+                            tmp1 = commandReader.nextLine();
+                            tmp9 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
+                            System.out.print("Anna eräpäivä(dd/mm/yyyy): ");
+                            tmp2 = commandReader.nextLine();
+                            tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp2);
+                            oK = transaction.createSecondReminderOfUnpaidInvoice(tmp9, tmp10, con.getConnection());
+                            if (oK) {
+                                System.out.println(ADDOKMESSAGE);
+                                oK = false;
+                            }
+                            else {
+                                System.out.println(ADDNOTOKMESSAGE);
+                            }
+                        }
+                        
+                        // Jos valitaan tulosta lasku. 
+                        else if (userCommand.equals(PRINTINVOICECOMMAND)) {
+                
+                        }
+                        
+                        // Jos valitaan takaisin.
+                        else if (userCommand.equals(INVOICEBACKCOMMAND)) {
+                            inInvoicingMenu = false;
+                        }
+                        
+                        // Muuten, komento on virheellinen.
+                        else {
+                            System.out.println(WRONGCOMMANDMESSAGE);
+                        }
+                    }
+                    catch (NumberFormatException e) {
+                        System.out.println(NOTNUMBERMESSAGE);
+                    }
+                    catch (SQLException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    catch (NullPointerException e) {
+                        System.out.println(EMPTYINPUTMESSAGE);
+                    }
+                    catch (ParseException e) {
+                       System.out.println(NOTDATEMESSAGE);
+                    }
+                }
+            }
+            
+            // Jos valitaan lopeta.
             else if (userCommand.equals(QUITCOMMAND)) {
                 System.out.println(QUITCONFIRMMESSAGE);
                 userCommand = commandReader.nextLine();
+                // Jos valitaan kyllä.
                 if (userCommand.equals(YESCOMMAND)) {
                     uIRunning = false;
                     commandReader.close();
@@ -442,17 +522,24 @@ public class UI {
                         con.disconnect();
                     }
                 }
+                // Jos komento on virheellinen.
                 if (!userCommand.equals(YESCOMMAND) && !userCommand.equals(NOCOMMAND)) {
                     System.out.println(WRONGCOMMANDMESSAGE);
                 }
             }
             
+            // Muuten, komento on virheellinen.
             else {
                 System.out.println(WRONGCOMMANDMESSAGE);
             }
         }
     }
     
+    /**
+     * Tulostaa parametrina saadun String-olio-listan. 
+     * 
+     * @param list lista String tyyppisistä olioista.
+     */
     public void printList(ArrayList<String> list) {
         if (!list.isEmpty()) {
             for (int i = 0; i < list.size(); i++) {

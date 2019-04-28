@@ -27,11 +27,12 @@ public class InvoiceCont {
         return x;
     }
     
-    public void addNewInvoice(Invoice x, Connection con) throws SQLException {
+    public int addNewInvoice(Invoice x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        int invN = 0;
         try {
-            con.setAutoCommit(false);
-            pStatement = con.prepareStatement("INSERT INTO lasku(paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero) VALUES(?, ?, ?, ?, ?, ?, ?)");
+            pStatement = con.prepareStatement("INSERT INTO lasku(paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero) VALUES(?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             java.sql.Date d = new java.sql.Date(x.getCompDate().getTime());
             pStatement.setDate(1, d);
             d = new java.sql.Date(x.getFinalPayDate().getTime());
@@ -43,16 +44,19 @@ public class InvoiceCont {
             pStatement.setInt(6, x.getReminderOfNmbr());
             pStatement.setInt(7, x.getWorkPerformanceNmbr());
             pStatement.executeUpdate();
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
+            resultSet = pStatement.getGeneratedKeys();
+            resultSet.next();
+            invN = resultSet.getInt(1);
         }
         finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
             if (pStatement != null) {
                 pStatement.close();
             }
-        }    	
+        }
+        return invN;           
     }
     
     public Invoice findInvoiceByNmbr(int nmbr, Connection con) throws SQLException {
