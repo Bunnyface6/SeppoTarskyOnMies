@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package theController;
+package old;
 
+import old.ModelList;
+import old.FindMethods;
 import dBConnection.dBConnection;
-import view.FindDialog;
 import helpers.*;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
