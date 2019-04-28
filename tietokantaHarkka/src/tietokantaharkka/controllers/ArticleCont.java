@@ -371,7 +371,7 @@ public class ArticleCont {
     public void updateArticle(Article x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
         try {
-            pStatement = con.prepareStatement("UPDATE tarvike SET sisaanostohinta = ?,varastotilanne = ?, myyntihinta = ? WHERE tarvikenumero = ?");
+            pStatement = con.prepareStatement("UPDATE tarvike SET sisaanostohinta = sisaanostohinta + ?, varastotilanne = varastotilanne + ?, myyntihinta = myyntihinta + ? WHERE tarvikenumero = ?");
             pStatement.setDouble(1, x.getBuyIn());
             pStatement.setInt(2, x.getStorage());
             pStatement.setDouble(3, x.getSalePrice());
