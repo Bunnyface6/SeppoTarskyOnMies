@@ -58,7 +58,7 @@ public class UI {
                                           + "6)Tarvikeen varastosaldo 7)Uusi tarvike varastoon 8)Uusi tarvikelista 9)Takaisin";
     private final String SEARCHMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tarvikeet 5)Laskupohjat 6)Takaisin";
     private final String INVOICINGMENUMESSAGE = "1)Luo lasku 2)Luo muitutuslaskut maksamattomista 3)Luo karhulaskut maksamattomista 4)Tulosta lasku 5)Kuittaa lasku maksetuksi\n" 
-                                                + "6)Tee tarjous 7)Takaisin";
+                                                + "6)Tee hinta-arvio 7)Takaisin";
     private final String WANTTOADDARTICLE = "Lisätäänkö tarvikeita? k)Kyllä e)Ei t)Näytä tarvikelista";
     private final String WRONGCOMMANDMESSAGE = "Virheellinen komento.";
     private final String NOTNUMBERMESSAGE = "Syöte virheellinen. Anna numero-muotoinen syöte ilman välilyöntejä.";
@@ -542,9 +542,50 @@ public class UI {
                             }
                         }
                         
-                        // Jos valitaan tee tarjous.
+                        // Jos valitaan tee hinta-arvio.
                         else if (userCommand.equals(MAKEOFFERCOMMAND)) {
-                        
+                            tmp12 = new int[3];
+                            System.out.print("Asennustyö(tunnit): ");
+                            tmp1 = commandReader.nextLine();
+                            tmp12[0] = Integer.parseInt(tmp1);
+                            System.out.print("Suunnittelutyö(tunnit): ");
+                            tmp1 = commandReader.nextLine();
+                            tmp12[1] = Integer.parseInt(tmp1);
+                            System.out.print("Aputyö(tunnit): ");
+                            tmp1 = commandReader.nextLine();
+                            tmp12[2] = Integer.parseInt(tmp1);
+                            list2 = new ArrayList<Integer>();
+                            do {
+                                System.out.print(WANTTOADDARTICLE);
+                                userCommand = commandReader.nextLine();
+                                if (userCommand.equals(YESCOMMAND)) {
+                                    System.out.print("Tarvikenumero: ");
+                                    tmp1 = commandReader.nextLine();
+                                    list2.add(Integer.parseInt(tmp1));
+                                    System.out.print("Määrä: ");
+                                    tmp1 = commandReader.nextLine();
+                                    list2.add(Integer.parseInt(tmp1));
+                                }
+                                else if (userCommand.equals(NOCOMMAND)){
+                                    inAdding = false;
+                                }
+                                else if (userCommand.equals(ARTLISTCOMMAND)){
+                                    list = transaction.getAllArticles(con.getConnection());
+                                    printList(list);     
+                                }
+                                else {
+                                    System.out.print(WRONGCOMMANDMESSAGE);
+                                }
+                            }
+                            while (inAdding);
+                            inAdding = true;
+                            tmp1 = transaction.createAssessmentOfPrices(tmp12, list2, con.getConnection());
+                            if (tmp1 != null) {
+                                System.out.println(tmp1);
+                            }
+                            else {
+                                System.out.println(NOTOKMESSAGE);
+                            }
                         }
                         
                         // Jos valitaan takaisin.

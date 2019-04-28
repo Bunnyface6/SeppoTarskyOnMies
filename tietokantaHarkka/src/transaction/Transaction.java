@@ -318,6 +318,27 @@ public class Transaction {
         }
     }
     
+    public String createAssessmentOfPrices(int[] hours, ArrayList<Integer> articles, Connection con) throws SQLException {
+        String assessmentOfPrices = null;
+        ArrayList<SoldArticle> soldA = new ArrayList<SoldArticle>();
+        int j = 0;
+        try {
+            con.setAutoCommit(false);
+            while (j < articles.size()) {
+                SoldArticle sA = new SoldArticle(0, articles.get(j), 0, articles.get(j + 1));
+                soldA.add(sA);
+                j = j + 2;
+            }
+            assessmentOfPrices = iG.printEstimate(hours[0], hours[2], hours[1], soldA, con);
+            con.commit();
+        }
+        catch (SQLException e) {
+            con.rollback();
+            throw new SQLException(e.getMessage());
+        }
+        return assessmentOfPrices;
+    }
+    
     public boolean addWorkTypeAndPrice(String type, double price, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
