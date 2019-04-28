@@ -49,16 +49,12 @@ public class Invoice {
     }
 
     public Date getFinalPayDate() {
-        
         return finalPayDate;
     }
 
-    public void setFinalPayDate(Date finalPayDate) throws IllegalArgumentException {
-        if(finalPayDate != null){
-            this.finalPayDate = finalPayDate;
-        }
-        else
-            throw new IllegalArgumentException();
+    public void setFinalPayDate(Date finalPayDate){
+        this.finalPayDate = finalPayDate;
+        
     }
 
     public int getIvNmbr() {
@@ -73,23 +69,16 @@ public class Invoice {
         return compDate;
     }
 
-    public void setCompDate(Date compDate) throws IllegalArgumentException{
-        if(compDate != null){
-            this.compDate = compDate;
-        }
-        else
-            throw new IllegalArgumentException();
+    public void setCompDate(Date compDate){
+        this.compDate = compDate;
     }
 
     public Date getDatePaid() {
         return datePaid;
     }
 
-    public void setDatePaid(Date datePaid) throws IllegalArgumentException{
-        if(datePaid != null)
+    public void setDatePaid(Date datePaid){
             this.datePaid = datePaid;
-        else
-            throw new IllegalArgumentException();
     }
 
     public int getReminderOfNmbr() {

@@ -30,20 +30,26 @@ public class InvoiceCont {
     public int addNewInvoice(Invoice x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
         ResultSet resultSet = null;
+        java.sql.Date d = null;
         int invN = 0;
         try {
+            
             pStatement = con.prepareStatement("INSERT INTO lasku(paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero) VALUES(?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            java.sql.Date d = new java.sql.Date(x.getCompDate().getTime());
+            if(x.getCompDate() != null)
+                d = new java.sql.Date(x.getCompDate().getTime());
             pStatement.setDate(1, d);
-            d = new java.sql.Date(x.getFinalPayDate().getTime());
+            if(x.getFinalPayDate() != null)
+                d = new java.sql.Date(x.getFinalPayDate().getTime());
             pStatement.setDate(2, d);
-            d = new java.sql.Date(x.getDatePaid().getTime());
+            if(x.getDatePaid() != null)
+                d = new java.sql.Date(x.getDatePaid().getTime());
             pStatement.setDate(3, d);
             pStatement.setInt(4, x.getNmbrOfInvoices());
             pStatement.setInt(5, x.getClientNmbr());
             pStatement.setInt(6, x.getReminderOfNmbr());
             pStatement.setInt(7, x.getWorkPerformanceNmbr());
             pStatement.executeUpdate();
+            System.out.println("TEST");
             resultSet = pStatement.getGeneratedKeys();
             resultSet.next();
             invN = resultSet.getInt(1);
@@ -68,6 +74,7 @@ public class InvoiceCont {
             pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE laskutunnus = ?"); 
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
+            
             if (resultSet.next()) {
                 i = createInvoice(new java.util.Date(resultSet.getDate(3).getTime()), resultSet.getInt(1), 
                                   new java.util.Date(resultSet.getDate(2).getTime()), new java.util.Date(resultSet.getDate(4).getTime()), 
@@ -345,7 +352,7 @@ public class InvoiceCont {
             pStatement.setInt(1, workPerformanceNmbr);
             resultSet = pStatement.executeQuery();
             if (resultSet.next()) {
-                return true;  
+                return true;
             }
             else {
                 return false;
