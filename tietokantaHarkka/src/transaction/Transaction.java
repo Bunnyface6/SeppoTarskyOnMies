@@ -27,7 +27,7 @@ import tietokantaharkka.controllers.*;
  */
 public class Transaction {
     
-    private LocationCont lC;
+    private locationCont lC;
     private PrivateClientCont pCC;
     private CompanyClientCont cCC;
     private ClientCont cC;
@@ -42,7 +42,7 @@ public class Transaction {
     private InvoiceGenerator iG;
     
     public Transaction() {
-        this.lC = new LocationCont();
+        this.lC = new locationCont();
         this.pCC = new PrivateClientCont();
         this.cCC = new CompanyClientCont();
         this.wSC = new WorkSiteCont();
