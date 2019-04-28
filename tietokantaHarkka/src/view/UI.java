@@ -28,6 +28,7 @@ public class UI {
     private final String INVOICINGCOMMAND = "3";
     private final String NOCOMMAND = "e";
     private final String YESCOMMAND = "k";
+    private final String ARTLISTCOMMAND = "t";
     private final String QUITCOMMAND = "4";
     private final String ADDPRIVCLIENTCOMMAND = "1";
     private final String ADDCOMPCLIENTCOMMAND = "2";
@@ -55,6 +56,7 @@ public class UI {
                                           + "6)Tarviketta varastoon 7)Uusi tarvike varastoon 8)Uusi tarvikelista 9)Takaisin";
     private final String SEARCHMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tarvikeet 5)Lasku 6)Takaisin";
     private final String INVOICINGMENUMESSAGE = "1)Luo lasku 2)Luo muitutuslaskut maksamattomista 3)Luo karhulaskut maksamattomista 4)Näytä lasku 5)Takaisin";
+    private final String WANTTOADDARTICLE = "Lisätäänkö tarvikeita? k)Kyllä e)Ei t)Näytä tarvikelista";
     private final String WRONGCOMMANDMESSAGE = "Virheellinen komento.";
     private final String NOTNUMBERMESSAGE = "Syöte virheellinen. Anna numero-muotoinen syöte ilman välilyöntejä.";
     private final String NOTDATEMESSAGE = "Syöte virheellinen. Anna oikean muotoinen pävämäärä.";
@@ -71,6 +73,7 @@ public class UI {
         con.createConnection();
         Scanner commandReader = new Scanner(System.in);
         ArrayList<String> list = new ArrayList<String>();
+        ArrayList<Integer> list2 = new ArrayList<Integer>();
         String userCommand = "";
         String tmp1 = "";
         String tmp2 = "";
@@ -79,6 +82,7 @@ public class UI {
         String tmp5 = "";
         int tmp6;
         int tmp7;
+        int[] tmp12;
         double tmp8;
         double tmp11;
         Date tmp9;
@@ -87,6 +91,7 @@ public class UI {
         boolean inAddMenu;
         boolean inSearchMenu;
         boolean inInvoicingMenu;
+        boolean inAdding = true;
         boolean oK = false;        
         System.out.println(HELOMESSAGE);
         
@@ -174,18 +179,57 @@ public class UI {
                         }
                 
                         else if (userCommand.equals(ADDHOURSANDARTICLESCOMMAND)) {
+                            tmp12 = new int[7];
                             System.out.print("Työkohdenumero: ");
                             tmp1 = commandReader.nextLine();
-                            tmp6 = Integer.parseInt(tmp1);
+                            tmp12[0] = Integer.parseInt(tmp1);
                             System.out.print("Asennustyö(tunnit): ");
                             tmp1 = commandReader.nextLine();
-                            tmp7 = Integer.parseInt(tmp1);
-                            
-                            System.out.print("Tunnit: ");
-                            tmp3 = commandReader.nextLine();
-                            System.out.print("Alennus: ");
-                            tmp4 = commandReader.nextLine();
-                            // Tähän metodi, jolla lisätään työsuoritus. INTit tarkistettvava.
+                            tmp12[1] = Integer.parseInt(tmp1);
+                            System.out.print("Asennustyö(alennusprosentti): ");
+                            tmp1 = commandReader.nextLine();
+                            tmp12[2] = Integer.parseInt(tmp1);
+                            System.out.print("Suunnittelutyö(tunnit): ");
+                            tmp1 = commandReader.nextLine();
+                            tmp12[3] = Integer.parseInt(tmp1);
+                            System.out.print("Suunnittelutyö(alennusprosentti): ");
+                            tmp1 = commandReader.nextLine();
+                            tmp12[4] = Integer.parseInt(tmp1);
+                            System.out.print("Aputyö(tunnit): ");
+                            tmp1 = commandReader.nextLine();
+                            tmp12[5] = Integer.parseInt(tmp1);
+                            System.out.print("Aputyö(alennusprosentti): ");
+                            tmp1 = commandReader.nextLine();
+                            tmp12[6] = Integer.parseInt(tmp1);
+                            do {
+                                System.out.print(WANTTOADDARTICLE);
+                                list2 = new ArrayList<Integer>();
+                                userCommand = commandReader.nextLine();
+                                if (userCommand.equals(YESCOMMAND)) {
+                                    System.out.print("Tarvikenumero: ");
+                                    tmp1 = commandReader.nextLine();
+                                    list2.add(Integer.parseInt(tmp1));
+                                    System.out.print("Määrä: ");
+                                    tmp1 = commandReader.nextLine();
+                                    list2.add(Integer.parseInt(tmp1));
+                                    System.out.print("Alennusprosentti: ");
+                                    tmp1 = commandReader.nextLine();
+                                    list2.add(Integer.parseInt(tmp1));
+                                }
+                                else if (userCommand.equals(NOCOMMAND)){
+                                    inAdding = false;
+                                }
+                                else if (userCommand.equals(ARTLISTCOMMAND)){
+                                    list = transaction.getAllArticles(con.getConnection());
+                                    printList(list);     
+                                }
+                                else {
+                                    System.out.print(WRONGCOMMANDMESSAGE);
+                                }
+                            }
+                            while (inAdding);
+                            inAdding = true;
+                            transaction.addHoursAndArticles(tmp12, list2, con.getConnection());
                         }
                 
                         else if (userCommand.equals(ADDARTICLETOINVOICECOMMAND)) {

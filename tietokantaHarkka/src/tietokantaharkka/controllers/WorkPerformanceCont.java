@@ -26,23 +26,27 @@ public class WorkPerformanceCont {
         return x;
     }
     
-    public void addNewWorkPerformance(WorkPerformance x, Connection con) throws SQLException {
+    public int addNewWorkPerformance(WorkPerformance x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
+        ResultSet resultSet = null;
+        int wPN = 0;
         try {
-            con.setAutoCommit(false);
-            pStatement = con.prepareStatement("INSERT INTO tyosuoritus(tyokohdenumero) VALUES(?)");
+            pStatement = con.prepareStatement("INSERT INTO tyosuoritus(tyokohdenumero) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
             pStatement.setInt(1, x.getWorkSiteNmbr());
             pStatement.executeUpdate();
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
+            resultSet = pStatement.getGeneratedKeys();
+            resultSet.next();
+            wPN = resultSet.getInt(1);
         }
         finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
             if (pStatement != null) {
                 pStatement.close();
             }
-        }    	
+        }
+        return wPN;        
     }
     
     public WorkPerformance findWorkPerformanceByNmbr(int nmbr, Connection con) throws SQLException {

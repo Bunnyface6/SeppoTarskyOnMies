@@ -39,7 +39,7 @@ public class PerformedWorkCont {
                 pStatement.executeUpdate();
             }
             else {
-                pStatement = con.prepareStatement("UPDATE hinnoiteltu_tyosuoritus SET maara = maara + ?, alennusprosentti = alennusprosentti + ? WHERE tyotyyppi = ? AND tyosuoritusnumero = ?");
+                pStatement = con.prepareStatement("UPDATE hinnoiteltu_tyosuoritus SET maara = maara + ?, alennusprosentti = ? WHERE tyotyyppi = ? AND tyosuoritusnumero = ?");
                 pStatement.setInt(1, x.getNumOfHours());
                 pStatement.setInt(2, x.getDiscountPer());
                 pStatement.setString(3, x.getWorkType());

@@ -37,12 +37,12 @@ public class SoldArticleCont {
             resultSet = pStatement.executeQuery();
             pStatement.clearParameters();
             if (!resultSet.next()) {
-                throw new IllegalArgumentException("Tarviketta ei ole varastossa!");
+                throw new IllegalArgumentException("Tarviketta " + x.getArticleNmbr() + " ei ole varastossa!");
             }
             int numberOfItems = resultSet.getInt(1);
             numberOfItems = numberOfItems - x.getNmbrOfSold();
             if (numberOfItems < 0) {
-                throw new IllegalArgumentException("Tarviketta liian vähän varastossa!");
+                throw new IllegalArgumentException("Tarviketta " + x.getArticleNmbr() + " liian vähän varastossa!");
             }
             pStatement = con.prepareStatement("UPDATE tarvike SET varastotilanne = ? WHERE tarvikenumero = ?");
             pStatement.setInt(1, numberOfItems);
@@ -58,10 +58,11 @@ public class SoldArticleCont {
                 pStatement.executeUpdate();
             }
             else {
-                pStatement = con.prepareStatement("UPDATE myyty_tarvike SET kappalemaara = kappalemaara + ? WHERE laskutunnus = ? AND tarvikenumero = ?");
+                pStatement = con.prepareStatement("UPDATE myyty_tarvike SET kappalemaara = kappalemaara + ?, alennusprosentti = ? WHERE laskutunnus = ? AND tarvikenumero = ?");
                 pStatement.setInt(1, x.getNmbrOfSold());
-                pStatement.setInt(2, x.getInvoiceNmbr());
-                pStatement.setInt(3, x.getArticleNmbr());
+                pStatement.setInt(2, x.getDiscountPer());
+                pStatement.setInt(3, x.getInvoiceNmbr());
+                pStatement.setInt(4, x.getArticleNmbr());
                 pStatement.executeUpdate();
             }
             con.commit();

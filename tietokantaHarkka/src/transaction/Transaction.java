@@ -37,6 +37,7 @@ public class Transaction {
     private WorkPriceCont wPrC;
     private ArticleCont aC;
     private ArticleTypeCont aTC;
+    private SoldArticleCont sAC;
     
     public Transaction() {
         this.lC = new LocationCont();
@@ -50,6 +51,7 @@ public class Transaction {
         this.aC = new ArticleCont();
         this.aTC = new ArticleTypeCont();
         this.cC = new ClientCont();
+        this.sAC = new SoldArticleCont();
     }
     
     public boolean addClient(String fName, String lName, String address, int zipCode, String city, Connection con) throws SQLException {
@@ -127,23 +129,58 @@ public class Transaction {
         }
     }
     
-    //Kesken
-    public boolean addHoursAndArticles(int worksiteNumber, String workType, int nOHours, int wPDisc, Connection con) throws SQLException {
+    public boolean addHoursAndArticles(int[] workSiteNmbrHoursAndDisc, ArrayList<Integer> articlesAndDisc, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
-            WorkPerformance w = wPC.findWorkPerformanceByWorkSiteNmbr(x.getNmbr(), con);
-            if (w != null) {
-                PerformedWork p = new PerformedWork(wType, w.getNmbr(), nOHours, disc);
-                pVC.addNewPerformedWork(p, con);
+            ArrayList<WorkPerformance> wP = wPC.findWorkPerformanceByWorkSiteNmbr(workSiteNmbrHoursAndDisc[0], con);
+            WorkPerformance p = null;
+            Invoice inv;
+            PerformedWork pWork1 = null;
+            PerformedWork pWork2 = null;
+            PerformedWork pWork3 = null;
+            WorkSite wS = null;
+            boolean invoiceNotCreated = true;
+            int key = 0;
+            int perfNum = 0;
+            int j = 0;
+            for (int i = 0; i < wP.size() && invoiceNotCreated; i++) {
+                if(!iC.invoiceIsCreated(wP.get(i).getNmbr(), con)) {
+                    p = wP.get(i);
+                    invoiceNotCreated = false;
+                }
+            }
+            if (p == null) {
+                p = new WorkPerformance(0, workSiteNmbrHoursAndDisc[0]);
+                key = wPC.addNewWorkPerformance(p, con);
+                pWork1 = new PerformedWork("Työ", key, workSiteNmbrHoursAndDisc[1], workSiteNmbrHoursAndDisc[2]);
+                pWork2 = new PerformedWork("Suunnittelutyö", key, workSiteNmbrHoursAndDisc[3], workSiteNmbrHoursAndDisc[4]);
+                pWork3 = new PerformedWork("Aputyö", key, workSiteNmbrHoursAndDisc[5], workSiteNmbrHoursAndDisc[6]);
+                wS = wSC.findWorkSiteByNmbr(workSiteNmbrHoursAndDisc[0], con);
+                inv = new Invoice(null, 0, null, null, 1, 0, wS.getClientNmbr(), key);
+                iC.addNewInvoice(inv, con);
+                perfNum = key;
             }
             else {
-                w = new WorkPerformance(0, x.getNmbr());
-                wPC.addNewWorkPerformance(w, con);
-                w = wPC.findWorkPerformanceByWorkSiteNmbr(w.getWorkSiteNmbr(), con);
-                PerformedWork p2 = new PerformedWork(wType, w.getNmbr(), nOHours, disc);
-                pVC.addNewPerformedWork(p2, con);
-                Invoice i = new Invoice(null, 0, null, null, 1, 0, x.getClientNmbr(), w.getNmbr());
-                iC.addNewInvoice(i, con);
+                pWork1 = new PerformedWork("Työ", p.getNmbr(), workSiteNmbrHoursAndDisc[1], workSiteNmbrHoursAndDisc[2]);
+                pWork2 = new PerformedWork("Suunnittelutyö", p.getNmbr(), workSiteNmbrHoursAndDisc[3], workSiteNmbrHoursAndDisc[4]);
+                pWork3 = new PerformedWork("Aputyö", p.getNmbr(), workSiteNmbrHoursAndDisc[5], workSiteNmbrHoursAndDisc[6]);
+                perfNum = p.getNmbr();
+            }
+            perfWC.addNewPerformedWork(pWork1, con);
+            perfWC.addNewPerformedWork(pWork2, con);
+            perfWC.addNewPerformedWork(pWork3, con);
+            
+            inv = iC.findInvoiceByWorkPerformanceNmbr(perfNum, con);
+                        
+            while (j < articlesAndDisc.size()) {
+                SoldArticle sA = new SoldArticle(inv.getIvNmbr(), articlesAndDisc.get(j), articlesAndDisc.get(j + 2), articlesAndDisc.get(j + 1));
+                j = j + 3;
+                try {
+                    sAC.addNewSoldArticle(sA, con);
+                }
+                catch (IllegalArgumentException e) {
+                    
+                }
             }
             con.commit();
             return true;
@@ -153,20 +190,7 @@ public class Transaction {
             return false;
         }
     }
-    // Kesken
-    public boolean addArticleToWorksite(WorkSite x, Article a, Connection con) throws SQLException {
-        try {
-            con.setAutoCommit(false);
-            WorkPerformance w
-            con.commit();
-            return true;
-        }
-        catch(SQLException e) {
-            con.rollback();
-            return false;
-        }
-    }
-    
+        
     public boolean createReminderOfUnpaidInvoices(Date today, Date fpDate, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
