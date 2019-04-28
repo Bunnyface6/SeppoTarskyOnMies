@@ -244,7 +244,7 @@ public class Transaction {
         try {
            con.setAutoCommit(false);
            Invoice i = iC.findInvoiceByNmbr(invNumber, con);
-           if (i != null) {
+           if (i != null && i.getDatePaid() == null && i.getFinalPayDate() != null) {
                invoice = iG.generateInvoice(i, con);
            }
            con.commit();

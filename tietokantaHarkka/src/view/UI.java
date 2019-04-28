@@ -538,7 +538,7 @@ public class UI {
                                 oK = false;
                             }
                             else {
-                                System.out.println(NOTOKMESSAGE + ": Tarkista, että laskutunnus liittyy luotuun laskuun, jossa päiväykset.");
+                                System.out.println(NOTOKMESSAGE + ": Tarkista, että laskutunnus liittyy luotuun maksamattomaan laskuun, jossa päivämäärä ja eräpäivä.");
                             }
                         }
                         
