@@ -210,7 +210,7 @@ public class UI {
                             tmp12[6] = Integer.parseInt(tmp1);
                             list2 = new ArrayList<Integer>();
                             do {
-                                System.out.print(WANTTOADDARTICLE);
+                                System.out.println(WANTTOADDARTICLE);
                                 userCommand = commandReader.nextLine();
                                 if (userCommand.equals(YESCOMMAND)) {
                                     System.out.print("Tarvikenumero: ");
@@ -225,6 +225,14 @@ public class UI {
                                 }
                                 else if (userCommand.equals(NOCOMMAND)){
                                     inAdding = false;
+                                    oK = transaction.addHoursAndArticles(tmp12, list2, con.getConnection());
+                                    if (oK) {
+                                        System.out.println(OKMESSAGE);
+                                        oK = false;
+                                    }
+                                    else {
+                                        System.out.println(NOTOKMESSAGE);
+                                    }
                                 }
                                 else if (userCommand.equals(ARTLISTCOMMAND)){
                                     list = transaction.getAllArticles(con.getConnection());
@@ -236,14 +244,7 @@ public class UI {
                             }
                             while (inAdding);
                             inAdding = true;
-                            oK = transaction.addHoursAndArticles(tmp12, list2, con.getConnection());
-                            if (oK) {
-                                System.out.println(OKMESSAGE);
-                                oK = false;
-                            }
-                            else {
-                                System.out.println(NOTOKMESSAGE);
-                            }
+                            
                         }
                         
                         // Jos valitaan tarvikkeen lisäys laskulle(tarvikkeiden myynti, ilman työkohdetta).
