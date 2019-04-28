@@ -135,6 +135,7 @@ public class Transaction {
     public boolean addHoursAndArticles(int[] workSiteNmbrHoursAndDisc, ArrayList<Integer> articlesAndDisc, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
+           
             ArrayList<WorkPerformance> wP = wPC.findWorkPerformanceByWorkSiteNmbr(workSiteNmbrHoursAndDisc[0], con);
             WorkPerformance p = null;
             Invoice inv;
@@ -147,7 +148,7 @@ public class Transaction {
             int perfNum = 0;
             int j = 0;
             for (int i = 0; i < wP.size() && invoiceNotCreated; i++) {
-                if(!iC.invoiceIsCreated(wP.get(i).getNmbr(), con)) {
+                if(iC.invoiceIsCreated(wP.get(i).getNmbr(), con)) {
                     p = wP.get(i);
                     invoiceNotCreated = false;
                 }
@@ -164,18 +165,21 @@ public class Transaction {
                 perfNum = key;
             }
             else {
+                
                 pWork1 = new PerformedWork("Työ", p.getNmbr(), workSiteNmbrHoursAndDisc[1], workSiteNmbrHoursAndDisc[2]);
                 pWork2 = new PerformedWork("Suunnittelutyö", p.getNmbr(), workSiteNmbrHoursAndDisc[3], workSiteNmbrHoursAndDisc[4]);
                 pWork3 = new PerformedWork("Aputyö", p.getNmbr(), workSiteNmbrHoursAndDisc[5], workSiteNmbrHoursAndDisc[6]);
                 perfNum = p.getNmbr();
             }
+            
             perfWC.addNewPerformedWork(pWork1, con);
             perfWC.addNewPerformedWork(pWork2, con);
             perfWC.addNewPerformedWork(pWork3, con);
             
             inv = iC.findInvoiceByWorkPerformanceNmbr(perfNum, con);
-                        
+            
             while (j < articlesAndDisc.size()) {
+                
                 SoldArticle sA = new SoldArticle(inv.getIvNmbr(), articlesAndDisc.get(j), articlesAndDisc.get(j + 2), articlesAndDisc.get(j + 1));
                 j = j + 3;
                 try {
@@ -189,6 +193,7 @@ public class Transaction {
             return true;
         }
         catch(SQLException e) {
+            System.out.println(e.getMessage());
             con.rollback();
             return false;
         }
