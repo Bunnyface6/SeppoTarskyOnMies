@@ -74,11 +74,20 @@ public class InvoiceCont {
             pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE laskutunnus = ?"); 
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            
             if (resultSet.next()) {
-                i = createInvoice(new java.util.Date(resultSet.getDate(3).getTime()), resultSet.getInt(1), 
-                                  new java.util.Date(resultSet.getDate(2).getTime()), new java.util.Date(resultSet.getDate(4).getTime()), 
-                                  resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8));
+                Date fPD = null;
+                Date d = null;
+                Date pD = null;
+                if (resultSet.getDate(3) != null) {
+                    fPD = new java.util.Date(resultSet.getDate(3).getTime());    
+                }
+                if (resultSet.getDate(2) != null) {
+                    d = new java.util.Date(resultSet.getDate(2).getTime());
+                }
+                if (resultSet.getDate(4) != null) {
+                    pD = new java.util.Date(resultSet.getDate(4).getTime());
+                }
+                i = createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8));
             }
             con.commit();
         }
@@ -96,8 +105,8 @@ public class InvoiceCont {
         return i;
     }
     
-    public Invoice findInvoiceByClientNmbr(int nmbr, Connection con) throws SQLException {
-        Invoice i = null;
+    public ArrayList<Invoice> findInvoiceByClientNmbr(int nmbr, Connection con) throws SQLException {
+        ArrayList<Invoice> i = new ArrayList<Invoice>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -105,10 +114,20 @@ public class InvoiceCont {
             pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE asiakasnumero = ?"); 
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            if (resultSet.next()) {
-                i = createInvoice(new java.util.Date(resultSet.getDate(3).getTime()), resultSet.getInt(1), 
-                                  new java.util.Date(resultSet.getDate(2).getTime()), new java.util.Date(resultSet.getDate(4).getTime()), 
-                                  resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8));
+            while (resultSet.next()) {
+                Date fPD = null;
+                Date d = null;
+                Date pD = null;
+                if (resultSet.getDate(3) != null) {
+                    fPD = new java.util.Date(resultSet.getDate(3).getTime());    
+                }
+                if (resultSet.getDate(2) != null) {
+                    d = new java.util.Date(resultSet.getDate(2).getTime());
+                }
+                if (resultSet.getDate(4) != null) {
+                    pD = new java.util.Date(resultSet.getDate(4).getTime());
+                }
+                i.add(createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
             }
             con.commit();
         }
@@ -126,8 +145,8 @@ public class InvoiceCont {
         return i;
     }
     
-    public Invoice findInvoiceByWorkPerformanceNmbr(int nmbr, Connection con) throws SQLException {
-        Invoice i = null;
+    public ArrayList<Invoice> findInvoiceByWorkPerformanceNmbr(int nmbr, Connection con) throws SQLException {
+        ArrayList<Invoice> i = new ArrayList<Invoice>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
@@ -135,10 +154,20 @@ public class InvoiceCont {
             pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE tyosuoritusnumero = ?"); 
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
-            if (resultSet.next()) {
-                i = createInvoice(new java.util.Date(resultSet.getDate(3).getTime()), resultSet.getInt(1), 
-                                  new java.util.Date(resultSet.getDate(2).getTime()), new java.util.Date(resultSet.getDate(4).getTime()), 
-                                  resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8));
+            while (resultSet.next()) {
+                Date fPD = null;
+                Date d = null;
+                Date pD = null;
+                if (resultSet.getDate(3) != null) {
+                    fPD = new java.util.Date(resultSet.getDate(3).getTime());    
+                }
+                if (resultSet.getDate(2) != null) {
+                    d = new java.util.Date(resultSet.getDate(2).getTime());
+                }
+                if (resultSet.getDate(4) != null) {
+                    pD = new java.util.Date(resultSet.getDate(4).getTime());
+                }
+                i.add(createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
             }
             con.commit();
         }
@@ -166,9 +195,19 @@ public class InvoiceCont {
             pStatement.setDate(1, new java.sql.Date(fBD.getTime()));
             resultSet = pStatement.executeQuery();
             while (resultSet.next()) {
-                i.add(createInvoice(new java.util.Date(resultSet.getDate(3).getTime()), resultSet.getInt(1), 
-                                  new java.util.Date(resultSet.getDate(2).getTime()), new java.util.Date(resultSet.getDate(4).getTime()), 
-                                  resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
+                Date fPD = null;
+                Date d = null;
+                Date pD = null;
+                if (resultSet.getDate(3) != null) {
+                    fPD = new java.util.Date(resultSet.getDate(3).getTime());    
+                }
+                if (resultSet.getDate(2) != null) {
+                    d = new java.util.Date(resultSet.getDate(2).getTime());
+                }
+                if (resultSet.getDate(4) != null) {
+                    pD = new java.util.Date(resultSet.getDate(4).getTime());
+                }
+                i.add(createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
             }
             con.commit();
         }
@@ -196,9 +235,19 @@ public class InvoiceCont {
             pStatement.setDate(1, new java.sql.Date(fBD.getTime()));
             resultSet = pStatement.executeQuery();
             while (resultSet.next()) {
-                i.add(createInvoice(new java.util.Date(resultSet.getDate(3).getTime()), resultSet.getInt(1), 
-                                  new java.util.Date(resultSet.getDate(2).getTime()), new java.util.Date(resultSet.getDate(4).getTime()), 
-                                  resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
+                Date fPD = null;
+                Date d = null;
+                Date pD = null;
+                if (resultSet.getDate(3) != null) {
+                    fPD = new java.util.Date(resultSet.getDate(3).getTime());    
+                }
+                if (resultSet.getDate(2) != null) {
+                    d = new java.util.Date(resultSet.getDate(2).getTime());
+                }
+                if (resultSet.getDate(4) != null) {
+                    pD = new java.util.Date(resultSet.getDate(4).getTime());
+                }
+                i.add(createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
             }
             con.commit();
         }
@@ -216,7 +265,7 @@ public class InvoiceCont {
         return i;
     }
     
-        public ArrayList<Invoice> findInvoices(Connection con) throws SQLException {
+    public ArrayList<Invoice> findInvoices(Connection con) throws SQLException {
         ArrayList<Invoice> i = new ArrayList<Invoice>();
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
@@ -224,9 +273,19 @@ public class InvoiceCont {
             pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku"); 
             resultSet = pStatement.executeQuery();
             while (resultSet.next()) {
-                i.add(createInvoice(new java.util.Date(resultSet.getDate(3).getTime()), resultSet.getInt(1), 
-                                  new java.util.Date(resultSet.getDate(2).getTime()), new java.util.Date(resultSet.getDate(4).getTime()), 
-                                  resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
+                Date fPD = null;
+                Date d = null;
+                Date pD = null;
+                if (resultSet.getDate(3) != null) {
+                    fPD = new java.util.Date(resultSet.getDate(3).getTime());    
+                }
+                if (resultSet.getDate(2) != null) {
+                    d = new java.util.Date(resultSet.getDate(2).getTime());
+                }
+                if (resultSet.getDate(4) != null) {
+                    pD = new java.util.Date(resultSet.getDate(4).getTime());
+                }
+                i.add(createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
             }
         }
         finally {
@@ -256,9 +315,19 @@ public class InvoiceCont {
                 }
                 resultSet = pStatement.executeQuery();
                 while (resultSet.next()) {
-                    i.add(createInvoice(new java.util.Date(resultSet.getDate(3).getTime()), resultSet.getInt(1), 
-                                      new java.util.Date(resultSet.getDate(2).getTime()), new java.util.Date(resultSet.getDate(4).getTime()), 
-                                      resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
+                    Date fPD = null;
+                    Date d = null;
+                    Date pD = null;
+                    if (resultSet.getDate(3) != null) {
+                        fPD = new java.util.Date(resultSet.getDate(3).getTime());    
+                    }
+                    if (resultSet.getDate(2) != null) {
+                        d = new java.util.Date(resultSet.getDate(2).getTime());
+                    }
+                    if (resultSet.getDate(4) != null) {
+                        pD = new java.util.Date(resultSet.getDate(4).getTime());
+                    }
+                    i.add(createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
                 }
                 con.commit();
             }
