@@ -406,38 +406,32 @@ public class Transaction {
     }
     
     public ArrayList<Article> findAllOldArticles(ArrayList<Article> newList, ArrayList<Article> updateList, Connection con) throws SQLException{
-        try{
-            con.setAutoCommit(false);
-            ArrayList<Article> oldList = aC.findAllArcticles(con);
-            con.commit();
-            Article rmv = oldList.get(0);
-            boolean found = false;
-            //SAATTAA OLLA TOIMIMATON, TESTAA!
-            for(Article oldA: oldList){
-                if(found)
-                    updateList.add(rmv);
-                    newList.remove(rmv);
-                    oldList.remove(rmv);
-                found = false;
-                for(Article newA: newList){
-                    
-                    if(oldA.equals(newA)){
-                        
-                        found = true;
-                        break;
-                    }
+
+        ArrayList<Article> oldList = aC.findAllArcticles(con);
+        Article rmv = oldList.get(0);
+        boolean found = false;
+        //SAATTAA OLLA TOIMIMATON, TESTAA!
+        for(Article oldA: oldList){
+            if(found)
+                updateList.add(rmv);
+                newList.remove(rmv);
+                oldList.remove(rmv);
+            found = false;
+            for(Article newA: newList){
+
+                if(oldA.equals(newA)){
+
+                    found = true;
+                    break;
                 }
-                if(found)
-                    rmv = oldA;
             }
-            
-            return oldList;
+            if(found)
+                rmv = oldA;
         }
-        catch(SQLException e){
-            con.rollback();
-            return null;
-        }
-        
+
+        return oldList;
+
+
     }
     
     public boolean printOldArticles(String path, ArrayList<Article> list){
@@ -451,7 +445,7 @@ public class Transaction {
         }
         catch(Exception e){
            
-           System.out.println("PRINTING FAILED");
+           System.out.println("Print failure: " + e.message());
            return false; 
         }
         
@@ -477,51 +471,38 @@ public class Transaction {
     }
     
     public boolean updateArticlesFromFile(ArrayList<Article> updateList, Connection con) throws SQLException{
-        try{
-            con.setAutoCommit(false);
-            for(Article art : updateList){
-                aC.updateArticle(art, con);
-            }
-            con.commit();
-            return true;
+
+        for(Article art : updateList){
+            aC.updateArticle(art, con);
         }
-        catch(SQLException e){
-            
-            con.rollback();
-            return false;
-        }
+        return true;
     }
     
     public boolean newArticlesFromFile(ArrayList<Article> newList, Connection con) throws SQLException{
-        try{
-            con.setAutoCommit(false);
-            for(Article art : newList){
-                aC.addNewArticle(art, con);
-            }
-            con.commit();
-            return true;
+
+        for(Article art : newList){
+            aC.addNewArticle(art, con);
         }
-        catch(SQLException e){
-            
-            con.rollback();
-            return false;
-        }
+        return true;
+
     }
     
     //LIIKUTA ALLA OLEVA METODIKASA JONNEKKIN
     
-    public boolean fullUpdateFromFile(String nPath, String oPath, Connection con){
+    public boolean fullUpdateFromFile(String nPath, String oPath, Connection con) throws SQLException{
         try{
+            con.setAutoCommit(false);
             ArrayList<Article> newList = readArticlesFromFile(nPath);
             ArrayList<Article> updateList = new ArrayList();
             ArrayList<Article> oldList = findAllOldArticles(newList, updateList, con);
             printOldArticles(oPath, oldList);
             updateArticlesFromFile(updateList, con);
             newArticlesFromFile(updateList, con);
+            con.commit();
             return true;
         }
         catch(SQLException e){
-            System.out.println("PAHASTI PIELEEN");
+            con.rollback();
             return false;
         }
     }
