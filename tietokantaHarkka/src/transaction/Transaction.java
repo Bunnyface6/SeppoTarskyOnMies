@@ -27,7 +27,7 @@ import tietokantaharkka.controllers.*;
  */
 public class Transaction {
     
-    private locationCont lC;
+    private LocationCont lC;
     private PrivateClientCont pCC;
     private CompanyClientCont cCC;
     private ClientCont cC;
@@ -42,7 +42,7 @@ public class Transaction {
     private InvoiceGenerator iG;
     
     public Transaction() {
-        this.lC = new locationCont();
+        this.lC = new LocationCont();
         this.pCC = new PrivateClientCont();
         this.cCC = new CompanyClientCont();
         this.wSC = new WorkSiteCont();
@@ -410,7 +410,7 @@ public class Transaction {
             con.setAutoCommit(false);
             ArrayList<Article> oldList = aC.findAllArcticles(con);
             con.commit();
-            Article rmv;
+            Article rmv = oldList.get(0);
             boolean found = false;
             //SAATTAA OLLA TOIMIMATON, TESTAA!
             for(Article oldA: oldList){
