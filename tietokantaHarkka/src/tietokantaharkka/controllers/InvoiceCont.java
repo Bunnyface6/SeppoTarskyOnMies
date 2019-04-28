@@ -341,7 +341,7 @@ public class InvoiceCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            pStatement = con.prepareStatement("SELECT laskutunnus FROM lasku WHERE tyosuoritusnumero = ? AND erapaiva NOT NULL"); 
+            pStatement = con.prepareStatement("SELECT laskutunnus FROM lasku WHERE tyosuoritusnumero = ? AND erapaiva IS NOT NULL"); 
             pStatement.setInt(1, workPerformanceNmbr);
             resultSet = pStatement.executeQuery();
             if (resultSet.next()) {
