@@ -189,6 +189,7 @@ public class Transaction {
             return true;
         }
         catch(SQLException e) {
+            System.out.println(e.getMessage());
             con.rollback();
             return false;
         }
