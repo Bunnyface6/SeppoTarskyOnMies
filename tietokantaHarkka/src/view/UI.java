@@ -244,7 +244,6 @@ public class UI {
                             }
                             while (inAdding);
                             inAdding = true;
-                            
                         }
                         
                         // Jos valitaan tarvikkeen lisäys laskulle(tarvikkeiden myynti, ilman työkohdetta).
