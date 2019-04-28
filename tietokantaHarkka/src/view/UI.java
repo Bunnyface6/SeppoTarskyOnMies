@@ -49,13 +49,14 @@ public class UI {
     private final String CREATE2NDINVOICECOMMAND = "2";
     private final String CREATE3THINVOICECOMMAND = "3";
     private final String PRINTINVOICECOMMAND = "4";
-    private final String INVOICEBACKCOMMAND = "5";
+    private final String SETINVOICEPAIDCOMMAND = "5";
+    private final String INVOICEBACKCOMMAND = "6";
     private final String HELOMESSAGE = "Tervetuloa Tmi Sähkötärsky:n laskutusjärjestelmään!";
     private final String MAINMENUMESSAGE = "1)Lisää 2)Etsi 3)Laskutus 4)Lopeta";
     private final String ADDMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tunnit ja tarvikkeet työkohteeseen 5)Tarvike laskulle\n"
                                           + "6)Tarvikeen varastosaldo 7)Uusi tarvike varastoon 8)Uusi tarvikelista 9)Takaisin";
     private final String SEARCHMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tarvikeet 5)Lasku/laskupohja 6)Takaisin";
-    private final String INVOICINGMENUMESSAGE = "1)Luo lasku 2)Luo muitutuslaskut maksamattomista 3)Luo karhulaskut maksamattomista 4)Tulosta lasku 5)Takaisin";
+    private final String INVOICINGMENUMESSAGE = "1)Luo lasku 2)Luo muitutuslaskut maksamattomista 3)Luo karhulaskut maksamattomista 4)Tulosta lasku 5) Kuittaa lasku maksetuksi 6)Takaisin";
     private final String WANTTOADDARTICLE = "Lisätäänkö tarvikeita? k)Kyllä e)Ei t)Näytä tarvikelista";
     private final String WRONGCOMMANDMESSAGE = "Virheellinen komento.";
     private final String NOTNUMBERMESSAGE = "Syöte virheellinen. Anna numero-muotoinen syöte ilman välilyöntejä.";
@@ -404,7 +405,7 @@ public class UI {
                             printList(list);     
                         }
                         
-                        // Jos valitaan etsi laskupohja.  
+                        // Jos valitaan etsi lasku/laskupohja.  
                         else if (userCommand.equals(SEARHINVOICECOMMAND)) {
                    
                         }
@@ -440,7 +441,23 @@ public class UI {
                         
                         // Jos valitaan luo lasku.
                         if (userCommand.equals(CREATEINVOICECOMMAND)) {
-                        
+                            System.out.print("Anna laskutunnus: ");
+                            tmp1 = commandReader.nextLine();
+                            tmp6 = Integer.parseInt(tmp1);
+                            System.out.print("Anna päivämäärä(dd/mm/yyyy) :");
+                            tmp1 = commandReader.nextLine();
+                            tmp9 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
+                            System.out.print("Anna eräpäivä(dd/mm/yyyy): ");
+                            tmp1 = commandReader.nextLine();
+                            tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
+                            oK = transaction.createInvoice(tmp6, tmp9, tmp10, con.getConnection());
+                            if (oK) {
+                                System.out.println(ADDOKMESSAGE);
+                                oK = false;
+                            }
+                            else {
+                                System.out.println(ADDNOTOKMESSAGE);
+                            }
                         } 
                         
                         // Jos valitaan luo muistutuslaskut maksamattomista laskuista.
@@ -482,6 +499,24 @@ public class UI {
                         // Jos valitaan tulosta lasku. 
                         else if (userCommand.equals(PRINTINVOICECOMMAND)) {
                 
+                        }
+                        
+                        // Jos valitaan kuittaa lasku maksetuksi.
+                        else if (userCommand.equals(SETINVOICEPAIDCOMMAND)) {
+                            System.out.print("Anna laskutunnus: ");
+                            tmp1 = commandReader.nextLine();
+                            tmp6 = Integer.parseInt(tmp1);
+                            System.out.print("Anna maksupäivämäärä(dd/mm/yyyy) :");
+                            tmp1 = commandReader.nextLine();
+                            tmp9 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
+                            oK = transaction.setInvoicePaid(tmp6, tmp9, con.getConnection());
+                            if (oK) {
+                                System.out.println(ADDOKMESSAGE);
+                                oK = false;
+                            }
+                            else {
+                                System.out.println(ADDNOTOKMESSAGE);
+                            }
                         }
                         
                         // Jos valitaan takaisin.

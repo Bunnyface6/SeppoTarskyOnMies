@@ -216,6 +216,43 @@ public class Transaction {
             return false; 
         }
     }
+    
+    public boolean createInvoice(int invNmbr, Date today, Date fPDate, Connection con) throws SQLException {
+        boolean oK = false;
+        try {
+            con.setAutoCommit(false);
+            Invoice i = iC.findInvoiceByNmbr(invNmbr, con);
+            if (i != null && i.getFinalPayDate() != null) {
+                i.setCompDate(today);
+                i.setFinalPayDate(fPDate);
+                oK = iC.updateCompDateFinalPayDate(i, con);
+            }
+            con.commit();
+            return oK;
+        }
+        catch (SQLException e) {
+            con.rollback();
+            return false; 
+        }
+    }
+    
+    public boolean setInvoicePaid(int invNmbr, Date dPaid, Connection con) throws SQLException {
+        boolean oK = false;
+        try {
+            con.setAutoCommit(false);
+            Invoice i = iC.findInvoiceByNmbr(invNmbr, con);
+            if (i != null && i.getDatePaid() == null && i.getCompDate() != null && i.getFinalPayDate() != null) {
+                i.setDatePaid(dPaid);
+                oK = iC.updateDatePaid(i, con);
+            }
+            con.commit();
+            return oK;
+        }
+        catch (SQLException e) {
+            con.rollback();
+            return false; 
+        }
+    }
         
     public boolean createReminderOfUnpaidInvoices(Date today, Date fpDate, Connection con) throws SQLException {
         try {
