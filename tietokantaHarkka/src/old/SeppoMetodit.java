@@ -16,7 +16,7 @@ import tietokantaharkka.controllers.*;
  * @author Jipsu
  */
 public class SeppoMetodit {
-    
+    /*
     private LocationCont lC;
     private PrivateClientCont pCC;
     private CompanyClientCont cCC;
@@ -247,5 +247,5 @@ public class SeppoMetodit {
             con.rollback();
             return a; 
         }
-    }
+    }*/
 }

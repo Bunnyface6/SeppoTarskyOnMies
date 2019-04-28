@@ -25,7 +25,7 @@ import transaction.Transaction;
  * @author Cassu
  */
 public class OverallController {
-    
+    /*
     private Connection con;
     private JList list;
     private MainWindow win;

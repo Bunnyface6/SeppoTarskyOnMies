@@ -19,7 +19,7 @@ import java.util.Iterator;
  * @author Cassu
  */
 public class FindMethods {
-    
+    /*
     Connection con;
     ModelList model;
 /* ARR[0] VAIHTOEHDOT:
@@ -31,7 +31,7 @@ public class FindMethods {
 "Tunnus", "Asiakas", "Osoite", "Laskuttamaton"
 "Tunnus", "Nimi", "Maksamattomia laskuja" 
 "Tunnus", "Sukunimi", "Maksamattomia laskuja" 
-*/
+
     
     
     public FindMethods(ModelList moo, Connection con2){
@@ -312,5 +312,5 @@ public class FindMethods {
         
         
     }
-    
+    */
 }
