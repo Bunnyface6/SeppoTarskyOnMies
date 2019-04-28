@@ -445,7 +445,7 @@ public class Transaction {
         }
         catch(Exception e){
            
-           System.out.println("Print failure: " + e.message());
+           System.out.println("Print failure: " + e.getMessage());
            return false; 
         }
         
