@@ -50,20 +50,22 @@ public class UI {
     private final String CREATE3THINVOICECOMMAND = "3";
     private final String PRINTINVOICECOMMAND = "4";
     private final String SETINVOICEPAIDCOMMAND = "5";
-    private final String INVOICEBACKCOMMAND = "6";
+    private final String MAKEOFFERCOMMAND = "6";
+    private final String INVOICEBACKCOMMAND = "7";
     private final String HELOMESSAGE = "Tervetuloa Tmi Sähkötärsky:n laskutusjärjestelmään!";
     private final String MAINMENUMESSAGE = "1)Lisää 2)Etsi 3)Laskutus 4)Lopeta";
     private final String ADDMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tunnit ja tarvikkeet työkohteeseen 5)Tarvike laskulle\n"
                                           + "6)Tarvikeen varastosaldo 7)Uusi tarvike varastoon 8)Uusi tarvikelista 9)Takaisin";
-    private final String SEARCHMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tarvikeet 5)Lasku/laskupohja 6)Takaisin";
-    private final String INVOICINGMENUMESSAGE = "1)Luo lasku 2)Luo muitutuslaskut maksamattomista 3)Luo karhulaskut maksamattomista 4)Tulosta lasku 5) Kuittaa lasku maksetuksi 6)Takaisin";
+    private final String SEARCHMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tarvikeet 5)Laskupohjat 6)Takaisin";
+    private final String INVOICINGMENUMESSAGE = "1)Luo lasku 2)Luo muitutuslaskut maksamattomista 3)Luo karhulaskut maksamattomista 4)Tulosta lasku 5)Kuittaa lasku maksetuksi\n" 
+                                                + "6)Tee tarjous 7)Takaisin";
     private final String WANTTOADDARTICLE = "Lisätäänkö tarvikeita? k)Kyllä e)Ei t)Näytä tarvikelista";
     private final String WRONGCOMMANDMESSAGE = "Virheellinen komento.";
     private final String NOTNUMBERMESSAGE = "Syöte virheellinen. Anna numero-muotoinen syöte ilman välilyöntejä.";
     private final String NOTDATEMESSAGE = "Syöte virheellinen. Anna oikean muotoinen pävämäärä.";
     private final String EMPTYINPUTMESSAGE = "Tyhjä syöte ei kelpaa.";
-    private final String ADDOKMESSAGE = "Toiminto onnistui.";
-    private final String ADDNOTOKMESSAGE = "Toiminto epäonnistui.";
+    private final String OKMESSAGE = "Toiminto onnistui.";
+    private final String NOTOKMESSAGE = "Toiminto epäonnistui.";
     private final String NORESULTS = "Ei tuloksia.";
     private final String QUITCONFIRMMESSAGE = "Haluatko varmasti lopettaa? k)Kyllä e)Ei";
     
@@ -125,11 +127,11 @@ public class UI {
                             tmp5  = commandReader.nextLine();
                             oK = transaction.addClient(tmp1, tmp2, tmp3, tmp6, tmp5, con.getConnection());
                             if (oK) {
-                                System.out.println(ADDOKMESSAGE);
+                                System.out.println(OKMESSAGE);
                                 oK = false;
                             }
                             else {
-                                System.out.println(ADDNOTOKMESSAGE);
+                                System.out.println(NOTOKMESSAGE);
                             }
                         }
                         
@@ -149,11 +151,11 @@ public class UI {
                             tmp5  = commandReader.nextLine();
                             oK = transaction.addClient(tmp1, tmp6, tmp3, tmp7, tmp5, con.getConnection());
                             if (oK) {
-                                System.out.println(ADDOKMESSAGE);
+                                System.out.println(OKMESSAGE);
                                 oK = false;
                             }
                             else {
-                                System.out.println(ADDNOTOKMESSAGE);
+                                System.out.println(NOTOKMESSAGE);
                             }
                         }
                         
@@ -174,11 +176,11 @@ public class UI {
                             tmp8 = Double.parseDouble(tmp5);
                             oK = transaction.addWorkSiteToClient(tmp6, tmp2, tmp7, tmp4, tmp8, con.getConnection());
                             if (oK) {
-                                System.out.println(ADDOKMESSAGE);
+                                System.out.println(OKMESSAGE);
                                 oK = false;
                             }
                             else {
-                                System.out.println(ADDNOTOKMESSAGE);
+                                System.out.println(NOTOKMESSAGE);
                             }
                         }
                         
@@ -236,11 +238,11 @@ public class UI {
                             inAdding = true;
                             oK = transaction.addHoursAndArticles(tmp12, list2, con.getConnection());
                             if (oK) {
-                                System.out.println(ADDOKMESSAGE);
+                                System.out.println(OKMESSAGE);
                                 oK = false;
                             }
                             else {
-                                System.out.println(ADDNOTOKMESSAGE);
+                                System.out.println(NOTOKMESSAGE);
                             }
                         }
                         
@@ -283,11 +285,11 @@ public class UI {
                             tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp2);
                             oK = transaction.addArticlesToInvoice(tmp6, list2, tmp9, tmp10, con.getConnection());
                             if (oK) {
-                                System.out.println(ADDOKMESSAGE);
+                                System.out.println(OKMESSAGE);
                                 oK = false;
                             }
                             else {
-                                System.out.println(ADDNOTOKMESSAGE);
+                                System.out.println(NOTOKMESSAGE);
                             }
                         }
                         
@@ -301,11 +303,11 @@ public class UI {
                             tmp7 = Integer.parseInt(tmp2);
                             oK = transaction.updateStorage(tmp6, tmp7, con.getConnection());
                             if (oK) {
-                                System.out.println(ADDOKMESSAGE);
+                                System.out.println(OKMESSAGE);
                                 oK = false;
                             }
                             else {
-                                System.out.println(ADDNOTOKMESSAGE);
+                                System.out.println(NOTOKMESSAGE);
                             }
                         }
                         
@@ -327,17 +329,28 @@ public class UI {
                             tmp2 = commandReader.nextLine();
                             oK = transaction.addArticle(tmp1, tmp8, tmp11, tmp6, tmp2, con.getConnection());
                             if (oK) {
-                                System.out.println(ADDOKMESSAGE);
+                                System.out.println(OKMESSAGE);
                                 oK = false;
                             }
                             else {
-                                System.out.println(ADDNOTOKMESSAGE);
+                                System.out.println(NOTOKMESSAGE);
                             }
                         }
                         
                         // Jos valitaan tarvikelistan lisäys(tavikkeiden lisäys tiedostosta ja vanhojen kirjoittaminen tiedostoon).
                         else if (userCommand.equals(ADDARTICLELISTCOMMAND)) {
-                   
+                            System.out.print("Anna polku, jossa tarvikelista: ");
+                            tmp1 = commandReader.nextLine();
+                            System.out.print("Anna polku, johon vanha tarvikelista tallennetaan: ");
+                            tmp2 = commandReader.nextLine();
+                            oK = transaction.fullUpdateFromFile(tmp1, tmp2, con.getConnection());
+                            if (oK) {
+                                System.out.println(OKMESSAGE);
+                                oK = false;
+                            }
+                            else {
+                                System.out.println(NOTOKMESSAGE);
+                            }
                         }
                         
                         // Jos valitaan takaisin.
@@ -405,9 +418,10 @@ public class UI {
                             printList(list);     
                         }
                         
-                        // Jos valitaan etsi lasku/laskupohja.  
+                        // Jos valitaan etsi laskupohjay.  
                         else if (userCommand.equals(SEARHINVOICECOMMAND)) {
-                   
+                            list = transaction.getInvoiceInfos(con.getConnection());
+                            printList(list);
                         }
                         
                         // Jos valitaan takaisin.  
@@ -452,11 +466,11 @@ public class UI {
                             tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
                             oK = transaction.createInvoice(tmp6, tmp9, tmp10, con.getConnection());
                             if (oK) {
-                                System.out.println(ADDOKMESSAGE);
+                                System.out.println(OKMESSAGE);
                                 oK = false;
                             }
                             else {
-                                System.out.println(ADDNOTOKMESSAGE);
+                                System.out.println(NOTOKMESSAGE);
                             }
                         } 
                         
@@ -470,11 +484,11 @@ public class UI {
                             tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp2);
                             oK = transaction.createReminderOfUnpaidInvoices(tmp10, tmp9, con.getConnection());
                             if (oK) {
-                                System.out.println(ADDOKMESSAGE);
+                                System.out.println(OKMESSAGE);
                                 oK = false;
                             }
                             else {
-                                System.out.println(ADDNOTOKMESSAGE);
+                                System.out.println(NOTOKMESSAGE);
                             }
                         }
                         
@@ -488,17 +502,26 @@ public class UI {
                             tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp2);
                             oK = transaction.createSecondReminderOfUnpaidInvoice(tmp9, tmp10, con.getConnection());
                             if (oK) {
-                                System.out.println(ADDOKMESSAGE);
+                                System.out.println(OKMESSAGE);
                                 oK = false;
                             }
                             else {
-                                System.out.println(ADDNOTOKMESSAGE);
+                                System.out.println(NOTOKMESSAGE);
                             }
                         }
                         
                         // Jos valitaan tulosta lasku. 
                         else if (userCommand.equals(PRINTINVOICECOMMAND)) {
-                
+                            System.out.print("Anna laskunumero: ");
+                            tmp1 = commandReader.nextLine();
+                            tmp6 = Integer.parseInt(tmp1);
+                            tmp1 = transaction.printInvoice(tmp6, con.getConnection());
+                            if (tmp1 != null) {
+                                System.out.println(tmp1);
+                            }
+                            else {
+                                System.out.print(NOTOKMESSAGE);
+                            }
                         }
                         
                         // Jos valitaan kuittaa lasku maksetuksi.
@@ -511,12 +534,17 @@ public class UI {
                             tmp9 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
                             oK = transaction.setInvoicePaid(tmp6, tmp9, con.getConnection());
                             if (oK) {
-                                System.out.println(ADDOKMESSAGE);
+                                System.out.println(OKMESSAGE);
                                 oK = false;
                             }
                             else {
-                                System.out.println(ADDNOTOKMESSAGE);
+                                System.out.println(NOTOKMESSAGE + ": Tarkista, että laskutunnus liittyy luotuun laskuun, jossa päiväykset.");
                             }
+                        }
+                        
+                        // Jos valitaan tee tarjous.
+                        else if (userCommand.equals(MAKEOFFERCOMMAND)) {
+                        
                         }
                         
                         // Jos valitaan takaisin.

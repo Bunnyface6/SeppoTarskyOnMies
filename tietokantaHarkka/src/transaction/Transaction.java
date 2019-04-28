@@ -5,6 +5,7 @@
  */
 package transaction;
 
+import helpers.InvoiceGenerator;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -38,6 +39,7 @@ public class Transaction {
     private ArticleCont aC;
     private ArticleTypeCont aTC;
     private SoldArticleCont sAC;
+    private InvoiceGenerator iG;
     
     public Transaction() {
         this.lC = new LocationCont();
@@ -52,6 +54,7 @@ public class Transaction {
         this.aTC = new ArticleTypeCont();
         this.cC = new ClientCont();
         this.sAC = new SoldArticleCont();
+        this.iG = new InvoiceGenerator();
     }
     
     public boolean addClient(String fName, String lName, String address, int zipCode, String city, Connection con) throws SQLException {
@@ -234,6 +237,23 @@ public class Transaction {
             con.rollback();
             return false; 
         }
+    }
+    
+    public String printInvoice(int invNumber, Connection con) throws SQLException {
+        String invoice = null;
+        try {
+           con.setAutoCommit(false);
+           Invoice i = iC.findInvoiceByNmbr(invNumber, con);
+           if (i != null) {
+               invoice = iG.generateInvoice(i, con);
+           }
+           con.commit();
+        }
+        catch (SQLException e) {
+            con.rollback();
+            throw new SQLException(e.getMessage());
+        }
+        return invoice;
     }
     
     public boolean setInvoicePaid(int invNmbr, Date dPaid, Connection con) throws SQLException {
@@ -501,6 +521,7 @@ public class Transaction {
         }
         catch (SQLException e) {
             con.rollback();
+            throw new SQLException(e.getMessage());
         }
         return aTypes;
     }
@@ -521,6 +542,7 @@ public class Transaction {
         }    
         catch (SQLException e) {
             con.rollback();
+            throw new SQLException(e.getMessage());
         }
         return aList;        
     }
@@ -542,6 +564,7 @@ public class Transaction {
         }
         catch (SQLException e) {
             con.rollback();
+            throw new SQLException(e.getMessage());
         }
         return wSInfo;
     }
@@ -563,6 +586,7 @@ public class Transaction {
         }
         catch (SQLException e) {
             con.rollback();
+            throw new SQLException(e.getMessage());
         }
         return cInfo;
     }
@@ -584,7 +608,27 @@ public class Transaction {
         }
         catch (SQLException e) {
             con.rollback();
+            throw new SQLException(e.getMessage());
         }
         return cInfo;
+    }
+    
+     public ArrayList<String> getInvoiceInfos(Connection con) throws SQLException {
+        ArrayList<String> iInfo = new ArrayList<String>();
+        try {
+            con.setAutoCommit(false);
+            ArrayList<Invoice> invs = iC.findInvoices(con);
+            for (int i = 0; i < invs.size(); i++) {
+                Invoice inv = invs.get(i);
+                String s = inv.toString();
+                iInfo.add(s);
+            }
+            con.commit();
+        }
+        catch (SQLException e) {
+            con.rollback();
+            throw new SQLException(e.getMessage());
+        }
+        return iInfo;
     }
 }
