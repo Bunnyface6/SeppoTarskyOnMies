@@ -25,6 +25,13 @@ import java.util.HashMap;
  */
 public class InvoiceGenerator {
     
+    /**
+     * Luo stringin annetusta invoisesta joka näyttää jotakuinkin laskulta
+     *
+     * @param invoice Lasku joka halutaan tulostaa
+     * @param con Yhteys
+     * @return String joka näyttää laskulta
+     */
     public String generateInvoice(Invoice invoice, Connection con){
         
         String finString;
@@ -162,7 +169,7 @@ public class InvoiceGenerator {
            partThree = partThree + "\n\n\nYHTEENSÄ: " + df2.format(totalPrice) + " €";
 
            finString = partOne + partTwo + partThree;
-           printInvoice(finString, name);
+           printInvoice(finString, name, "invoices");
            return finString;
        }
        catch(SQLException e){
@@ -175,7 +182,15 @@ public class InvoiceGenerator {
        }
     }
 
-    
+    /**
+     * Laskee tunnit yhteen sekä niiden euromäärät
+     *
+     * @param wP Työsuoritus joka laskulle kuuluu
+     * @param sC Sepon yhtiön tiedot
+     * @param con Yhteys
+     * @return Palauttaa ArrayListin joka on täytetty storage-olioilla
+     * @throws SQLException
+     */
     public ArrayList<Storage> calculate(WorkPerformance wP, SeppoCompany sC, Connection con) throws SQLException{
         
         ArrayList<Storage> rtn = new ArrayList<Storage>();
@@ -208,6 +223,16 @@ public class InvoiceGenerator {
 
     }
     
+    /**
+     * Palauttaa string-olion joka näyttää hinta-arviolta
+     * 
+     * @param planWork Suunnittelutuntien määrä
+     * @param work Tavallisen työn määrä
+     * @param helpWork Aputyön määrä
+     * @param sA Myytävät tarvikkeet arviossa
+     * @param con Yhteys
+     * @return Hinta-arvion näköinen string
+     */
     public String printEstimate(int planWork, int work, int helpWork, ArrayList<SoldArticle> sA, Connection con){
         double total = 0;
         
@@ -255,6 +280,7 @@ public class InvoiceGenerator {
                     }
                     sb.append("\n\n\t\t\tYhteensä: " + total + " €");
                }
+               printInvoice(sb.toString(), "Arvio", "estimates");
                return sb.toString();
         }
         catch(SQLException e){
@@ -263,14 +289,21 @@ public class InvoiceGenerator {
         }
     }
     
-    public boolean printInvoice(String x, String name){
+    /**
+     * Tulostaa annetun string-olion annettuun kansioon.
+     * @param x Mitä halutaan tulostaa
+     * @param name Tiedoston nimi
+     * @param location Polku jonne luodaan
+     * @return palauttaa totuusarvon onnistuiko
+     */
+    public boolean printInvoice(String x, String name, String location){
         
         try{   
                String separator = System.getProperty("line.separator");
                x.replace("\\n", separator);
                ZoneId zoneId = ZoneId.systemDefault() ;
                LocalDate today = LocalDate.now( zoneId ) ;
-               String day = name + today.toString()+".txt" ;
+               String day = location + "/" + name + today.toString()+".txt" ;
                Path out = Paths.get(day);
                if(Files.notExists(out)) {
                    Files.createFile(out);
@@ -285,7 +318,9 @@ public class InvoiceGenerator {
         }
         
     }
-    
+    /*
+    * Luokka joka tallentaa tunneista kertyvät summat
+    */
     class Storage{
         String name;
         int hours;

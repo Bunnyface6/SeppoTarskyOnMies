@@ -572,7 +572,7 @@ public class Transaction {
         try{
                ZoneId zoneId = ZoneId.systemDefault() ;
                LocalDate today = LocalDate.now( zoneId ) ;
-               String day = today.toString()+".txt" ;
+               String day = "history/" + today.toString()+".txt" ;
                Path out = Paths.get(day);
                if(Files.notExists(out)) {
                    Files.createFile(out);
@@ -634,7 +634,6 @@ public class Transaction {
     public boolean updateArticlesFromFile(ArrayList<Article> updateList, Connection con) throws SQLException{
 
         for(Article art : updateList){
-            System.out.println("UPDATE: " + art.toString());
             aC.updateArticle(art, con);
         }
         return true;
@@ -650,7 +649,6 @@ public class Transaction {
     public boolean newArticlesFromFile(ArrayList<Article> newList, Connection con) throws SQLException{
 
         for(Article art : newList){
-            System.out.println("NEW: " + art.toString());
             aC.addNewArticle(art, con);
         }
         return true;

@@ -1,0 +1,23 @@
+LASKU 
+
+Jani Aakio
+OSOITE: Osoitenumero: 28 Katuosoite: Kuusikatu 7 Postinumero: 32200 Kaupunki: Loimaa
+
+TYÖMAA:
+OSOITE: Osoitenumero: 28 Katuosoite: Kuusikatu 7 Postinumero: 32200 Kaupunki: Loimaa
+
+TEHDYT TUNNIT:
+
+	 TYÖ:  Tuntimäärä 12 Tuntiveloitus 45.0 Kokonaishinta 540€ josta veroton osuus 435.48€
+	 SUUNNITTELUTYÖ:  Tuntimäärä 12 Tuntiveloitus 55.0 Kokonaishinta 660€ josta veroton osuus 532.26€
+	 APUTYÖ:  Tuntimäärä 6 Tuntiveloitus 35.0 Kokonaishinta 210€ josta veroton osuus 169.35€
+
+KOKONAISHINTA TYÖSTÄ: 1410 €
+Josta kotitalousvähennyskelpoinen osuus on: 1137.1 €
+
+LASKUTETTAVAT TYÖTARVIKKEET:
+
+			Työtarvikkeet yhteensä: 0.0 €
+
+
+YHTEENSÄ: 1410 €
