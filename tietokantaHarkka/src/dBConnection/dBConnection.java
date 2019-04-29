@@ -22,11 +22,11 @@ public class dBConnection {
     private final String USERNAME = "na428043";
     private final String PASSWORD = "Velimatti1";
     private Connection con;
-    private static int lport;
+    /*private static int lport;
     private static String rhost;
     private static int rport;
     private Session session;
-    
+    */
     /**
      *
      * @return
@@ -35,7 +35,7 @@ public class dBConnection {
         try {
             Class.forName("org.postgresql.Driver");
             System.out.println(PROTOCOL + "//" + SERVER + ":" + PORTNUM + "/" + DATABASE);
-            con = DriverManager.getConnection(PROTOCOL + "//" + "localhost" + ":" + lport + "/" + DATABASE, USERNAME, PASSWORD);
+            con = DriverManager.getConnection(PROTOCOL + "//" + "dbstud2.sis.uta.fi" + ":" + PORTNUM + "/" + DATABASE, USERNAME, PASSWORD);
             return con;
 	}
 	catch (SQLException e) {
@@ -77,10 +77,10 @@ public class dBConnection {
     
     /**
      *
-     */
+     
     public void go(){
         String user = "ja427770";
-        String password = "Predator669";
+        String password = "";
         String host = "shell.sis.uta.fi";
         int port=22;
         try
@@ -99,19 +99,16 @@ public class dBConnection {
             }
         catch(Exception e){System.err.print(e);}
     }
-         
     /**
      *
      */
     public void disconnect(){
-       System.out.println("Suljetaan");
        try{
         con.close();
        }
        catch(Exception e){
-           System.out.println("JOTAIN MENI PIELEEN");
+           System.out.println("Yhteyden sulkeminen epäonnistui");
        }
-       session.disconnect();
-       System.out.println("Suljetaan");
+        System.out.println("Suljetaan yhteys");
    }
 }
