@@ -36,8 +36,6 @@ public class SeppoCompanyCont {
                                          resultSet.getDouble(5),
                                          resultSet.getDouble(6),
                                          resultSet.getInt(7),
-                                         resultSet.getInt(8),
-                                         resultSet.getDouble(9),
                                          resultSet.getDouble(10));
             }
             
@@ -153,30 +151,6 @@ public class SeppoCompanyCont {
         }
     };
 
-    /**
-     * muokkaa muistutuskuluja yrityksille
-     * @param newCompanyFee
-     * @param con
-     * @throws SQLException jos virhe
-     */
-    public void modifyCompanyFee(int newCompanyFee, Connection con) throws SQLException {
-        PreparedStatement pStatement = null;
-        SeppoCompany seppo = seppoInfo(con);
-        try {
-            
-            pStatement = con.prepareStatement("UPDATE sepon_firma SET yrityskulu = ? WHERE yrityskulu = ?");
-            pStatement.setInt(1, newCompanyFee);
-            pStatement.setInt(2, seppo.getCompanyFee());
-            pStatement.executeUpdate();
-            
-        }
-        
-        finally {
-            if (pStatement != null) {
-                pStatement.close();
-            }
-        }
-    };
 
     /**
      * muokkaa muikkarikuluja kuluttajille
@@ -228,30 +202,6 @@ public class SeppoCompanyCont {
         }
     };
 
-    /**
-     * muokkaa viivästyskorkoa yrityksille
-     * @param newCompanyInterest
-     * @param con
-     * @throws SQLException jos virhe
-     */
-    public void modifyCompanyInterest(double newCompanyInterest, Connection con) throws SQLException {
-        PreparedStatement pStatement = null;
-        SeppoCompany seppo = seppoInfo(con);
-        try {
-            
-            pStatement = con.prepareStatement("UPDATE sepon_firma SET yrityskorko = ? WHERE yrityskorko = ?");
-            pStatement.setDouble(1, newCompanyInterest);
-            pStatement.setDouble(2, seppo.getCompanyInterest());
-            pStatement.executeUpdate();
-           
-        }
-      
-        finally {
-            if (pStatement != null) {
-                pStatement.close();
-            }
-        }
-    };
 
     /**
      *
