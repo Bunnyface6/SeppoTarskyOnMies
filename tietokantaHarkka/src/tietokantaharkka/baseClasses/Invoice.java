@@ -5,6 +5,7 @@
  */
 package tietokantaharkka.baseClasses;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -99,10 +100,11 @@ public class Invoice {
 
     @Override
     public String toString() {
+        SimpleDateFormat sDF = new SimpleDateFormat("dd-MM-yyyy");
         if(finalPayDate != null && datePaid == null)
-            return "LASKU (MAKSAMATON): " + "Laskun numero " + ivNmbr + ", Asiakasnumero: " + clientNmbr + ", Laskun päiväys: " + compDate + ", Viimeinen maksupäivä: " + finalPayDate;
+            return "LASKU (MAKSAMATON): " + "Laskun numero " + ivNmbr + ", Asiakasnumero: " + clientNmbr + ", Laskun päiväys: " + sDF.format(compDate) + ", Viimeinen maksupäivä: " + sDF.format(finalPayDate);
         else if(finalPayDate != null && datePaid != null)
-            return "LASKU (MAKSETTU): " + "Laskun numero " + ivNmbr + ", Asiakasnumero: " + clientNmbr + ", Laskun päiväys: " + compDate + ", Maksttu päivämäärä: " + datePaid;
+            return "LASKU (MAKSETTU): " + "Laskun numero " + ivNmbr + ", Asiakasnumero: " + clientNmbr + ", Laskun päiväys: " + sDF.format(compDate) + ", Maksttu päivämäärä: " + sDF.format(datePaid);
         else
             return "LASKU (EI LÄHETETTY): " + "Laskun numero " + ivNmbr + ", Asiakasnumero: " + clientNmbr;
     }
