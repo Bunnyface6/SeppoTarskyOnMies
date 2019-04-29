@@ -155,45 +155,36 @@ public class InvoiceGenerator {
     }
 
     
-    public ArrayList<Storage> calculate(WorkPerformance wP, SeppoCompany sC, Connection con){
+    public ArrayList<Storage> calculate(WorkPerformance wP, SeppoCompany sC, Connection con) throws SQLException{
         
         ArrayList<Storage> rtn = new ArrayList<Storage>();
         PerformedWorkCont pWC = new PerformedWorkCont();
         WorkPriceCont wPC = new WorkPriceCont();
         ArrayList<PerformedWork> pW;
-        try{
-            pW = pWC.findPerformedWorkByWorkPerformanceNmbr(wP.getNmbr(), con);
-            if(pW != null){
-                
-                for(PerformedWork x : pW){
-                    
-                    Storage y = new Storage(x.getWorkType(), sC);
-                    if(rtn.contains(y)){
-                        y = rtn.remove(rtn.indexOf(y));
-                    }
-                    y.hours = y.hours + x.getNumOfHours();
-                    y.reduction = x.getDiscountPer();
-                    rtn.add(y);
+        pW = pWC.findPerformedWorkByWorkPerformanceNmbr(wP.getNmbr(), con);
+        if(pW != null){
+
+            for(PerformedWork x : pW){
+
+                Storage y = new Storage(x.getWorkType(), sC);
+                if(rtn.contains(y)){
+                    y = rtn.remove(rtn.indexOf(y));
                 }
-                
-                for(Storage x : rtn){
-                    WorkPrice y = wPC.findWorkPriceByWorkType(x.name, con);
-                    x.hPrice = y.getPrice();
-                    x.calculateTotal();
-                }
-                return rtn;
+                y.hours = y.hours + x.getNumOfHours();
+                y.reduction = x.getDiscountPer();
+                rtn.add(y);
             }
-            else
-                return null;
+
+            for(Storage x : rtn){
+                WorkPrice y = wPC.findWorkPriceByWorkType(x.name, con);
+                x.hPrice = y.getPrice();
+                x.calculateTotal();
+            }
+            return rtn;
         }
-        catch(SQLException e){
-            System.out.println(e.getMessage());
+        else
             return null;
-        }
-        catch(NullPointerException e){
-            System.out.println(e.getMessage());
-            return null;
-        }
+
     }
     
     public String printEstimate(int planWork, int work, int helpWork, ArrayList<SoldArticle> sA, Connection con){
