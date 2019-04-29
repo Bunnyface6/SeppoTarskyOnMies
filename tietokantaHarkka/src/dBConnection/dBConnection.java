@@ -10,11 +10,12 @@ import java.sql.*;
 import java.util.Properties;
 
 /**
- *
+ * Luokka, jolla yhdistetään tietokantaan.
  * @author Jipsu
  */
 public class dBConnection {
     
+    /** Yhdistämiseen tarvittavat vakioidut tiedot */
     private final String PROTOCOL = "jdbc:postgresql:";
     private final String SERVER = "dbstud2.sis.uta.fi";
     private final int PORTNUM = 5432;
@@ -27,9 +28,11 @@ public class dBConnection {
     private static int rport;
     private Session session;
     */
+    
     /**
-     *
-     * @return
+     * Luo yhteyden tietokantaan.
+     * 
+     * @return yhteys-olio
      */
     public Connection createConnection() {
         try {
@@ -49,16 +52,18 @@ public class dBConnection {
     }
     
     /**
-     *
-     * @return
+     * Palauttaa yhteys-olion.
+     * 
+     * @return yhteys-olio
      */
     public Connection getConnection() {
         return con;
     }
     
     /**
-     *
-     * @return
+     * Sulkee yhteyden tietokantaan.
+     * 
+     * @return totuusavo yhteyden sulkemisen onnistumisesta.
      */
     public boolean closeConnection() {
         try {

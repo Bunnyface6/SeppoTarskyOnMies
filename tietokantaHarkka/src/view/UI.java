@@ -59,7 +59,7 @@ public class UI {
     private final String HELOMESSAGE = "Tervetuloa Tmi Sähkötärsky:n laskutusjärjestelmään!";
     private final String MAINMENUMESSAGE = "1)Lisää 2)Etsi 3)Laskutus 4)Lopeta";
     private final String ADDMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tunnit ja tarvikkeet työkohteeseen 5)Tarvike laskulle\n"
-                                          + "6)Tarvikeen varastosaldo 7)Uusi tarvike varastoon 8)Uusi tarvikelista 9)Takaisin";
+                                          + "6)Tarvikkeen varastosaldoa 7)Uusi tarvike varastoon 8)Uusi tarvikelista 9)Takaisin";
     private final String SEARCHMENUMESSAGE = "1)Yksityisasiakas 2)Yritysasiakas 3)Työkohde 4)Tarvikeet 5)Laskupohjat 6)Takaisin";
     private final String INVOICINGMENUMESSAGE = "1)Luo lasku 2)Luo muitutuslaskut maksamattomista 3)Luo karhulaskut maksamattomista 4)Tulosta lasku 5)Kuittaa lasku maksetuksi\n" 
                                                 + "6)Tee hinta-arvio 7)Takaisin";
@@ -630,9 +630,12 @@ public class UI {
                 if (userCommand.equals(YESCOMMAND)) {
                     uIRunning = false;
                     commandReader.close();
-                    // Muutettava vielä toiseen metodiin.
-                    if (con != null) {
-                        con.disconnect();
+                    oK = con.closeConnection();
+                    if (oK) {
+                        System.out.println("Suljetaan ohjelma.");
+                    }
+                    else {
+                         System.out.println("Virhe tietokanta-yhteyden sulkemisessa. Suljetaan ohjelma.");
                     }
                 }
                 // Jos komento on virheellinen.
