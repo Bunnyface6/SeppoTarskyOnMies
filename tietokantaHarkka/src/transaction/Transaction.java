@@ -148,11 +148,7 @@ public class Transaction {
             int perfNum = 0;
             int j = 0;
             for (int i = 0; i < wP.size() && invoiceNotCreated; i++) {
-<<<<<<< HEAD
                 if(!(iC.invoiceIsCreated(wP.get(i).getNmbr(), con))) {
-=======
-                if(!iC.invoiceIsCreated(wP.get(i).getNmbr(), con)) {
->>>>>>> cc3248306db7bf24b8697d9712b5e5a8cc3eb16f
                     p = wP.get(i);
                     invoiceNotCreated = false;
                 }
@@ -237,10 +233,6 @@ public class Transaction {
             
             con.setAutoCommit(false);
             Invoice i = iC.findInvoiceByNmbr(invNmbr, con);
-<<<<<<< HEAD
-            
-=======
->>>>>>> cc3248306db7bf24b8697d9712b5e5a8cc3eb16f
             if (i != null && i.getFinalPayDate() == null) {
                 i.setCompDate(today);
                 i.setFinalPayDate(fPDate);
