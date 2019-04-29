@@ -480,10 +480,10 @@ public class UI {
                         
                         // Jos valitaan luo muistutuslaskut maksamattomista laskuista.
                         else if (userCommand.equals(CREATE2NDINVOICECOMMAND)) {
-                            System.out.print("Anna päivämäärä(dd/mm/yyyy) :");
+                            System.out.print("Anna tämänhetkinen päivä, johon eräpäiviä verrataan(dd/mm/yyyy) :");
                             tmp1 = commandReader.nextLine();
                             tmp9 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
-                            System.out.print("Anna eräpäivä(dd/mm/yyyy): ");
+                            System.out.print("Anna eräpäivä laskulle(dd/mm/yyyy): ");
                             tmp2 = commandReader.nextLine();
                             tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp2);
                             oK = transaction.createReminderOfUnpaidInvoices(tmp10, tmp9, con.getConnection());
@@ -498,10 +498,10 @@ public class UI {
                         
                         // Jos valitaan luo karhulaskut maksamattomista muistutuslaskuista.
                         else if (userCommand.equals(CREATE3THINVOICECOMMAND)) {
-                            System.out.print("Anna päivämäärä(dd/mm/yyyy) :");
+                            System.out.print("Anna tämänhetkinen päivä, johon eräpäiviä verrataan(dd/mm/yyyy) :");
                             tmp1 = commandReader.nextLine();
                             tmp9 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp1);
-                            System.out.print("Anna eräpäivä(dd/mm/yyyy): ");
+                            System.out.print("Anna eräpäivä laskulle(dd/mm/yyyy): ");
                             tmp2 = commandReader.nextLine();
                             tmp10 = new SimpleDateFormat("dd/MM/yyyy").parse(tmp2);
                             oK = transaction.createSecondReminderOfUnpaidInvoice(tmp9, tmp10, con.getConnection());

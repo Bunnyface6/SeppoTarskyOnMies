@@ -9,27 +9,45 @@ import tietokantaharkka.baseClasses.WorkSite;
 import java.util.ArrayList;
 
 /**
- *
+ * Työkohde-controlleri.
  * @author Jipsu
  */
 public class WorkSiteCont {
     
+    /** Viimeisimmät työkohteet */
     private ArrayList<WorkSite> recentWorkSites = new ArrayList<WorkSite>();
     
+    /** Viimeisin työkohde */
     private WorkSite lastUsed;
     
+    /**
+     * Luo uuden työkohteen. Asettaa luodun olion viimeisimpien 
+     * olioiden listalle ja viimeksimmän olion viitteeseen.
+     * 
+     * @param locationNmbr osoitekohdenumero
+     * @param clientNmbr asiakasnumero
+     * @param nmbr työkohdenumero
+     * @param contractPrice urakkahinta
+     * @return työkohde-olio
+     */
     public WorkSite createWorkSite(int locationNmbr, int clientNmbr, int nmbr, double contractPrice) {
         WorkSite x = new WorkSite(locationNmbr, clientNmbr, nmbr, contractPrice);
         recentWorkSites.add(x);
         lastUsed = x;
         return x;
     }
-
+    
+    /**
+     * Asettaa uuden rivin työkohde tauluun ja urakka tauluun parametrina saaduilla olion tiedoilla.
+     * 
+     * @param x työkohde-olio
+     * @param con yhteys-olio
+     * @throws SQLException jos rivien asetus epäonnistuu.
+     */
     public void addNewWorkSite(WorkSite x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("INSERT INTO tyokohde(asiakasnro, osoitenumero) VALUES(?, ?)", Statement.RETURN_GENERATED_KEYS);
             pStatement.setInt(1, x.getClientNmbr());
             pStatement.setInt(2, x.getLocationNmbr());
@@ -43,10 +61,6 @@ public class WorkSiteCont {
                 pStatement.setDouble(2, x.getContractPrice());
                 pStatement.executeUpdate();
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -59,13 +73,19 @@ public class WorkSiteCont {
     }   
     
 
-    //IDllä
+    /**
+     * Hakee tietokannan tyokohde-taulusta parametria vastaavan rivin ja käärii sen olioksi.
+     * 
+     * @param nmbr työkohdenumero
+     * @param con yhteys-olio
+     * @return työkohde-olio
+     * @throws SQLException jos kysely epäonnistuu
+     */
     public WorkSite findWorkSiteByNmbr(int nmbr, Connection con) throws SQLException {
         WorkSite wS = null;
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT tyokohde.tyokohdenumero, tyokohde.osoitenumero, tyokohde.asiakasnro, urakka.urakkahinta "
                                               + "FROM tyokohde LEFT OUTER JOIN urakka ON tyokohde.tyokohdenumero = urakka.tyokohdenumero WHERE tyokohde.tyokohdenumero = ?");
             pStatement.setInt(1, nmbr);
@@ -77,10 +97,6 @@ public class WorkSiteCont {
                 }
                 wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -93,7 +109,14 @@ public class WorkSiteCont {
         return wS;
     }
 
-    //Asiakasnumerolla
+    /**
+     * Hakee tietokannan tyokohde-taulusta parametria vastaavat rivit ja käärii ne olioksiksi.
+     * 
+     * @param clientNmbr asiakasnumero
+     * @param con yhteys-olio
+     * @return työkohde-olio-lista
+     * @throws SQLException jos haku epäonnistuu
+     */
     public ArrayList<WorkSite> findWorkSiteByClientNmbr(int clientNmbr, Connection con) throws SQLException {
         WorkSite wS = null;
 	ArrayList<WorkSite> wSAL = new ArrayList<WorkSite>();
@@ -113,9 +136,6 @@ public class WorkSiteCont {
 		 wSAL.add(wS);
             }
         }
-        catch(SQLException e) {
-            con.rollback(); 
-        }
         finally {
             if (resultSet != null) {
                 resultSet.close();
@@ -128,7 +148,14 @@ public class WorkSiteCont {
     }
     
 
-    //osoitenumerolla
+    /**
+     * Hakee tietokannan tyokohde-taulusta parametria vastaavat rivit ja käärii ne olioksiksi.
+     * 
+     * @param locationNmbr osoitenumero
+     * @param con yhteys-olio
+     * @return työkohde-olio-lista
+     * @throws SQLException jos haku epäonnistuu
+     */
     public ArrayList<WorkSite> findWorkSiteByLocationNmbr(int locationNmbr, Connection con) throws SQLException {
         WorkSite wS = null;
 	ArrayList<WorkSite> wSAL = new ArrayList<WorkSite>();
@@ -136,8 +163,7 @@ public class WorkSiteCont {
         ResultSet resultSet = null;
 	int rows = 0;
         try {
-            con.setAutoCommit(false);
-	    pStatement = con.prepareStatement("SELECT COUNT(*) FROM tyokohde WHERE osoitenumero = ?");
+            pStatement = con.prepareStatement("SELECT COUNT(*) FROM tyokohde WHERE osoitenumero = ?");
 	    pStatement.setInt(1, locationNmbr);
 	    resultSet = pStatement.executeQuery();
             resultSet.next();
@@ -156,10 +182,6 @@ public class WorkSiteCont {
 		 wS = createWorkSite(resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(1), d);
 		 wSAL.add(wS);
 	    }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -171,14 +193,18 @@ public class WorkSiteCont {
         }
         return wSAL;
     }
-    //public WorkSite findWorkSite(int locationNmbr, int clientNmbr){
-        //TODO Hae db.stä sekä palauta
-    //}
     
+    /**
+     * Poistaa tietokannan tyokohde-taulusta ja urakka-taulusta parametrina saatua oliota vastaavat rivit.
+     * 
+     * @param x työkohde-olio
+     * @param con yhtyes-olio
+     * @return poistettu työkohde-olio
+     * @throws SQLException jos poisto epäonnistuu.
+     */    
     public WorkSite removeWorkSite(WorkSite x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("DELETE FROM urakka WHERE tyokohdenumero = ?");
             pStatement.setInt(1, x.getNmbr());
             pStatement.executeUpdate();
@@ -186,10 +212,6 @@ public class WorkSiteCont {
             pStatement = con.prepareStatement("DELETE FROM tyokohde WHERE tyokohdenumero = ?");
             pStatement.setInt(1, x.getNmbr());
             pStatement.executeUpdate();
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (pStatement != null) {

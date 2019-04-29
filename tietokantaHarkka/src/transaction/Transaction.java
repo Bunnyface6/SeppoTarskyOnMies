@@ -22,11 +22,12 @@ import java.util.stream.Stream;
 import tietokantaharkka.baseClasses.*;
 import tietokantaharkka.controllers.*;
 /**
- *
+ * Tapahtuma-luokka.
  * @author Jipsu
  */
 public class Transaction {
     
+    /** Base-luokkien controllerit. */
     private LocationCont lC;
     private PrivateClientCont pCC;
     private CompanyClientCont cCC;
@@ -57,6 +58,19 @@ public class Transaction {
         this.iG = new InvoiceGenerator();
     }
     
+    /**
+     * Asettaa tietokantaan yksityisasikkaan tiedot ja osoitteen. Jos osoite on olemassa
+     * uutta ei tehdä vaan käytetään vanhaa.
+     * 
+     * @param fName etunimi
+     * @param lName sukunimi
+     * @param address katuosoite
+     * @param zipCode postinumero
+     * @param city kaupunki
+     * @param con yhteys-olio
+     * @return totuusarvon tapahtuman onnistumisesta
+     * @throws SQLException jos tapahtuma aiheuttaa virheen
+     */
     public boolean addClient(String fName, String lName, String address, int zipCode, String city, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
@@ -80,6 +94,19 @@ public class Transaction {
         }
     }
     
+    /**
+     * Asettaa tietokantaan yritysasikkaan tiedot ja osoitteen. Jos osoite on olemassa
+     * uutta ei tehdä vaan käytetään vanhaa.
+     * 
+     * @param name nimi
+     * @ yID yritys-tunnus
+     * @param address katuosoite
+     * @param zipCode postinumero
+     * @param city kaupunki
+     * @param con yhteys-olio
+     * @return totuusarvon tapahtuman onnistumisesta
+     * @throws SQLException jos tapahtuma aiheuttaa virheen
+     */
     public boolean addClient(String name, int yID, String address, int zipCode, String city, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
@@ -104,6 +131,19 @@ public class Transaction {
         }
     }
     
+    /**
+     * Lisää tietokantaan asiakkaalle työkohteen ja osoitteen sille. Ositetta ei lisätä, jos
+     * se on jo olemaasa, vaan hyödynnetään vanhaa.
+     * 
+     * @param clientNmbr asiakasnumero
+     * @param address katuosoite
+     * @param zipCode postinumero
+     * @param city postitoimipaikka
+     * @param contractPrice urakkahinta
+     * @param con yhteys-olio
+     * @return totuusarvon tapahtuman onnistumisesta
+     * @throws SQLException jos tapahtuma aiheuttaa virheen
+     */
     public boolean addWorkSiteToClient(int clientNmbr, String address, int zipCode, String city, double contractPrice, Connection con) throws SQLException {
         try {
             boolean oK = false;
@@ -132,6 +172,16 @@ public class Transaction {
         }
     }
     
+    /**
+     * Lisää asiakkaalle tunnit ja tavarat työkohteeseen sekä luo laskupohjan, jos keskeneräinen sellainen ei osoita työkohteeseen.
+     * Muuten tunnit ja tavarat kuuluvat keskeneräiseen laskupohjaan.
+     * 
+     * @param workSiteNmbrHoursAndDisc taulukko, joka sisältää työkohdenumeron, tehdyt tunnit ja niiden alennukset
+     * @param articlesAndDisc lista tarvikkeista, niiden määristä ja alennuksista
+     * @param con yhteys-olio
+     * @return totuusarvon tapahtuman onnistumisesta
+     * @throws SQLException jos tapahtuma aihettaa virheen
+     */
     public boolean addHoursAndArticles(int[] workSiteNmbrHoursAndDisc, ArrayList<Integer> articlesAndDisc, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
@@ -154,7 +204,6 @@ public class Transaction {
                 }
             }
             if (p == null) {
-                System.out.println("TEST112");
                 p = new WorkPerformance(0, workSiteNmbrHoursAndDisc[0]);
                 key = wPC.addNewWorkPerformance(p, con);
                 pWork1 = new PerformedWork("Työ", key, workSiteNmbrHoursAndDisc[1], workSiteNmbrHoursAndDisc[2]);
@@ -230,9 +279,9 @@ public class Transaction {
     public boolean createInvoice(int invNmbr, Date today, Date fPDate, Connection con) throws SQLException {
         boolean oK = false;
         try {
-            
             con.setAutoCommit(false);
             Invoice i = iC.findInvoiceByNmbr(invNmbr, con);
+
             if (i != null && i.getFinalPayDate() == null) {
                 i.setCompDate(today);
                 i.setFinalPayDate(fPDate);
