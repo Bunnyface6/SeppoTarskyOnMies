@@ -27,6 +27,10 @@ public class dBConnection {
     private static int rport;
     private Session session;
     
+    /**
+     *
+     * @return
+     */
     public Connection createConnection() {
         try {
             Class.forName("org.postgresql.Driver");
@@ -44,10 +48,18 @@ public class dBConnection {
         }
     }
     
+    /**
+     *
+     * @return
+     */
     public Connection getConnection() {
         return con;
     }
     
+    /**
+     *
+     * @return
+     */
     public boolean closeConnection() {
         try {
 	    if (con != null) {
@@ -63,9 +75,12 @@ public class dBConnection {
 	}			
     }
     
+    /**
+     *
+     */
     public void go(){
         String user = "ja427770";
-        String password = "";
+        String password = "Predator669";
         String host = "shell.sis.uta.fi";
         int port=22;
         try
@@ -85,7 +100,10 @@ public class dBConnection {
         catch(Exception e){System.err.print(e);}
     }
          
-   public void disconnect(){
+    /**
+     *
+     */
+    public void disconnect(){
        System.out.println("Suljetaan");
        try{
         con.close();

@@ -5,11 +5,19 @@
  */
 package helpers;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import static java.nio.file.Files.list;
+import java.nio.file.*;
+import static java.rmi.Naming.list;
 import tietokantaharkka.baseClasses.*;
 import tietokantaharkka.controllers.*;
 import java.sql.*;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import static java.util.Collections.list;
 import java.util.HashMap;
 /**
  *
@@ -17,6 +25,13 @@ import java.util.HashMap;
  */
 public class InvoiceGenerator {
     
+    /**
+     * Luo stringin annetusta invoisesta joka näyttää jotakuinkin laskulta
+     *
+     * @param invoice Lasku joka halutaan tulostaa
+     * @param con Yhteys
+     * @return String joka näyttää laskulta
+     */
     public String generateInvoice(Invoice invoice, Connection con){
         
         String finString;
@@ -27,6 +42,7 @@ public class InvoiceGenerator {
         double contractPrice = 0;
         boolean agreement = false;
         DecimalFormat df2 = new DecimalFormat("#.##");
+        String name;
         
         Client client;
         CompanyClient cC;
@@ -62,12 +78,14 @@ public class InvoiceGenerator {
                     cC.getName() + "\n" +
                     cC.getyIdentifier()
                 ;
+                name = cC.getName();
             }
             else{
                 pC = privCont.findPrivateClient(client.getNmbr(), con);
                 partOne =
                     "LASKU \n\n" +
                     pC.getfName() + " " + pC.getlName();
+                name = pC.getfName()+ pC.getlName();
             }
             clientLoc = locCont.findLocationByNmbr(client.getLocationNmbr(), con);
 
@@ -140,18 +158,18 @@ public class InvoiceGenerator {
            if(agreement)
                totalPrice = contractPrice;
            if(invoice.getNmbrOfInvoices() == 2){
-               partThree = partThree + "\n\n Lisäksi koska kyseessä muistuslasku lisätään laskuun "+ sC.getConsumerFee() + " € laskutuslisä";
+               partThree = partThree + "\n\n Lisäksi koska kyseessä muistuslasku laskusta " + invoice.getReminderOfNmbr() +" lisätään laskuun "+ sC.getConsumerFee() + " € laskutuslisä";
                totalPrice += sC.getConsumerFee();
            }
            if(invoice.getNmbrOfInvoices() == 3){
-               partThree = partThree + "\n\n Lisäksi koska kyseessä karhuamislasku lisätään laskuun "+ sC.getConsumerFee() + " € laskutuslisä sekä korko " + sC.getConsumerInterest() + "%";
+               partThree = partThree + "\n\n Lisäksi koska kyseessä karhuamislasku laskusta " + invoice.getReminderOfNmbr() + " lisätään laskuun "+ sC.getConsumerFee() + " € laskutuslisä sekä korko " + sC.getConsumerInterest() + "%";
                totalPrice += sC.getConsumerFee();
                totalPrice = totalPrice * (1 + (sC.getConsumerInterest() / 100));
            }
            partThree = partThree + "\n\n\nYHTEENSÄ: " + df2.format(totalPrice) + " €";
 
            finString = partOne + partTwo + partThree;
-
+           printInvoice(finString, name, "invoices");
            return finString;
        }
        catch(SQLException e){
@@ -164,7 +182,15 @@ public class InvoiceGenerator {
        }
     }
 
-    
+    /**
+     * Laskee tunnit yhteen sekä niiden euromäärät
+     *
+     * @param wP Työsuoritus joka laskulle kuuluu
+     * @param sC Sepon yhtiön tiedot
+     * @param con Yhteys
+     * @return Palauttaa ArrayListin joka on täytetty storage-olioilla
+     * @throws SQLException
+     */
     public ArrayList<Storage> calculate(WorkPerformance wP, SeppoCompany sC, Connection con) throws SQLException{
         
         ArrayList<Storage> rtn = new ArrayList<Storage>();
@@ -197,6 +223,16 @@ public class InvoiceGenerator {
 
     }
     
+    /**
+     * Palauttaa string-olion joka näyttää hinta-arviolta
+     * 
+     * @param planWork Suunnittelutuntien määrä
+     * @param work Tavallisen työn määrä
+     * @param helpWork Aputyön määrä
+     * @param sA Myytävät tarvikkeet arviossa
+     * @param con Yhteys
+     * @return Hinta-arvion näköinen string
+     */
     public String printEstimate(int planWork, int work, int helpWork, ArrayList<SoldArticle> sA, Connection con){
         double total = 0;
         
@@ -244,6 +280,7 @@ public class InvoiceGenerator {
                     }
                     sb.append("\n\n\t\t\tYhteensä: " + total + " €");
                }
+               printInvoice(sb.toString(), "Arvio", "estimates");
                return sb.toString();
         }
         catch(SQLException e){
@@ -251,7 +288,39 @@ public class InvoiceGenerator {
             return null;
         }
     }
-
+    
+    /**
+     * Tulostaa annetun string-olion annettuun kansioon.
+     * @param x Mitä halutaan tulostaa
+     * @param name Tiedoston nimi
+     * @param location Polku jonne luodaan
+     * @return palauttaa totuusarvon onnistuiko
+     */
+    public boolean printInvoice(String x, String name, String location){
+        
+        try{   
+               String separator = System.getProperty("line.separator");
+               x.replace("\\n", separator);
+               ZoneId zoneId = ZoneId.systemDefault() ;
+               LocalDate today = LocalDate.now( zoneId ) ;
+               String day = location + "/" + name + today.toString()+".txt" ;
+               Path out = Paths.get(day);
+               if(Files.notExists(out)) {
+                   Files.createFile(out);
+               }
+               Files.write(out, x.getBytes());
+               return true;
+        }
+        catch(Exception e){
+           
+           System.out.println("Print failure: " + e.getMessage());
+           return false; 
+        }
+        
+    }
+    /*
+    * Luokka joka tallentaa tunneista kertyvät summat
+    */
     class Storage{
         String name;
         int hours;
@@ -283,4 +352,6 @@ public class InvoiceGenerator {
             
         }
     }
+    
+    
 }
