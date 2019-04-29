@@ -36,7 +36,7 @@ public class SeppoCompanyCont {
                                          resultSet.getDouble(5),
                                          resultSet.getDouble(6),
                                          resultSet.getInt(7),
-                                         resultSet.getDouble(10));
+                                         resultSet.getDouble(8));
             }
             
         }

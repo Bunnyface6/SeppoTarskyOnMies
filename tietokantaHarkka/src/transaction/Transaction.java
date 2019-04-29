@@ -544,13 +544,14 @@ public class Transaction {
 
                 if(oldA.equals(newA)){
                     found = true;
+                    newA.setNmbr2(oldA.getNmbr2());
                     toBeRemoved.add(newA);
+                    updateList.add(newA);
                     break;
                 }
             }
             if(found){
                 rmv = oldA;
-                updateList.add(rmv);
                 toBeRemoved.add(rmv);
             }
         }
@@ -577,7 +578,7 @@ public class Transaction {
                if(Files.notExists(out)) {
                    Files.createFile(out);
                }
-               Files.write(out, list, StandardCharsets.UTF_8);
+               Files.write(out, list, Charset.defaultCharset());
                return true;
         }
         catch(Exception e){
@@ -618,7 +619,13 @@ public class Transaction {
     public boolean removeOldArticles(ArrayList<Article> oArticles, Connection con) throws SQLException{
         
         ArticleCont aC = new ArticleCont();
+        SoldArticleCont sAC = new SoldArticleCont();
+        ArrayList<SoldArticle> sA; 
         for(Article x : oArticles){
+            sA = sAC.findSoldArticles(x.getNmbr2(), con);
+            for(SoldArticle y : sA){
+                sAC.removeSoldArticle(y, con);
+            }
             aC.removeArticle(x, con);
         }
         return true;
@@ -677,6 +684,7 @@ public class Transaction {
             return true;
         }
         catch(SQLException e){
+            System.out.println(e.getMessage());
             con.rollback();
             return false;
         }

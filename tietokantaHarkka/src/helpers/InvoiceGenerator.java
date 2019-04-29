@@ -66,6 +66,7 @@ public class InvoiceGenerator {
         WorkSiteCont workSiteCont = new WorkSiteCont();
         WorkPerformanceCont wPCont = new WorkPerformanceCont();
         SeppoCompanyCont sCC = new SeppoCompanyCont();
+        InvoiceCont iVC = new InvoiceCont();
 
         
        try{
@@ -88,9 +89,13 @@ public class InvoiceGenerator {
                 name = pC.getfName()+ pC.getlName();
             }
             clientLoc = locCont.findLocationByNmbr(client.getLocationNmbr(), con);
-
-            sA = soldCont.findSoldArticlesOfInvoice(invoice.getIvNmbr(), con);
-
+            if(invoice.getNmbrOfInvoices() > 1){
+                Invoice invoice2 = iVC.findInvoiceByNmbr(invoice.getReminderOfNmbr(), con);
+                sA = soldCont.findSoldArticlesOfInvoice(invoice2.getIvNmbr(), con);
+            }
+            else{
+                sA = soldCont.findSoldArticlesOfInvoice(invoice.getIvNmbr(), con);
+            }
             wP = wPCont.findWorkPerformanceByNmbr(invoice.getWorkPerformanceNmbr(), con);
 
             wS = workSiteCont.findWorkSiteByNmbr(wP.getWorkSiteNmbr(), con);
@@ -104,11 +109,10 @@ public class InvoiceGenerator {
            ArrayList<Storage> hours = calculate(wP, sC, con);
            
            contractPrice = wS.getContractPrice();
-           
            if(contractPrice != 0){
                agreement = true;
            }
-           
+
            if(hours != null){
                double total = 0;
                double total2 = 0;
@@ -139,22 +143,37 @@ public class InvoiceGenerator {
            if(sA != null){
                double total = 0;
                 partThree = "\n\nLASKUTETTAVAT TYÖTARVIKKEET:";
+                
                 for(SoldArticle x : sA){
-                    
+                    System.out.println(x.getArticleNmbr());
                      art = artCont.findArticleByNmbr(x.getArticleNmbr(), con);
+                     
+                        if(art != null){
+                     
+                     
+                        System.out.println(art.getNmbr());
+                        artType = artTypeCont.findArticleTypeByNmbr(art.getNmbr(), con);
+                            if(artType != null){
+                        
+                                double price = art.getSalePrice() * x.getNmbrOfSold();
 
-                     artType = artTypeCont.findArticleTypeByNmbr(art.getNmbr2(), con);
-
-                     double price = art.getSalePrice() * x.getNmbrOfSold();
-
-                     partThree = partThree + "\n\t" + art.getName() + "\t" + x.getNmbrOfSold() + " " + artType.getUnit() + "\t" + art.getSalePrice() + " €" + "\tYht. " + price;
-                     total += price;
+                                partThree = partThree + "\n\t" + art.getName() + "\t" + x.getNmbrOfSold() + " " + artType.getUnit() + "\t" + art.getSalePrice() + " €" + "\tYht. " + price + " €";
+                                                                total += price;
+                                partThree = partThree + " josta veroton osuus: ";
+                                if(art.getTypeName() != "Kirja"){
+                                    price = price / (1 + ((double)sC.getArticleVAT() / 100));
+                                }
+                                else{
+                                    price = price / (1 + ((double)sC.getBookVAT() / 100));
+                                }
+                            }
+                        }
 
                 }
+               
                 totalPrice = totalPrice + total;
                 partThree = partThree + "\n\n\t\t\tTyötarvikkeet yhteensä: " + total + " €";
            }
-           
            if(agreement)
                totalPrice = contractPrice;
            if(invoice.getNmbrOfInvoices() == 2){
@@ -177,7 +196,7 @@ public class InvoiceGenerator {
            return null;
        }
        catch(NullPointerException e){
-           System.out.println(e.getMessage());
+           e.printStackTrace();
            return null;
        }
     }
@@ -262,7 +281,7 @@ public class InvoiceGenerator {
             sb.append("SUUNNITTELUTYÖ: " + helpWork + " Tuntia; Hinta: " + (helpWork * helpWorkPrice.getPrice()) + "€");
             total = helpWork * helpWorkPrice.getPrice();
 
-            sb.append("TYÖ YHTEENSÄ: " + total + "€");
+            sb.append("\n\nTYÖ YHTEENSÄ: " + total + "€");
 
             if(sA != null){
                     sb.append("\n\nLASKUTETTAVAT TYÖTARVIKKEET:");
@@ -270,7 +289,7 @@ public class InvoiceGenerator {
 
                          art = artCont.findArticleByNmbr(x.getArticleNmbr(), con);
 
-                         artType = artTypeCont.findArticleTypeByNmbr(art.getNmbr2(), con);
+                         artType = artTypeCont.findArticleTypeByNmbr(art.getNmbr(), con);
 
                          double price = art.getSalePrice() * x.getNmbrOfSold();
 
@@ -285,6 +304,10 @@ public class InvoiceGenerator {
         }
         catch(SQLException e){
             System.out.println(e.getMessage());
+            return null;
+        }
+        catch(Exception e){
+            e.printStackTrace();
             return null;
         }
     }
