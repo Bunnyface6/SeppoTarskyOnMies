@@ -634,7 +634,7 @@ public class Transaction {
     public boolean updateArticlesFromFile(ArrayList<Article> updateList, Connection con) throws SQLException{
 
         for(Article art : updateList){
-            aC.updateArticle(art, con);
+            aC.updateArticle2(art, con);
         }
         return true;
     }

@@ -391,4 +391,27 @@ public class ArticleCont {
             }
         }    	
     }
+    public void updateArticle2(Article x, Connection con) throws SQLException {
+	PreparedStatement pStatement = null;
+        try {
+            pStatement = con.prepareStatement("UPDATE tarvike SET sisaanostohinta = ?, varastotilanne =  ?, myyntihinta = ? WHERE tarvikenumero = ?");
+            pStatement.setDouble(1, x.getBuyIn());
+            pStatement.setInt(2, x.getStorage());
+            pStatement.setDouble(3, x.getSalePrice());
+            if(x.getNmbr() != 0){
+                pStatement.setInt(4, x.getNmbr2());
+            }
+            else{
+                ArticleTypeCont aTC = new ArticleTypeCont();
+                ArticleType ArtT = aTC.findArticleTypeByTypeName(x.getTypeName(), con);
+                pStatement.setInt(4, ArtT.getNmbr());
+            }
+            pStatement.executeUpdate();
+        }
+        finally {
+            if (pStatement != null) {
+                pStatement.close();
+            }
+        }    	
+    }
 }

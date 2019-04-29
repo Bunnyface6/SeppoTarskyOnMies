@@ -17,11 +17,9 @@ public class SeppoCompany {
     private double articleVAT;
     private double bookVAT;
     private int consumerFee;
-    private int companyFee;
-    private double companyInterest;
     private double consumerInterest;
 
-    public SeppoCompany(String name, int yIdentifier, String address, double workVAT, double articleVAT, double bookVAT, int consumerFee, int companyFee, double companyInterest, double consumerInterest) {
+    public SeppoCompany(String name, int yIdentifier, String address, double workVAT, double articleVAT, double bookVAT, int consumerFee, double consumerInterest) {
         this.name = name;
         this.yIdentifier = yIdentifier;
         this.address = address;
@@ -29,8 +27,6 @@ public class SeppoCompany {
         this.articleVAT = articleVAT;
         this.bookVAT = bookVAT;
         this.consumerFee = consumerFee;
-        this.companyFee = companyFee;
-        this.companyInterest = companyInterest;
         this.consumerInterest = consumerInterest;
     }
 
@@ -88,22 +84,6 @@ public class SeppoCompany {
 
     public void setConsumerFee(int consumerFee) {
         this.consumerFee = consumerFee;
-    }
-
-    public int getCompanyFee() {
-        return companyFee;
-    }
-
-    public void setCompanyFee(int companyFee) {
-        this.companyFee = companyFee;
-    }
-
-    public double getCompanyInterest() {
-        return companyInterest;
-    }
-
-    public void setCompanyInterest(double companyInterest) {
-        this.companyInterest = companyInterest;
     }
 
     public double getConsumerInterest() {
