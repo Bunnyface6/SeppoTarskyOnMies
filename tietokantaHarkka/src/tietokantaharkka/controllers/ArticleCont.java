@@ -398,14 +398,7 @@ public class ArticleCont {
             pStatement.setDouble(1, x.getBuyIn());
             pStatement.setInt(2, x.getStorage());
             pStatement.setDouble(3, x.getSalePrice());
-            if(x.getNmbr() != 0){
-                pStatement.setInt(4, x.getNmbr2());
-            }
-            else{
-                ArticleTypeCont aTC = new ArticleTypeCont();
-                ArticleType ArtT = aTC.findArticleTypeByTypeName(x.getTypeName(), con);
-                pStatement.setInt(4, ArtT.getNmbr());
-            }
+            pStatement.setInt(4, x.getNmbr2());
             pStatement.executeUpdate();
         }
         finally {
