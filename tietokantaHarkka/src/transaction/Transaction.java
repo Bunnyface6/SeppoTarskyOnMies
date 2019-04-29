@@ -148,12 +148,13 @@ public class Transaction {
             int perfNum = 0;
             int j = 0;
             for (int i = 0; i < wP.size() && invoiceNotCreated; i++) {
-                if(iC.invoiceIsCreated(wP.get(i).getNmbr(), con)) {
+                if(!(iC.invoiceIsCreated(wP.get(i).getNmbr(), con))) {
                     p = wP.get(i);
                     invoiceNotCreated = false;
                 }
             }
             if (p == null) {
+                System.out.println("TEST112");
                 p = new WorkPerformance(0, workSiteNmbrHoursAndDisc[0]);
                 key = wPC.addNewWorkPerformance(p, con);
                 pWork1 = new PerformedWork("Työ", key, workSiteNmbrHoursAndDisc[1], workSiteNmbrHoursAndDisc[2]);
@@ -228,9 +229,11 @@ public class Transaction {
     public boolean createInvoice(int invNmbr, Date today, Date fPDate, Connection con) throws SQLException {
         boolean oK = false;
         try {
+            
             con.setAutoCommit(false);
             Invoice i = iC.findInvoiceByNmbr(invNmbr, con);
-            if (i != null && i.getFinalPayDate() != null) {
+            
+            if (i != null && i.getFinalPayDate() == null) {
                 i.setCompDate(today);
                 i.setFinalPayDate(fPDate);
                 oK = iC.updateCompDateFinalPayDate(i, con);
@@ -239,6 +242,7 @@ public class Transaction {
             return oK;
         }
         catch (SQLException e) {
+            System.out.println(e.getMessage());
             con.rollback();
             return false; 
         }

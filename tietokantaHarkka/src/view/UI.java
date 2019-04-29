@@ -370,6 +370,7 @@ public class UI {
                         System.out.println(e.getMessage());
                     }
                     catch (NullPointerException e) {
+                        System.out.println(e.getMessage());
                         System.out.println(EMPTYINPUTMESSAGE);
                     }
                     catch (ParseException e) {

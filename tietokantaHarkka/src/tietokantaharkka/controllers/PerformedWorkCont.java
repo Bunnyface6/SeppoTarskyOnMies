@@ -29,7 +29,6 @@ public class PerformedWorkCont {
     public void addNewPerformedWork(PerformedWork x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
         try {
-            con.setAutoCommit(false);
             if (findPerformedWorkOfWorkPerformance(x.getWorkType(), x.getWorkPerformanceNmbr(), con) == null) {
                 pStatement = con.prepareStatement("INSERT INTO hinnoiteltu_tyosuoritus(tyotyyppi, tyosuoritusnumero, maara, alennusprosentti) VALUES(?, ?, ?, ?)");
                 pStatement.setString(1, x.getWorkType());
@@ -46,10 +45,6 @@ public class PerformedWorkCont {
                 pStatement.setInt(4, x.getWorkPerformanceNmbr());
                 pStatement.executeUpdate();
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (pStatement != null) {

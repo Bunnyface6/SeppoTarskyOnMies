@@ -66,7 +66,7 @@ public class InvoiceGenerator {
                     "LASKU \n\n" +
                     pC.getfName() + " " + pC.getlName();
             }
-
+            
             clientLoc = locCont.findLocationByNmbr(client.getLocationNmbr(), con);
 
             sA = soldCont.findSoldArticlesOfInvoice(invoice.getIvNmbr(), con);
@@ -80,6 +80,7 @@ public class InvoiceGenerator {
            ArrayList<Storage> hours = calculate(wP, con);
            
            contractPrice = wS.getContractPrice();
+           
            if(contractPrice != 0){
                agreement = true;
            }
@@ -107,6 +108,7 @@ public class InvoiceGenerator {
                totalPrice = totalPrice + total;
                partTwo = sb.toString();
            }
+           
            if(sA != null){
                double total = 0;
                 partThree = "\n\nLASKUTETTAVAT TYÖTARVIKKEET:";
@@ -125,6 +127,7 @@ public class InvoiceGenerator {
                 totalPrice = totalPrice + total;
                 partThree = partThree + "\n\n\t\t\tTyötarvikkeet yhteensä: " + total + " €";
            }
+           
            if(agreement)
                totalPrice = contractPrice;
            partThree = partThree + "\n\n\nYHTEENSÄ: " + totalPrice + "€";
@@ -136,11 +139,15 @@ public class InvoiceGenerator {
            System.out.println("Caught exception " + e.toString());
            return null;
        }
+       catch(NullPointerException e){
+           System.out.println(e.getMessage());
+           return null;
+       }
     }
 
     
     public ArrayList<Storage> calculate(WorkPerformance wP, Connection con){
-
+        
         ArrayList<Storage> rtn = new ArrayList<Storage>();
         PerformedWorkCont pWC = new PerformedWorkCont();
         WorkPriceCont wPC = new WorkPriceCont();
@@ -148,7 +155,9 @@ public class InvoiceGenerator {
         try{
             pW = pWC.findPerformedWorkByWorkPerformanceNmbr(wP.getNmbr(), con);
             if(pW != null){
+                
                 for(PerformedWork x : pW){
+                    
                     Storage y = new Storage(x.getWorkType());
                     if(rtn.contains(y)){
                         y = rtn.remove(rtn.indexOf(y));
@@ -157,7 +166,7 @@ public class InvoiceGenerator {
                     y.reduction = x.getDiscountPer();
                     rtn.add(y);
                 }
-
+                
                 for(Storage x : rtn){
                     WorkPrice y = wPC.findWorkPriceByWorkType(x.name, con);
                     x.hPrice = y.getPrice();
@@ -169,6 +178,10 @@ public class InvoiceGenerator {
                 return null;
         }
         catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+        catch(NullPointerException e){
             System.out.println(e.getMessage());
             return null;
         }
@@ -236,6 +249,7 @@ public class InvoiceGenerator {
         double hPrice;
         double total;
         public Storage(String x){
+            this.name = x;
             this.hours = 0;
             this.reduction = 0;
             this.hPrice = 0;
@@ -252,4 +266,3 @@ public class InvoiceGenerator {
         }
     }
 }
-

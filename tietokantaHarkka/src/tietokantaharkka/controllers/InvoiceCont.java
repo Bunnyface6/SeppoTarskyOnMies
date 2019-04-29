@@ -379,9 +379,6 @@ public class InvoiceCont {
                 oK = true;
             }
         }
-        catch(SQLException e) {
-            throw new SQLException(e.getMessage());
-        }
         finally {
             if (pStatement != null) {
                 pStatement.close();
