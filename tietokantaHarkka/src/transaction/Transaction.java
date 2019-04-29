@@ -69,7 +69,7 @@ public class Transaction {
      * @param city kaupunki
      * @param con yhteys-olio
      * @return totuusarvon tapahtuman onnistumisesta
-     * @throws SQLException jos tapahtuma aiheuttaa virheen
+     * @throws SQLException jos tapahtuman peruutus aiheuttaa virheen
      */
     public boolean addClient(String fName, String lName, String address, int zipCode, String city, Connection con) throws SQLException {
         try {
@@ -99,13 +99,13 @@ public class Transaction {
      * uutta ei tehdä vaan käytetään vanhaa.
      * 
      * @param name nimi
-     * @ yID yritys-tunnus
+     * @param yID yritys-tunnus
      * @param address katuosoite
      * @param zipCode postinumero
      * @param city kaupunki
      * @param con yhteys-olio
      * @return totuusarvon tapahtuman onnistumisesta
-     * @throws SQLException jos tapahtuma aiheuttaa virheen
+     * @throws SQLException jos tapahtuman peruutus aiheuttaa virheen
      */
     public boolean addClient(String name, int yID, String address, int zipCode, String city, Connection con) throws SQLException {
         try {
@@ -142,7 +142,7 @@ public class Transaction {
      * @param contractPrice urakkahinta
      * @param con yhteys-olio
      * @return totuusarvon tapahtuman onnistumisesta
-     * @throws SQLException jos tapahtuma aiheuttaa virheen
+     * @throws SQLException jos tapahtuman peruutus aiheuttaa virheen
      */
     public boolean addWorkSiteToClient(int clientNmbr, String address, int zipCode, String city, double contractPrice, Connection con) throws SQLException {
         try {
@@ -180,7 +180,7 @@ public class Transaction {
      * @param articlesAndDisc lista tarvikkeista, niiden määristä ja alennuksista
      * @param con yhteys-olio
      * @return totuusarvon tapahtuman onnistumisesta
-     * @throws SQLException jos tapahtuma aihettaa virheen
+     * @throws SQLException jos tapahtuman peruutus aihettaa virheen
      */
     public boolean addHoursAndArticles(int[] workSiteNmbrHoursAndDisc, ArrayList<Integer> articlesAndDisc, Connection con) throws SQLException {
         try {
@@ -249,6 +249,17 @@ public class Transaction {
         }
     }
     
+    /**
+     * Luo laskun tietokantaa ja asettaa laskulle tiedot tarvikkeista.
+     * 
+     * @param clientNmbr asiakasnumero
+     * @param aList lista tarvikkeista, niiden määristä ja alennuksista.
+     * @param today laskun päiväys
+     * @param fPDate eräpäivä
+     * @param con yhteys-olio
+     * @return totuusarvon tapahtuman onnistumisesta
+     * @throws SQLException jos tapahtuman peruutus epäonnistuu
+     */
     public boolean addArticlesToInvoice(int clientNmbr, ArrayList<Integer> aList, Date today, Date fPDate, Connection con) throws SQLException {
         int iN;
         int j = 0;
@@ -276,6 +287,16 @@ public class Transaction {
         }
     }
     
+    /**
+     * Tekee laskusta valmiin(esitykelpoisen) asettamalla sille päiväyksen ja eräpäivän.
+     * 
+     * @param invNmbr laskunumero
+     * @param today laskun päiväys
+     * @param fPDate eräpäivä
+     * @param con yhteys-olio
+     * @return totuusarvo tapahtuman onnistumisesta
+     * @throws SQLException jos tapahtuman peruutus epäonnistuu
+     */
     public boolean createInvoice(int invNmbr, Date today, Date fPDate, Connection con) throws SQLException {
         boolean oK = false;
         try {
@@ -297,6 +318,14 @@ public class Transaction {
         }
     }
     
+    /**
+     * Luo esityksen laskusta, joka on luotu, mutta ei maksettu.
+     * 
+     * @param invNumber laskunumero
+     * @param con yhteys-olio
+     * @return merkkijonoesitys laskusta
+     * @throws SQLException jos tapahtuman peruutus epäonnistuu 
+     */
     public String printInvoice(int invNumber, Connection con) throws SQLException {
         String invoice = null;
         try {
@@ -314,6 +343,15 @@ public class Transaction {
         return invoice;
     }
     
+    /**
+     * Tekee laskusta maksetun asettamalla sille maksupäivän.
+     * 
+     * @param invNmbr laskunumero
+     * @param dPaid maksupäivä
+     * @param con yhteys-olio
+     * @return totuusarvo tapahtuman onnistumisesta
+     * @throws SQLException jos tapahtuman peruutus epäonnistuu
+     */
     public boolean setInvoicePaid(int invNmbr, Date dPaid, Connection con) throws SQLException {
         boolean oK = false;
         try {
@@ -331,7 +369,16 @@ public class Transaction {
             return false; 
         }
     }
-        
+    
+    /**
+     * Luo muistutuksen kaikista maksamattomista laskuista. Parametrina saatua päiväystä verrataan laskujen eräpäiviin.
+     * 
+     * @param today tämä päivä(laskun päiväys)
+     * @param fpDate eräpäivä
+     * @param con yhteys-olio
+     * @return totuusarvo tapahtuman onnistumisesta
+     * @throws SQLException jos tapahtuman peruutus epäonnistuu
+     */    
     public boolean createReminderOfUnpaidInvoices(Date today, Date fpDate, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
@@ -354,6 +401,15 @@ public class Transaction {
         }
     }
     
+    /**
+     * Luo toisen muistutuksen kaikista maksamattomista laskuista. Parametrina saatua päiväystä verrataan laskujen eräpäiviin.
+     * 
+     * @param today tämä päivä(laskun päiväys)
+     * @param fpDate eräpäivä
+     * @param con yhteys-olio
+     * @return totuusarvo tapahtuman onnistumisesta
+     * @throws SQLException jos tapahtuman peruutus epäonnistuu
+     */    
     public boolean createSecondReminderOfUnpaidInvoice(Date today, Date fpDate, Connection con) throws SQLException {
         try {
             con.setAutoCommit(false);
@@ -376,6 +432,14 @@ public class Transaction {
         }
     }
     
+    /**
+     * 
+     * @param hours työtunnit tyypeittäin
+     * @param articles tarvikkeet määrineen
+     * @param con yhteys-olio
+     * @return merkkijono esitys hinta-arviosta
+     * @throws SQLException 
+     */
     public String createAssessmentOfPrices(int[] hours, ArrayList<Integer> articles, Connection con) throws SQLException {
         String assessmentOfPrices = null;
         ArrayList<SoldArticle> soldA = new ArrayList<SoldArticle>();
