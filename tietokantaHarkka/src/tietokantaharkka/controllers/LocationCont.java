@@ -18,6 +18,14 @@ public class LocationCont {
     private ArrayList<Location> recentLocations = new ArrayList<Location>();
     private Location lastUsed;
     
+    /**
+     * luo lokaatio-olion
+     * @param nmbr
+     * @param address
+     * @param postNmbr
+     * @param city
+     * @return luotu lokaatio
+     */
     public Location createLocation(int nmbr, String address, int postNmbr, String city){
        Location x = new Location(nmbr, address, postNmbr, city);
        recentLocations.add(x);
@@ -25,6 +33,13 @@ public class LocationCont {
        return x;
     }
     
+    /**
+     * lisää lokaation databaseen
+     * @param x
+     * @param con
+     * @return lokaationumero
+     * @throws SQLException jos lisäyksessä virhe
+     */
     public int addNewLocation(Location x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
@@ -51,6 +66,14 @@ public class LocationCont {
     }
         
     // Haku idllä
+
+    /**
+     * haku lokaationumerolla
+     * @param nmbr
+     * @param con
+     * @return lokaatio
+     * @throws SQLException jos etsinnässä virhe
+     */
     public Location findLocationByNmbr(int nmbr, Connection con) throws SQLException {
         Location l = null;
         PreparedStatement pStatement = null;
@@ -75,6 +98,14 @@ public class LocationCont {
     }
 
 	// Haku katuosoitteella
+
+    /**
+     * etsii lokaatioita osoitteen perusteella
+     * @param address
+     * @param con
+     * @return arraylist lokaatioista
+     * @throws SQLException jos etsinnässä virhe
+     */
     public ArrayList<Location> findLocationByAddress(String address, Connection con) throws SQLException {
         ArrayList<Location> l = new ArrayList<Location>();
         PreparedStatement pStatement = null;
@@ -99,6 +130,14 @@ public class LocationCont {
     }
 
 	//haku postinumerolla
+
+    /**
+     * hakee lokaatioita postinumerolla
+     * @param postNmbr
+     * @param con
+     * @return arraylist lokaatioista
+     * @throws SQLException jos etsinnässä virhe
+     */
     public ArrayList<Location> findLocationByPostNmbr(int postNmbr, Connection con) throws SQLException {
         ArrayList<Location> l = new ArrayList<Location>();
         PreparedStatement pStatement = null;
@@ -122,6 +161,13 @@ public class LocationCont {
         return l;
     }
 
+    /**
+     * hakee lokaatioita kaupungilla
+     * @param city
+     * @param con
+     * @return arraylist lokaatioista
+     * @throws SQLException jos etsinnässä virhe
+     */
     public ArrayList<Location> findLocationByCity(String city, Connection con) throws SQLException {
         ArrayList<Location> l = new ArrayList<Location>();
         PreparedStatement pStatement = null;
@@ -145,6 +191,15 @@ public class LocationCont {
         return l;
     }
     
+    /**
+     * hakee lokaatioita osoitteella, postinumerolla ja kaupungilla
+     * @param address
+     * @param zipCode
+     * @param city
+     * @param con
+     * @return lokaatio
+     * @throws SQLException jos etsinnässä virhe
+     */
     public Location findLocation(String address, int zipCode, String city, Connection con) throws SQLException {
         Location l = null;
         PreparedStatement pStatement = null;
@@ -170,6 +225,13 @@ public class LocationCont {
         return l;
     }
 
+    /**
+     * poistaa lokaation
+     * @param x
+     * @param con
+     * @return poistettu lokaatio
+     * @throws SQLException jos poistossa virhe
+     */
     public Location removeLocation(Location x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         try {

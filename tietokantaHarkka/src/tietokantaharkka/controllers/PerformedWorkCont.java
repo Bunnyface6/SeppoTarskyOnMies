@@ -19,6 +19,14 @@ public class PerformedWorkCont {
     
     private PerformedWork lastUsed;
     
+    /**
+     * Luo työsuorituksen
+     * @param workType
+     * @param workPerformanceNmbr
+     * @param numOfHours
+     * @param discountPer
+     * @return tehty työ
+     */
     public PerformedWork createPerformedWork(String workType, int workPerformanceNmbr, int numOfHours, int discountPer) {
         PerformedWork x = new PerformedWork(workType, workPerformanceNmbr, numOfHours, discountPer);
         recentPerformedWorks.add(x);
@@ -26,6 +34,12 @@ public class PerformedWorkCont {
         return x;
     }
     
+    /**
+     * lisää työsuorituksen
+     * @param x
+     * @param con
+     * @throws SQLException
+     */
     public void addNewPerformedWork(PerformedWork x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
         try {
@@ -53,6 +67,13 @@ public class PerformedWorkCont {
         }    	
     }
     
+    /**
+     * etsii työsuorituksia työtyypillä
+     * @param workType
+     * @param con
+     * @return arraylist työsuorituksista
+     * @throws SQLException jos virhe etsinnässä
+     */
     public ArrayList<PerformedWork> findPerformedWorkByWorkType(String workType, Connection con) throws SQLException {
         ArrayList<PerformedWork> pW = new ArrayList<PerformedWork>();
         PreparedStatement pStatement = null;
@@ -76,6 +97,13 @@ public class PerformedWorkCont {
         return pW;
     }
     
+    /**
+     * etsii työuorituksia numerolla
+     * @param nmbr
+     * @param con
+     * @return arraylist työsuorituksista
+     * @throws SQLException jos etsinnässä virhe
+     */
     public ArrayList<PerformedWork> findPerformedWorkByWorkPerformanceNmbr(int nmbr, Connection con) throws SQLException {
         ArrayList<PerformedWork> pW = new ArrayList<PerformedWork>();
         PreparedStatement pStatement = null;
@@ -99,6 +127,14 @@ public class PerformedWorkCont {
         return pW;
     }
     
+    /**
+     * etsii suorituksia
+     * @param type
+     * @param wBN
+     * @param con
+     * @return työsuoritus
+     * @throws SQLException jos etsinnässä virheitä
+     */
     public PerformedWork findPerformedWorkOfWorkPerformance(String type, int wBN, Connection con) throws SQLException {
         PerformedWork pW = null;
         PreparedStatement pStatement = null;
@@ -123,6 +159,13 @@ public class PerformedWorkCont {
         return pW;
     }
     
+    /**
+     * poistaa yösuorituksen
+     * @param x
+     * @param con
+     * @return poistettu työsuoritus
+     * @throws SQLException jos poistossa virhe
+     */
     public PerformedWork removePerformedWork (PerformedWork x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         try {
@@ -139,6 +182,13 @@ public class PerformedWorkCont {
         return x;    
     }
     
+    /**
+     * päivittää alennuksen
+     * @param x
+     * @param con
+     * @return true/false
+     * @throws SQLException jos päivityksessä virhe
+     */
     public boolean updateDiscount(PerformedWork x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         boolean oK = false;

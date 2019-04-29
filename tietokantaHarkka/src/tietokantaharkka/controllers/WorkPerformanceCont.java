@@ -19,6 +19,12 @@ public class WorkPerformanceCont {
     
     private WorkPerformance lastUsed;
     
+    /**
+     * luo työsuorituksen
+     * @param nmbr
+     * @param workSiteNmbr
+     * @return luotu työsuoritus
+     */
     public WorkPerformance createWorkPerformance(int nmbr,int workSiteNmbr) {
         WorkPerformance x = new WorkPerformance(nmbr, workSiteNmbr);
         recentWorkPerformances.add(x);
@@ -26,6 +32,13 @@ public class WorkPerformanceCont {
         return x;
     }
     
+    /**
+     * lisää työsuorituksen
+     * @param x
+     * @param con
+     * @return työsuoritusnumero
+     * @throws SQLException jos virhe
+     */
     public int addNewWorkPerformance(WorkPerformance x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
         ResultSet resultSet = null;
@@ -49,6 +62,13 @@ public class WorkPerformanceCont {
         return wPN;        
     }
     
+    /**
+     * etsii työsuoritusta numerolla
+     * @param nmbr
+     * @param con
+     * @return työsuoritus
+     * @throws SQLException jos virhe
+     */
     public WorkPerformance findWorkPerformanceByNmbr(int nmbr, Connection con) throws SQLException {
         WorkPerformance wP = null;
         PreparedStatement pStatement = null;
@@ -72,6 +92,13 @@ public class WorkPerformanceCont {
         return wP;
     }
     
+    /**
+     * etsii työsuorituksia työkohdenumerolla
+     * @param nmbr
+     * @param con
+     * @return arraylist työsuorituksista
+     * @throws SQLException jos virhe
+     */
     public ArrayList<WorkPerformance> findWorkPerformanceByWorkSiteNmbr(int nmbr, Connection con) throws SQLException {
         WorkPerformance wP = null;
         ArrayList<WorkPerformance> wPAL = new ArrayList<WorkPerformance>();
@@ -97,6 +124,13 @@ public class WorkPerformanceCont {
         return wPAL;
     }
     
+    /**
+     * poistaa työsuorituksen
+     * @param x
+     * @param con
+     * @return poistettu työsuoritus
+     * @throws SQLException jos virhe
+     */
     public WorkPerformance removeWorkPerformance(WorkPerformance x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
         try {

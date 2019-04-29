@@ -15,11 +15,27 @@ import java.util.Date;
  * @author Jipsu
  */
 public class InvoiceCont {
-
+    /**
+     * Viimeisimmät laskut
+     */
     private ArrayList<Invoice> recentInvoices = new ArrayList<Invoice>();
-    
+    /**
+     * Viimeksi käytetty lasku
+     */
     private Invoice lastUsed;
     
+    /**
+     * Luo laskuolion
+     * @param finalPayDate
+     * @param ivNmbr
+     * @param compDate
+     * @param datePaid
+     * @param nmbrOfInvoices
+     * @param reminderOfNmbr
+     * @param clientNmbr
+     * @param workPerformanceNmbr
+     * @return
+     */
     public Invoice createInvoice(Date finalPayDate, int ivNmbr, Date compDate, Date datePaid, int nmbrOfInvoices, int reminderOfNmbr, int clientNmbr, int workPerformanceNmbr) {
         Invoice x = new Invoice(finalPayDate, ivNmbr, compDate, datePaid, nmbrOfInvoices, reminderOfNmbr, clientNmbr, workPerformanceNmbr);
         recentInvoices.add(x);
@@ -27,6 +43,13 @@ public class InvoiceCont {
         return x;
     }
     
+    /**
+     * Lisää laskun tiedot databaseen
+     * @param x
+     * @param con
+     * @return laskunnumero
+     * @throws SQLException jos lisäyksessä virhe
+     */
     public int addNewInvoice(Invoice x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
         ResultSet resultSet = null;
@@ -70,6 +93,13 @@ public class InvoiceCont {
         return invN;           
     }
     
+    /**
+     * Etsii laskun databasesta laskunnumerolla
+     * @param nmbr
+     * @param con
+     * @return laskuolio
+     * @throws SQLException jos etsinnässä virhe
+     */
     public Invoice findInvoiceByNmbr(int nmbr, Connection con) throws SQLException {
         Invoice i = null;
         PreparedStatement pStatement = null;
@@ -105,6 +135,13 @@ public class InvoiceCont {
         return i;
     }
     
+    /**
+     * Etsii laskun asiakasnumerolla
+     * @param nmbr
+     * @param con
+     * @return arraylistin laskuja
+     * @throws SQLException jos etsinnässä virhe
+     */
     public ArrayList<Invoice> findInvoiceByClientNmbr(int nmbr, Connection con) throws SQLException {
         ArrayList<Invoice> i = new ArrayList<Invoice>();
         PreparedStatement pStatement = null;
@@ -140,6 +177,13 @@ public class InvoiceCont {
         return i;
     }
     
+    /**
+     * Etsii laskun tyosuoritusnumerolla
+     * @param nmbr
+     * @param con
+     * @return arraylistin laskuja
+     * @throws SQLException jos etsinnässä virhe
+     */
     public ArrayList<Invoice> findInvoiceByWorkPerformanceNmbr(int nmbr, Connection con) throws SQLException {
         ArrayList<Invoice> i = new ArrayList<Invoice>();
         PreparedStatement pStatement = null;
@@ -175,6 +219,13 @@ public class InvoiceCont {
         return i;
     }
     
+    /**
+     * Etsii laskun maksupäivällä
+     * @param fBD
+     * @param con
+     * @return arraylistin laskuja
+     * @throws SQLException jos etsinnässä virhe
+     */
     public ArrayList<Invoice> findInvoiceByFinalPayDate(Date fBD, Connection con) throws SQLException {
         ArrayList<Invoice> i = new ArrayList<Invoice>();
         PreparedStatement pStatement = null;
@@ -210,6 +261,13 @@ public class InvoiceCont {
         return i;
     }
     
+    /**
+     * Etsii laskun päivämäärällä
+     * @param fBD
+     * @param con
+     * @return arraylistin laskuja
+     * @throws SQLException jos etsinnässä virhe
+     */
     public ArrayList<Invoice> findInvoiceByDate(Date fBD, Connection con) throws SQLException {
         ArrayList<Invoice> i = new ArrayList<Invoice>();
         PreparedStatement pStatement = null;
@@ -245,6 +303,12 @@ public class InvoiceCont {
         return i;
     }
     
+    /**
+     * Etsii laskuja
+     * @param con
+     * @return arraylistin laskuja
+     * @throws SQLException jos etsinnässä virhe
+     */
     public ArrayList<Invoice> findInvoices(Connection con) throws SQLException {
         ArrayList<Invoice> i = new ArrayList<Invoice>();
         PreparedStatement pStatement = null;
@@ -279,6 +343,13 @@ public class InvoiceCont {
         return i;
     }
         
+    /**
+     * Etsii maksamattomia laskuja
+     * @param whatNumber
+     * @param con
+     * @return arraylistin laskuolioita
+     * @throws SQLException jos etsinnässä virhe
+     */
     public ArrayList<Invoice> findUnpaidInvoices(int whatNumber, Connection con) throws SQLException {
         ArrayList<Invoice> i = new ArrayList<Invoice>();
         PreparedStatement pStatement = null;
@@ -321,6 +392,13 @@ public class InvoiceCont {
         return i;
     }
             
+    /**
+     * Poistaa laskun databasesta
+     * @param x
+     * @param con
+     * @return laskuolio
+     * @throws SQLException jos poistossa virhe
+     */
     public Invoice removeInvoice(Invoice x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
         try {
@@ -336,6 +414,13 @@ public class InvoiceCont {
         return x;    
     }
     
+    /**
+     * Päivittää laskun päivämäärän
+     * @param x
+     * @param con
+     * @return true/false
+     * @throws SQLException jos päivityksessä virhe
+     */
     public boolean updateCompDateFinalPayDate(Invoice x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         boolean oK = false;
@@ -357,7 +442,14 @@ public class InvoiceCont {
         return oK;        
     }
     
-     public boolean updateDatePaid(Invoice x, Connection con) throws SQLException {
+    /**
+     * Päivittää maksupäivän
+     * @param x
+     * @param con
+     * @return true/false
+     * @throws SQLException jos päivityksessä virhe
+     */
+    public boolean updateDatePaid(Invoice x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         boolean oK = false;
         try {
@@ -380,6 +472,13 @@ public class InvoiceCont {
         return oK;        
     }
      
+    /**
+     * Tarkistaa luodaanko lasku
+     * @param workPerformanceNmbr
+     * @param con
+     * @return true/false
+     * @throws SQLException jos etsinnässä virhe
+     */
     public boolean invoiceIsCreated(int workPerformanceNmbr, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;

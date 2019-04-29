@@ -14,6 +14,12 @@ import java.util.Date;
  */
 public class SeppoCompanyCont {
     
+    /**
+     * luo seppo-olion (hakee tiedot)
+     * @param con
+     * @return sepon tiedot -olion
+     * @throws SQLException jos virhe
+     */
     public SeppoCompany seppoInfo(Connection con) throws SQLException {
         SeppoCompany seppo = null;
         PreparedStatement pStatement = null;
@@ -47,6 +53,12 @@ public class SeppoCompanyCont {
         return seppo;
     };
     
+    /**
+     * muokkaa sepon osoitetta
+     * @param newAddress
+     * @param con
+     * @throws SQLException jos virhe
+     */
     public void modifyAddress(String newAddress, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
@@ -65,6 +77,13 @@ public class SeppoCompanyCont {
             }
         }
     };
+
+    /**
+     * muokkaa työ-alvia
+     * @param newWVAT
+     * @param con
+     * @throws SQLException jos virhe
+     */
     public void modifyWorkVAT(double newWVAT, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
@@ -83,6 +102,13 @@ public class SeppoCompanyCont {
             }
         }
     };
+
+    /**
+     * muokkaa tarvike-alvia
+     * @param newAVAT
+     * @param con
+     * @throws SQLException jos virhe
+     */
     public void modifyArticleVAT(double newAVAT, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
@@ -101,6 +127,13 @@ public class SeppoCompanyCont {
             }
         }
     };
+
+    /**
+     * muokkaa kirja-alvia
+     * @param newBVAT
+     * @param con
+     * @throws SQLException jos virhe
+     */
     public void modifyBookVAT(double newBVAT, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
@@ -119,6 +152,13 @@ public class SeppoCompanyCont {
             }
         }
     };
+
+    /**
+     * muokkaa muistutuskuluja yrityksille
+     * @param newCompanyFee
+     * @param con
+     * @throws SQLException jos virhe
+     */
     public void modifyCompanyFee(int newCompanyFee, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
@@ -137,6 +177,13 @@ public class SeppoCompanyCont {
             }
         }
     };
+
+    /**
+     * muokkaa muikkarikuluja kuluttajille
+     * @param newConsumerFee
+     * @param con
+     * @throws SQLException jos virhe
+     */
     public void modifyConsumerFee(int newConsumerFee, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
@@ -155,6 +202,13 @@ public class SeppoCompanyCont {
             }
         }
     };
+
+    /**
+     * muokkaa viivästyskorkoa kuluttajille
+     * @param newConsumerInterest
+     * @param con
+     * @throws SQLException jos virhe
+     */
     public void modifyConsumerInterest(double newConsumerInterest, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
@@ -173,6 +227,13 @@ public class SeppoCompanyCont {
             }
         }
     };
+
+    /**
+     * muokkaa viivästyskorkoa yrityksille
+     * @param newCompanyInterest
+     * @param con
+     * @throws SQLException jos virhe
+     */
     public void modifyCompanyInterest(double newCompanyInterest, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
@@ -191,5 +252,9 @@ public class SeppoCompanyCont {
             }
         }
     };
+
+    /**
+     *
+     */
     public void modifySeppo(){};
 }
