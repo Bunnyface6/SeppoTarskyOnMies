@@ -139,7 +139,17 @@ public class InvoiceGenerator {
            
            if(agreement)
                totalPrice = contractPrice;
+           if(invoice.getNmbrOfInvoices() == 2){
+               partThree = partThree + "\n\n Lisäksi koska kyseessä muistuslasku lisätään laskuun "+ sC.getConsumerFee() + " € laskutuslisä";
+               totalPrice += sC.getConsumerFee();
+           }
+           if(invoice.getNmbrOfInvoices() == 3){
+               partThree = partThree + "\n\n Lisäksi koska kyseessä karhuamislasku lisätään laskuun "+ sC.getConsumerFee() + " € laskutuslisä sekä korko " + sC.getConsumerInterest() + "%";
+               totalPrice += sC.getConsumerFee();
+               totalPrice = totalPrice * (1 + (sC.getConsumerInterest() / 100));
+           }
            partThree = partThree + "\n\n\nYHTEENSÄ: " + df2.format(totalPrice) + " €";
+
            finString = partOne + partTwo + partThree;
 
            return finString;

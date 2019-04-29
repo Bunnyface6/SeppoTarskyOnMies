@@ -550,7 +550,7 @@ public class Transaction {
     
     //LIIKUTA ALLA OLEVA METODIKASA JONNEKKIN
     
-    public boolean fullUpdateFromFile(String nPath, String oPath, Connection con) throws SQLException{
+    public boolean fullUpdateFromFile(String nPath, Connection con) throws SQLException{
         try{
             con.setAutoCommit(false);
             ArrayList<Article> newList = readArticlesFromFile(nPath);
