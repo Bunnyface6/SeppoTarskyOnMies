@@ -10,7 +10,7 @@ import tietokantaharkka.baseClasses.WorkPerformance;
 import java.sql.*;
 
 /**
- *
+ * työsuorituskontrolleri
  * @author Jipsu
  */
 public class WorkPerformanceCont {

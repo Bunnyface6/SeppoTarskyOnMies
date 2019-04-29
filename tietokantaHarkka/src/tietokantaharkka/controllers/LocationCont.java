@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import tietokantaharkka.baseClasses.Location;
 
 /**
- *
+ * Lokaatiokontrolleri
  * @author Cassu
  */
 public class LocationCont {

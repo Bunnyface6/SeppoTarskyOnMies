@@ -10,7 +10,7 @@ import tietokantaharkka.baseClasses.SoldArticle;
 import java.sql.*;
 
 /**
- *
+ * myydyn tarvikkeen kontrolleri
  * @author Jipsu
  */
 public class SoldArticleCont {

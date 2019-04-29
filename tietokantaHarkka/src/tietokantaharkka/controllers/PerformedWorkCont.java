@@ -10,7 +10,7 @@ import tietokantaharkka.baseClasses.PerformedWork;
 import java.sql.*;
 
 /**
- *
+ * Tehdyn työn kontrolleri
  * @author Jipsu
  */
 public class PerformedWorkCont {
