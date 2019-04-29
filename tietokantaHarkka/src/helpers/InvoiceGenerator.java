@@ -5,11 +5,19 @@
  */
 package helpers;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import static java.nio.file.Files.list;
+import java.nio.file.*;
+import static java.rmi.Naming.list;
 import tietokantaharkka.baseClasses.*;
 import tietokantaharkka.controllers.*;
 import java.sql.*;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import static java.util.Collections.list;
 import java.util.HashMap;
 /**
  *
@@ -27,6 +35,7 @@ public class InvoiceGenerator {
         double contractPrice = 0;
         boolean agreement = false;
         DecimalFormat df2 = new DecimalFormat("#.##");
+        String name;
         
         Client client;
         CompanyClient cC;
@@ -62,12 +71,14 @@ public class InvoiceGenerator {
                     cC.getName() + "\n" +
                     cC.getyIdentifier()
                 ;
+                name = cC.getName();
             }
             else{
                 pC = privCont.findPrivateClient(client.getNmbr(), con);
                 partOne =
                     "LASKU \n\n" +
                     pC.getfName() + " " + pC.getlName();
+                name = pC.getfName()+ pC.getlName();
             }
             clientLoc = locCont.findLocationByNmbr(client.getLocationNmbr(), con);
 
@@ -140,18 +151,18 @@ public class InvoiceGenerator {
            if(agreement)
                totalPrice = contractPrice;
            if(invoice.getNmbrOfInvoices() == 2){
-               partThree = partThree + "\n\n Lisäksi koska kyseessä muistuslasku lisätään laskuun "+ sC.getConsumerFee() + " € laskutuslisä";
+               partThree = partThree + "\n\n Lisäksi koska kyseessä muistuslasku laskusta " + invoice.getReminderOfNmbr() +" lisätään laskuun "+ sC.getConsumerFee() + " € laskutuslisä";
                totalPrice += sC.getConsumerFee();
            }
            if(invoice.getNmbrOfInvoices() == 3){
-               partThree = partThree + "\n\n Lisäksi koska kyseessä karhuamislasku lisätään laskuun "+ sC.getConsumerFee() + " € laskutuslisä sekä korko " + sC.getConsumerInterest() + "%";
+               partThree = partThree + "\n\n Lisäksi koska kyseessä karhuamislasku laskusta " + invoice.getReminderOfNmbr() + " lisätään laskuun "+ sC.getConsumerFee() + " € laskutuslisä sekä korko " + sC.getConsumerInterest() + "%";
                totalPrice += sC.getConsumerFee();
                totalPrice = totalPrice * (1 + (sC.getConsumerInterest() / 100));
            }
            partThree = partThree + "\n\n\nYHTEENSÄ: " + df2.format(totalPrice) + " €";
 
            finString = partOne + partTwo + partThree;
-
+           printInvoice(finString, name);
            return finString;
        }
        catch(SQLException e){
@@ -251,7 +262,30 @@ public class InvoiceGenerator {
             return null;
         }
     }
-
+    
+    public boolean printInvoice(String x, String name){
+        
+        try{   
+               String separator = System.getProperty("line.separator");
+               x.replace("\\n", separator);
+               ZoneId zoneId = ZoneId.systemDefault() ;
+               LocalDate today = LocalDate.now( zoneId ) ;
+               String day = name + today.toString()+".txt" ;
+               Path out = Paths.get(day);
+               if(Files.notExists(out)) {
+                   Files.createFile(out);
+               }
+               Files.write(out, x.getBytes());
+               return true;
+        }
+        catch(Exception e){
+           
+           System.out.println("Print failure: " + e.getMessage());
+           return false; 
+        }
+        
+    }
+    
     class Storage{
         String name;
         int hours;
@@ -283,4 +317,6 @@ public class InvoiceGenerator {
             
         }
     }
+    
+    
 }

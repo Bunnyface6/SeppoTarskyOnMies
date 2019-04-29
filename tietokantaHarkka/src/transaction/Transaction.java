@@ -530,30 +530,32 @@ public class Transaction {
     public ArrayList<Article> findAllOldArticles(ArrayList<Article> newList, ArrayList<Article> updateList, Connection con) throws SQLException{
 
         ArrayList<Article> oldList = aC.findAllArcticles(con);
-        Article rmv = oldList.get(0);
+        ArrayList<Article> toBeRemoved = new ArrayList();
+        Article rmv;
         boolean found = false;
         //SAATTAA OLLA TOIMIMATON, TESTAA!
         for(Article oldA: oldList){
-            if(found)
-                updateList.add(rmv);
-                newList.remove(rmv);
-                oldList.remove(rmv);
             found = false;
             for(Article newA: newList){
 
                 if(oldA.equals(newA)){
-
                     found = true;
+                    toBeRemoved.add(newA);
                     break;
                 }
             }
-            if(found)
+            if(found){
                 rmv = oldA;
+                updateList.add(rmv);
+                toBeRemoved.add(rmv);
+            }
+        }
+        for(Article x : toBeRemoved){
+            oldList.remove(x);
+            newList.remove(x);
         }
 
         return oldList;
-
-
     }
     
     public boolean printOldArticles(ArrayList<Article> list){
@@ -565,7 +567,7 @@ public class Transaction {
                if(Files.notExists(out)) {
                    Files.createFile(out);
                }
-               Files.write(out, list, Charset.defaultCharset());
+               Files.write(out, list, StandardCharsets.UTF_8);
                return true;
         }
         catch(Exception e){
@@ -581,23 +583,35 @@ public class Transaction {
         try (Stream<String> stream = Files.lines( Paths.get(path), StandardCharsets.UTF_8))
         {  
             stream.forEach((s) ->{
-             
+                Article art;
                 String[] data = s.split(";");
-                Article art = new Article(data[0], Double.parseDouble(data[2]), Integer.parseInt(data[1]), Double.parseDouble(data[3]), 0, 0,data[5], data[4]);
-                newList.add(art);
+                if(data.length == 6){
+                    art = new Article(data[0], Double.parseDouble(data[2]), Integer.parseInt(data[1]), Double.parseDouble(data[3]), 0, 0,data[5], data[4]);
+                    newList.add(art);
+                }
             });
+            
+            return newList;
         }
         catch (IOException e)
         {
             e.printStackTrace();
             return null;
         }
-        return newList;
+    }
+    public boolean removeOldArticles(ArrayList<Article> oArticles, Connection con) throws SQLException{
+        
+        ArticleCont aC = new ArticleCont();
+        for(Article x : oArticles){
+            aC.removeArticle(x, con);
+        }
+        return true;
     }
     
     public boolean updateArticlesFromFile(ArrayList<Article> updateList, Connection con) throws SQLException{
 
         for(Article art : updateList){
+            System.out.println("UPDATE: " + art.toString());
             aC.updateArticle(art, con);
         }
         return true;
@@ -606,10 +620,10 @@ public class Transaction {
     public boolean newArticlesFromFile(ArrayList<Article> newList, Connection con) throws SQLException{
 
         for(Article art : newList){
+            System.out.println("NEW: " + art.toString());
             aC.addNewArticle(art, con);
         }
         return true;
-
     }
     
     //LIIKUTA ALLA OLEVA METODIKASA JONNEKKIN
@@ -621,8 +635,9 @@ public class Transaction {
             ArrayList<Article> updateList = new ArrayList();
             ArrayList<Article> oldList = findAllOldArticles(newList, updateList, con);
             printOldArticles(oldList);
+            removeOldArticles(oldList, con);
             updateArticlesFromFile(updateList, con);
-            newArticlesFromFile(updateList, con);
+            newArticlesFromFile(newList, con);
             con.commit();
             return true;
         }
