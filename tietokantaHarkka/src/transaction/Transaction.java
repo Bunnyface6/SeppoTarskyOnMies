@@ -148,7 +148,7 @@ public class Transaction {
             int perfNum = 0;
             int j = 0;
             for (int i = 0; i < wP.size() && invoiceNotCreated; i++) {
-                if(iC.invoiceIsCreated(wP.get(i).getNmbr(), con)) {
+                if(!iC.invoiceIsCreated(wP.get(i).getNmbr(), con)) {
                     p = wP.get(i);
                     invoiceNotCreated = false;
                 }
@@ -220,6 +220,7 @@ public class Transaction {
             return true;
         }
         catch (SQLException e) {
+            System.out.println(e.getLocalizedMessage());
             con.rollback();
             return false; 
         }
@@ -230,7 +231,7 @@ public class Transaction {
         try {
             con.setAutoCommit(false);
             Invoice i = iC.findInvoiceByNmbr(invNmbr, con);
-            if (i != null && i.getFinalPayDate() != null) {
+            if (i != null && i.getFinalPayDate() == null) {
                 i.setCompDate(today);
                 i.setFinalPayDate(fPDate);
                 oK = iC.updateCompDateFinalPayDate(i, con);

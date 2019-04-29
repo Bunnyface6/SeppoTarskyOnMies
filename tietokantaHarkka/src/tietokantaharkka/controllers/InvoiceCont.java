@@ -30,26 +30,31 @@ public class InvoiceCont {
     public int addNewInvoice(Invoice x, Connection con) throws SQLException {
 	PreparedStatement pStatement = null;
         ResultSet resultSet = null;
-        java.sql.Date d = null;
+        java.sql.Date d1 = null;
+        java.sql.Date d2 = null;
+        java.sql.Date d3 = null;
         int invN = 0;
         try {
-            
             pStatement = con.prepareStatement("INSERT INTO lasku(paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero) VALUES(?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             if(x.getCompDate() != null)
-                d = new java.sql.Date(x.getCompDate().getTime());
-            pStatement.setDate(1, d);
+                d1 = new java.sql.Date(x.getCompDate().getTime());
+            pStatement.setDate(1, d1);
             if(x.getFinalPayDate() != null)
-                d = new java.sql.Date(x.getFinalPayDate().getTime());
-            pStatement.setDate(2, d);
+                d2 = new java.sql.Date(x.getFinalPayDate().getTime());
+            pStatement.setDate(2, d2);
             if(x.getDatePaid() != null)
-                d = new java.sql.Date(x.getDatePaid().getTime());
-            pStatement.setDate(3, d);
+                d3 = new java.sql.Date(x.getDatePaid().getTime());
+            pStatement.setDate(3, d3);
             pStatement.setInt(4, x.getNmbrOfInvoices());
             pStatement.setInt(5, x.getClientNmbr());
             pStatement.setInt(6, x.getReminderOfNmbr());
-            pStatement.setInt(7, x.getWorkPerformanceNmbr());
+            if (x.getWorkPerformanceNmbr() == 0) {
+                pStatement.setNull(7, java.sql.Types.INTEGER);
+            }
+            else {
+                pStatement.setInt(7, x.getWorkPerformanceNmbr());
+            }
             pStatement.executeUpdate();
-            System.out.println("TEST");
             resultSet = pStatement.getGeneratedKeys();
             resultSet.next();
             invN = resultSet.getInt(1);
@@ -70,7 +75,6 @@ public class InvoiceCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE laskutunnus = ?"); 
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
@@ -89,10 +93,6 @@ public class InvoiceCont {
                 }
                 i = createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -110,7 +110,6 @@ public class InvoiceCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE asiakasnumero = ?"); 
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
@@ -129,10 +128,6 @@ public class InvoiceCont {
                 }
                 i.add(createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -150,7 +145,6 @@ public class InvoiceCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE tyosuoritusnumero = ?"); 
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
@@ -169,10 +163,6 @@ public class InvoiceCont {
                 }
                 i.add(createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -190,7 +180,6 @@ public class InvoiceCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE erapaiva = ?"); 
             pStatement.setDate(1, new java.sql.Date(fBD.getTime()));
             resultSet = pStatement.executeQuery();
@@ -209,10 +198,6 @@ public class InvoiceCont {
                 }
                 i.add(createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -230,7 +215,6 @@ public class InvoiceCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE paivamaara = ?"); 
             pStatement.setDate(1, new java.sql.Date(fBD.getTime()));
             resultSet = pStatement.executeQuery();
@@ -249,10 +233,6 @@ public class InvoiceCont {
                 }
                 i.add(createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -305,7 +285,6 @@ public class InvoiceCont {
         ResultSet resultSet = null;
         try {
             if (whatNumber > 0) {
-                con.setAutoCommit(false);
                 if (whatNumber == 1) {
                     pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE erapaiva IS NOT NULL AND maksupaiva IS NULL"); 
                 }
@@ -329,11 +308,7 @@ public class InvoiceCont {
                     }
                     i.add(createInvoice(fPD, resultSet.getInt(1), d, pD, resultSet.getInt(5), resultSet.getInt(7), resultSet.getInt(6), resultSet.getInt(8)));
                 }
-                con.commit();
             }
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -349,15 +324,10 @@ public class InvoiceCont {
     public Invoice removeInvoice(Invoice x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("DELETE FROM lasku WHERE laskutunnus = ?");
             pStatement.setInt(1, x.getIvNmbr());
             pStatement.executeUpdate();
-            con.commit();
         }
-        catch(SQLException e) {
-            con.rollback(); 
-            }
         finally {
             if (pStatement != null) {
                 pStatement.close();
@@ -437,16 +407,18 @@ public class InvoiceCont {
         }
     }
     
+    /**
+     * Hakee uusimman laskun listalta suurimman laskunumeron perusteella.
+     * 
+     * @param x lista laskuista
+     * @return listan uusin lasku
+     */
     public Invoice chooseLatest(ArrayList<Invoice> x){
-        
         Invoice rtn = x.get(0);
-        
         for(Invoice y : x){
-            
             if(y.getIvNmbr() > rtn.getIvNmbr()){
                 rtn = y;
             }
-            
         }
         return rtn;
     }
