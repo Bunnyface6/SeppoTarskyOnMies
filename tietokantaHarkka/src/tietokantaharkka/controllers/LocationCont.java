@@ -178,6 +178,8 @@ public class LocationCont {
         try {
             con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT osoitenumero, katuosoite, postinumero, postitoimipaikka FROM osoite WHERE katuosoite = ? AND postinumero = ? AND postitoimipaikka = ?");
+            pStatement.setString(1, address);
+            pStatement.setInt(2, zipCode);
             pStatement.setString(3, city);
             resultSet = pStatement.executeQuery();
             if (resultSet.next()) {

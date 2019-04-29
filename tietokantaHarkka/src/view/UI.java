@@ -66,6 +66,7 @@ public class UI {
     private final String EMPTYINPUTMESSAGE = "Tyhjä syöte ei kelpaa.";
     private final String OKMESSAGE = "Toiminto onnistui.";
     private final String NOTOKMESSAGE = "Toiminto epäonnistui.";
+    private final String NOTOKMESSAGE2 = "Toiminto ei onnistunut.";
     private final String NORESULTS = "Ei tuloksia.";
     private final String QUITCONFIRMMESSAGE = "Haluatko varmasti lopettaa? k)Kyllä e)Ei";
     
@@ -193,19 +194,19 @@ public class UI {
                             System.out.print("Asennustyö(tunnit): ");
                             tmp1 = commandReader.nextLine();
                             tmp12[1] = Integer.parseInt(tmp1);
-                            System.out.print("Asennustyö(alennusprosentti): ");
+                            System.out.print("Asennustyö(alennusprosentti: kaikista asennustöistä1): ");
                             tmp1 = commandReader.nextLine();
                             tmp12[2] = Integer.parseInt(tmp1);
                             System.out.print("Suunnittelutyö(tunnit): ");
                             tmp1 = commandReader.nextLine();
                             tmp12[3] = Integer.parseInt(tmp1);
-                            System.out.print("Suunnittelutyö(alennusprosentti): ");
+                            System.out.print("Suunnittelutyö(alennusprosentti: Kaikista suunnittelutöistä): ");
                             tmp1 = commandReader.nextLine();
                             tmp12[4] = Integer.parseInt(tmp1);
                             System.out.print("Aputyö(tunnit): ");
                             tmp1 = commandReader.nextLine();
                             tmp12[5] = Integer.parseInt(tmp1);
-                            System.out.print("Aputyö(alennusprosentti): ");
+                            System.out.print("Aputyö(alennusprosentti: kaikista aputöistä)): ");
                             tmp1 = commandReader.nextLine();
                             tmp12[6] = Integer.parseInt(tmp1);
                             list2 = new ArrayList<Integer>();
@@ -219,7 +220,7 @@ public class UI {
                                     System.out.print("Määrä: ");
                                     tmp1 = commandReader.nextLine();
                                     list2.add(Integer.parseInt(tmp1));
-                                    System.out.print("Alennusprosentti: ");
+                                    System.out.print("Alennusprosentti(Koskee kaikkia samanlaisia tarvikkeita): ");
                                     tmp1 = commandReader.nextLine();
                                     list2.add(Integer.parseInt(tmp1));
                                 }
@@ -252,6 +253,9 @@ public class UI {
                             System.out.print("Asiakasnumero: ");
                             tmp1 = commandReader.nextLine();
                             tmp6 = Integer.parseInt(tmp1);
+                            list = transaction.getAllArticles(con.getConnection());
+                            printList(list);
+                            System.out.println("\nValitse ylläolevista.");
                             do {
                                 System.out.print("Tarvikenumero: ");
                                 tmp1 = commandReader.nextLine();
@@ -262,13 +266,12 @@ public class UI {
                                 System.out.print("Alennusprosentti: ");
                                 tmp1 = commandReader.nextLine();
                                 list2.add(Integer.parseInt(tmp1));
-                                System.out.print(WANTTOADDARTICLE);
+                                System.out.println(WANTTOADDARTICLE);
                                 userCommand = commandReader.nextLine();
                                 if (userCommand.equals(NOCOMMAND)){
                                     inAdding = false;
                                 }
                                 if (userCommand.equals(ARTLISTCOMMAND)){
-                                    list = transaction.getAllArticles(con.getConnection());
                                     printList(list);     
                                 }
                                 if (!userCommand.equals(YESCOMMAND) && !userCommand.equals(ARTLISTCOMMAND) && !userCommand.equals(NOCOMMAND)) {
@@ -367,7 +370,7 @@ public class UI {
                         System.out.println(NOTNUMBERMESSAGE);
                     }
                     catch (SQLException e) {
-                        System.out.println(e.getMessage());
+                        System.out.println(NOTOKMESSAGE2);
                     }
                     catch (NullPointerException e) {
                         System.out.println(e.getMessage());
@@ -439,7 +442,7 @@ public class UI {
                         System.out.println(NOTNUMBERMESSAGE);
                     }
                     catch (SQLException e) {
-                        System.out.println(e.getMessage());
+                        System.out.println(NOTOKMESSAGE2);
                     }
                     catch (NullPointerException e) {
                         System.out.println(EMPTYINPUTMESSAGE);
@@ -521,7 +524,7 @@ public class UI {
                                 System.out.println(tmp1);
                             }
                             else {
-                                System.out.print(NOTOKMESSAGE);
+                                System.out.println(NOTOKMESSAGE);
                             }
                         }
                         
@@ -603,7 +606,7 @@ public class UI {
                         System.out.println(NOTNUMBERMESSAGE);
                     }
                     catch (SQLException e) {
-                        System.out.println(e.getMessage());
+                        System.out.println(NOTOKMESSAGE2);
                     }
                     catch (NullPointerException e) {
                         System.out.println(EMPTYINPUTMESSAGE);
@@ -653,7 +656,7 @@ public class UI {
             }       
         }
         else {
-            System.out.print(NORESULTS);
+            System.out.println(NORESULTS);
         }
     }    
 }
