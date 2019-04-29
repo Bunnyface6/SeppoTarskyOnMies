@@ -105,9 +105,9 @@ public class InvoiceGenerator {
             sC = sCC.seppoInfo(con);
             
             partOne = partOne + "\n" + clientLoc.toString() + "\n\nTYÖMAA:\n" + wSLoc.toString();
-            
-           ArrayList<Storage> hours = calculate(wP, sC, con);
-           
+           if(wP != null && wS != null){
+                ArrayList<Storage> hours = calculate(wP, sC, con);
+           }
            contractPrice = wS.getContractPrice();
            if(contractPrice != 0){
                agreement = true;
@@ -162,9 +162,11 @@ public class InvoiceGenerator {
                                 partThree = partThree + " josta veroton osuus: ";
                                 if(art.getTypeName() != "Kirja"){
                                     price = price / (1 + ((double)sC.getArticleVAT() / 100));
+                                    partThree = partThree + price;
                                 }
                                 else{
                                     price = price / (1 + ((double)sC.getBookVAT() / 100));
+                                    partThree = partThree + price;
                                 }
                             }
                         }

@@ -290,7 +290,7 @@ public class UI {
                             System.out.print("Anna päivämäärä laskulle(dd.mm.yyyy) :");
                             tmp1 = commandReader.nextLine();
                             tmp9 = new SimpleDateFormat("dd.MM.yyyy").parse(tmp1);
-                            System.out.print("Anna eräpäivä laskulle(dd/mm/yyyy): ");
+                            System.out.print("Anna eräpäivä laskulle(dd.mm.yyyy): ");
                             tmp2 = commandReader.nextLine();
                             tmp10 = new SimpleDateFormat("dd.MM.yyyy").parse(tmp2);
                             oK = transaction.addArticlesToInvoice(tmp6, list2, tmp9, tmp10, con.getConnection());
@@ -471,7 +471,7 @@ public class UI {
                             System.out.print("Anna päivämäärä(dd.mm.yyyy) :");
                             tmp1 = commandReader.nextLine();
                             tmp9 = new SimpleDateFormat("dd.MM.yyyy").parse(tmp1);
-                            System.out.print("Anna eräpäivä(dd/mm/yyyy): ");
+                            System.out.print("Anna eräpäivä(dd.mm.yyyy): ");
                             tmp1 = commandReader.nextLine();
                             tmp10 = new SimpleDateFormat("dd.MM.yyyy").parse(tmp1);
                             oK = transaction.createInvoice(tmp6, tmp9, tmp10, con.getConnection());
@@ -492,7 +492,7 @@ public class UI {
                             System.out.print("Anna eräpäivä laskulle(dd.mm.yyyy): ");
                             tmp2 = commandReader.nextLine();
                             tmp10 = new SimpleDateFormat("dd.MM.yyyy").parse(tmp2);
-                            oK = transaction.createReminderOfUnpaidInvoices(tmp10, tmp9, con.getConnection());
+                            oK = transaction.createReminderOfUnpaidInvoices(tmp9, tmp10, con.getConnection());
                             if (oK) {
                                 System.out.println(OKMESSAGE);
                                 oK = false;
