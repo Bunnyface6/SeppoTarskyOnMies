@@ -349,7 +349,8 @@ public class UI {
                         
                         // Jos valitaan tarvikelistan lisäys(tavikkeiden lisäys tiedostosta ja vanhojen kirjoittaminen tiedostoon).
                         else if (userCommand.equals(ADDARTICLELISTCOMMAND)) {
-                            System.out.print("Anna uuden tarvikelistan tiedoston nimi: ");
+                            System.out.println("Ota huomioon, että tarvikkeet häviävät laskuilta. Suositeltavaa tehdä silloin, kun kaikki laskut on maksettuna."); 
+                            System.out.print("Anna uuden tarvikelistan tiedoston nimi(tiedosto oltava rootissa): ");
                             tmp1 = commandReader.nextLine();
                             oK = transaction.fullUpdateFromFile(tmp1, con.getConnection());
                             if (oK) {
