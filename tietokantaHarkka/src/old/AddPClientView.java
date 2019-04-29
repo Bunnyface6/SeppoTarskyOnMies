@@ -146,9 +146,7 @@ public class AddPClientView extends javax.swing.JDialog {
     public String toString(){
         return "Tämä on oikea";
     }
-    /**
-     * @param args the command line arguments
-     */
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField adressF;

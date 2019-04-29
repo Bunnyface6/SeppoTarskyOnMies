@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import static java.util.Collections.list;
 import java.util.HashMap;
 /**
- *
+ * Laskun-luoja
  * @author Cassu
  */
 public class InvoiceGenerator {

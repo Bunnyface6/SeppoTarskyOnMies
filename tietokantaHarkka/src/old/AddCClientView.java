@@ -124,9 +124,6 @@ public class AddCClientView extends javax.swing.JDialog {
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_backBActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public void addListeners(ActionListener x){
         saveB.addActionListener(x);
     }

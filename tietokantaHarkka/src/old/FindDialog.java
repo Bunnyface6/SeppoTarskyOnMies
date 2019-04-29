@@ -145,9 +145,7 @@ public class FindDialog extends javax.swing.JDialog {
         return rtn;
     }
     
-    /**
-     * @param args the command line arguments
-     */
+
 
     javax.swing.DefaultComboBoxModel<String> laskuM = new javax.swing.DefaultComboBoxModel<String>(new String[] { "Tunnus", "Päivämäärä", "Työkohdenumero", "Asiakasnumero", "Kaikki maksamattomat", "Lähettämättömät" });
     javax.swing.DefaultComboBoxModel<String> tarvikeM = new javax.swing.DefaultComboBoxModel<String>(new String[] { "Tunnus", "Nimi", "Varastotilanne"});
