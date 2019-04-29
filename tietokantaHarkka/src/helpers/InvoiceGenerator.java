@@ -8,6 +8,7 @@ package helpers;
 import tietokantaharkka.baseClasses.*;
 import tietokantaharkka.controllers.*;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 /**
@@ -25,6 +26,7 @@ public class InvoiceGenerator {
         double totalPrice = 0;
         double contractPrice = 0;
         boolean agreement = false;
+        DecimalFormat df2 = new DecimalFormat("#.##");
         
         Client client;
         CompanyClient cC;
@@ -36,6 +38,7 @@ public class InvoiceGenerator {
         WorkSite wS;
         Location wSLoc;
         WorkPerformance wP;
+        SeppoCompany sC;
         
         SoldArticleCont soldCont = new SoldArticleCont();
         ClientCont clientCont = new ClientCont();
@@ -46,7 +49,7 @@ public class InvoiceGenerator {
         ArticleTypeCont artTypeCont = new ArticleTypeCont();
         WorkSiteCont workSiteCont = new WorkSiteCont();
         WorkPerformanceCont wPCont = new WorkPerformanceCont();
-        
+        SeppoCompanyCont sCC = new SeppoCompanyCont();
 
         
        try{
@@ -66,7 +69,6 @@ public class InvoiceGenerator {
                     "LASKU \n\n" +
                     pC.getfName() + " " + pC.getlName();
             }
-            
             clientLoc = locCont.findLocationByNmbr(client.getLocationNmbr(), con);
 
             sA = soldCont.findSoldArticlesOfInvoice(invoice.getIvNmbr(), con);
@@ -76,8 +78,12 @@ public class InvoiceGenerator {
             wS = workSiteCont.findWorkSiteByNmbr(wP.getWorkSiteNmbr(), con);
 
             wSLoc = locCont.findLocationByNmbr(wS.getLocationNmbr(), con);
-
-           ArrayList<Storage> hours = calculate(wP, con);
+            
+            sC = sCC.seppoInfo(con);
+            
+            partOne = partOne + "\n" + clientLoc.toString() + "\n\nTYÖMAA:\n" + wSLoc.toString();
+            
+           ArrayList<Storage> hours = calculate(wP, sC, con);
            
            contractPrice = wS.getContractPrice();
            
@@ -87,23 +93,26 @@ public class InvoiceGenerator {
            
            if(hours != null){
                double total = 0;
-               StringBuilder sb = new StringBuilder("TEHDYT TUNNIT:\n\n");
+               double total2 = 0;
+               StringBuilder sb = new StringBuilder("\n\nTEHDYT TUNNIT:\n\n");
                for(Storage stor : hours){
-                   
-                   sb.append(stor.name + " ");
+                   stor.calcVat();
+                   sb.append("\t " + stor.name.toUpperCase() + ": ");
                    sb.append(" Tuntimäärä " + stor.hours);
                    if(!agreement)
                        sb.append(" Tuntiveloitus " + stor.hPrice );
                    if(stor.reduction != 0)
                        sb.append(" Alennus " + stor.reduction + "%");
                    if(!agreement){
-                       sb.append(" Kokonaishinta " + stor.total);
-                       total = total + stor.total;
+                       sb.append(" Kokonaishinta " + df2.format(stor.total) + "€");
+                       total = (double)total + stor.total;
+                       sb.append(" josta veroton osuus " + df2.format(stor.vat) + "€");
+                       total2 += stor.vat;
                    }
                    sb.append("\n");
                }
                if(!agreement){
-                    sb.append("\nKOKONAISHINTA TYÖSTÄ: " + total);
+                    sb.append("\nKOKONAISHINTA TYÖSTÄ: " + df2.format(total) + " €\n" + "Josta kotitalousvähennyskelpoinen osuus on: " + df2.format(total2) + " €");
                }
                totalPrice = totalPrice + total;
                partTwo = sb.toString();
@@ -130,7 +139,7 @@ public class InvoiceGenerator {
            
            if(agreement)
                totalPrice = contractPrice;
-           partThree = partThree + "\n\n\nYHTEENSÄ: " + totalPrice + "€";
+           partThree = partThree + "\n\n\nYHTEENSÄ: " + df2.format(totalPrice) + " €";
            finString = partOne + partTwo + partThree;
 
            return finString;
@@ -146,7 +155,7 @@ public class InvoiceGenerator {
     }
 
     
-    public ArrayList<Storage> calculate(WorkPerformance wP, Connection con){
+    public ArrayList<Storage> calculate(WorkPerformance wP, SeppoCompany sC, Connection con){
         
         ArrayList<Storage> rtn = new ArrayList<Storage>();
         PerformedWorkCont pWC = new PerformedWorkCont();
@@ -158,7 +167,7 @@ public class InvoiceGenerator {
                 
                 for(PerformedWork x : pW){
                     
-                    Storage y = new Storage(x.getWorkType());
+                    Storage y = new Storage(x.getWorkType(), sC);
                     if(rtn.contains(y)){
                         y = rtn.remove(rtn.indexOf(y));
                     }
@@ -248,12 +257,15 @@ public class InvoiceGenerator {
         int reduction;
         double hPrice;
         double total;
-        public Storage(String x){
+        double vat;
+        SeppoCompany sC;
+        public Storage(String x, SeppoCompany y){
             this.name = x;
             this.hours = 0;
             this.reduction = 0;
             this.hPrice = 0;
             this.total = 0;
+            this.sC = y;
         }
         public boolean equals(Storage x){
             if(name.equals(x.name) && this.reduction == x.reduction)
@@ -262,7 +274,12 @@ public class InvoiceGenerator {
                 return false;
         }
         public void calculateTotal(){
-            this.total = hours * hPrice * (reduction / 100);
+            this.total = (double)hours * hPrice / (1 + ((double)reduction / 100));
+        }
+        public void calcVat(){
+            
+            this.vat = total / (1 + ((double)sC.getWorkVAT() / 100));
+            
         }
     }
 }
