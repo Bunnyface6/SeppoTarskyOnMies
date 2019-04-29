@@ -58,17 +58,12 @@ public class PerformedWorkCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT tyotyyppi, tyosuoritusnumero, maara, alennusprosentti FROM hinnoiteltu_tyosuoritus WHERE tyotyyppi = ?");
             pStatement.setString(1, workType);
             resultSet = pStatement.executeQuery();
             while (resultSet.next()) {
                 pW.add(createPerformedWork(resultSet.getString(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(4)));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -86,17 +81,12 @@ public class PerformedWorkCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT tyotyyppi, tyosuoritusnumero, maara, alennusprosentti FROM hinnoiteltu_tyosuoritus WHERE tyosuoritusnumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
             while (resultSet.next()) {
                 pW.add(createPerformedWork(resultSet.getString(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(4)));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -114,7 +104,6 @@ public class PerformedWorkCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT tyotyyppi, tyosuoritusnumero, maara, alennusprosentti FROM hinnoiteltu_tyosuoritus WHERE tyotyyppi = ? AND tyosuoritusnumero = ?");
             pStatement.setString(1, type);
             pStatement.setInt(2, wBN);
@@ -122,10 +111,6 @@ public class PerformedWorkCont {
             if (resultSet.next()) {
                pW = createPerformedWork(resultSet.getString(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(4)); 
             }                   
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -141,16 +126,11 @@ public class PerformedWorkCont {
     public PerformedWork removePerformedWork (PerformedWork x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("DELETE FROM hinnoiteltu_tyosuoritus WHERE tyotyyppi = ? AND tyosuoritusnumero = ?");
             pStatement.setString(1, x.getWorkType());
             pStatement.setInt(2, x.getWorkPerformanceNmbr());
             pStatement.executeUpdate();
-            con.commit();
         }
-        catch(SQLException e) {
-            con.rollback(); 
-            }
         finally {
             if (pStatement != null) {
                 pStatement.close();
@@ -163,7 +143,6 @@ public class PerformedWorkCont {
         PreparedStatement pStatement = null;
         boolean oK = false;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("UPDATE hinnoiteltu_tyosuoritus SET alennusprosentti = ? WHERE tyotyyppi = ? AND tyosuoritusnumero = ?");
             pStatement.setInt(1, x.getDiscountPer());
             pStatement.setString(2, x.getWorkType());
@@ -172,10 +151,6 @@ public class PerformedWorkCont {
             if (rV == 1) {
                 oK = true;
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (pStatement != null) {

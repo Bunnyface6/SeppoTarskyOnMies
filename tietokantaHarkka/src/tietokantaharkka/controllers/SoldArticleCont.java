@@ -30,7 +30,6 @@ public class SoldArticleCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             //Vähentää tarvittavan määrän tarvikkeita varastosta.
             pStatement = con.prepareStatement("SELECT varastotilanne FROM tarvike WHERE tarvikenumero = ?");
             pStatement.setInt(1, x.getArticleNmbr());
@@ -65,10 +64,6 @@ public class SoldArticleCont {
                 pStatement.setInt(4, x.getArticleNmbr());
                 pStatement.executeUpdate();
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (pStatement != null) {
@@ -84,7 +79,6 @@ public class SoldArticleCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT laskutunnus, tarvikenumero, alennusprosentti, kappalemaara FROM myyty_tarvike WHERE tarvikenumero = ?");
             pStatement.setInt(1, aNmbr);
             resultSet = pStatement.executeQuery();
@@ -92,10 +86,6 @@ public class SoldArticleCont {
                 SoldArticle a = createSoldArticle(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(4));
                 sA.add(a);
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -113,7 +103,6 @@ public class SoldArticleCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT laskutunnus, tarvikenumero, alennusprosentti, kappalemaara FROM myyty_tarvike WHERE laskutunnus = ?");
             pStatement.setInt(1, aNmbr);
             resultSet = pStatement.executeQuery();
@@ -121,10 +110,6 @@ public class SoldArticleCont {
                 SoldArticle a = createSoldArticle(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(4));
                 sA.add(a);
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -142,7 +127,6 @@ public class SoldArticleCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT laskutunnus, tarvikenumero, alennusprosentti, kappalemaara FROM myyty_tarvike WHERE laskutunnus = ? AND tarvikenumero = ?");
             pStatement.setInt(1, iNmbr);
             pStatement.setInt(2, aNmbr);
@@ -150,10 +134,6 @@ public class SoldArticleCont {
             if (resultSet.next()) {
                sA = createSoldArticle(resultSet.getInt(1), resultSet.getInt(2), resultSet.getInt(3), resultSet.getInt(4)); 
             }                   
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -169,15 +149,10 @@ public class SoldArticleCont {
     public SoldArticle removeSoldArticle(SoldArticle x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("DELETE FROM myyty_tarvike WHERE laskutunnus = ? AND tarvikenumero = ?");
             pStatement.setInt(1, x.getInvoiceNmbr());
             pStatement.setInt(2, x.getArticleNmbr());
             pStatement.executeUpdate();
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (pStatement != null) {
@@ -191,7 +166,6 @@ public class SoldArticleCont {
         PreparedStatement pStatement = null;
         boolean oK = false;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("UPDATE myyty_tarvike SET alennusprosentti = ? WHERE laskutunnus = ? AND tarvikenumero = ?");
             pStatement.setInt(1, x.getDiscountPer());
             pStatement.setInt(2, x.getInvoiceNmbr());
@@ -200,10 +174,6 @@ public class SoldArticleCont {
             if (rV == 1) {
                 oK = true;
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (pStatement != null) {

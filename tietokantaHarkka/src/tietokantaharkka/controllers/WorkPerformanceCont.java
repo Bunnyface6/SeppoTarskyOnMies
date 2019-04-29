@@ -54,17 +54,12 @@ public class WorkPerformanceCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT tyosuoritusnumero, tyokohdenumero FROM tyosuoritus WHERE tyosuoritusnumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
             if (resultSet.next()) {
                 wP = createWorkPerformance(resultSet.getInt(1), resultSet.getInt(2));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -83,7 +78,6 @@ public class WorkPerformanceCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("SELECT tyosuoritusnumero, tyokohdenumero FROM tyosuoritus WHERE tyokohdenumero = ?");
             pStatement.setInt(1, nmbr);
             resultSet = pStatement.executeQuery();
@@ -91,10 +85,6 @@ public class WorkPerformanceCont {
                 while (resultSet.next()) {
                     wPAL.add(createWorkPerformance(resultSet.getInt(1), resultSet.getInt(2)));
                 }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
         }
         finally {
             if (resultSet != null) {
@@ -110,15 +100,10 @@ public class WorkPerformanceCont {
     public WorkPerformance removeWorkPerformance(WorkPerformance x, Connection con) throws SQLException{
         PreparedStatement pStatement = null;
         try {
-            con.setAutoCommit(false);
             pStatement = con.prepareStatement("DELETE FROM tyosuoritus WHERE tyosuoritusnumero = ?");
             pStatement.setInt(1, x.getNmbr());
             pStatement.executeUpdate();
-            con.commit();
         }
-        catch(SQLException e) {
-            con.rollback(); 
-            }
         finally {
             if (pStatement != null) {
                 pStatement.close();

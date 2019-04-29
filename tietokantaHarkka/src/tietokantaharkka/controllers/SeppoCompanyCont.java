@@ -19,7 +19,7 @@ public class SeppoCompanyCont {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
         try {
-            con.setAutoCommit(false);
+            
             pStatement = con.prepareStatement("SELECT * FROM sepon_firma"); 
             resultSet = pStatement.executeQuery();
             if (resultSet.next()) {
@@ -34,10 +34,7 @@ public class SeppoCompanyCont {
                                          resultSet.getDouble(9),
                                          resultSet.getDouble(10));
             }
-            con.commit();
-        }
-        catch(SQLException e) {
-            con.rollback(); 
+            
         }
         finally {
             if (resultSet != null) {
@@ -54,16 +51,14 @@ public class SeppoCompanyCont {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
         try {
-            con.setAutoCommit(false);
+            
             pStatement = con.prepareStatement("UPDATE sepon_firma SET osoite = '?' WHERE osoite = '?'");
             pStatement.setString(1, newAddress);
             pStatement.setString(2, seppo.getAddress());
             pStatement.executeUpdate();
-            con.commit();
+            
         }
-        catch(SQLException e) {
-            con.rollback(); 
-            }
+        
         finally {
             if (pStatement != null) {
                 pStatement.close();
@@ -74,16 +69,14 @@ public class SeppoCompanyCont {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
         try {
-            con.setAutoCommit(false);
+            
             pStatement = con.prepareStatement("UPDATE sepon_firma SET tyoalv = ? WHERE tyoalv = ?");
             pStatement.setDouble(1, newWVAT);
             pStatement.setDouble(2, seppo.getWorkVAT());
             pStatement.executeUpdate();
-            con.commit();
+            
         }
-        catch(SQLException e) {
-            con.rollback(); 
-            }
+        
         finally {
             if (pStatement != null) {
                 pStatement.close();
@@ -94,16 +87,14 @@ public class SeppoCompanyCont {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
         try {
-            con.setAutoCommit(false);
+            
             pStatement = con.prepareStatement("UPDATE sepon_firma SET tarvikealv = ? WHERE tarvikealv = ?");
             pStatement.setDouble(1, newAVAT);
             pStatement.setDouble(2, seppo.getArticleVAT());
             pStatement.executeUpdate();
-            con.commit();
+            
         }
-        catch(SQLException e) {
-            con.rollback(); 
-            }
+        
         finally {
             if (pStatement != null) {
                 pStatement.close();
@@ -114,16 +105,14 @@ public class SeppoCompanyCont {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
         try {
-            con.setAutoCommit(false);
+            
             pStatement = con.prepareStatement("UPDATE sepon_firma SET kirjaalv = ? WHERE kirjaalv = ?");
             pStatement.setDouble(1, newBVAT);
             pStatement.setDouble(2, seppo.getBookVAT());
             pStatement.executeUpdate();
-            con.commit();
+            
         }
-        catch(SQLException e) {
-            con.rollback(); 
-            }
+        
         finally {
             if (pStatement != null) {
                 pStatement.close();
@@ -134,16 +123,14 @@ public class SeppoCompanyCont {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
         try {
-            con.setAutoCommit(false);
+            
             pStatement = con.prepareStatement("UPDATE sepon_firma SET yrityskulu = ? WHERE yrityskulu = ?");
             pStatement.setInt(1, newCompanyFee);
             pStatement.setInt(2, seppo.getCompanyFee());
             pStatement.executeUpdate();
-            con.commit();
+            
         }
-        catch(SQLException e) {
-            con.rollback(); 
-            }
+        
         finally {
             if (pStatement != null) {
                 pStatement.close();
@@ -154,16 +141,14 @@ public class SeppoCompanyCont {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
         try {
-            con.setAutoCommit(false);
+            
             pStatement = con.prepareStatement("UPDATE sepon_firma SET kuluttajakulu = ? WHERE kuluttajakulu = ?");
             pStatement.setInt(1, newConsumerFee);
             pStatement.setInt(2, seppo.getConsumerFee());
             pStatement.executeUpdate();
-            con.commit();
+            
         }
-        catch(SQLException e) {
-            con.rollback(); 
-            }
+        
         finally {
             if (pStatement != null) {
                 pStatement.close();
@@ -174,16 +159,14 @@ public class SeppoCompanyCont {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
         try {
-            con.setAutoCommit(false);
+            
             pStatement = con.prepareStatement("UPDATE sepon_firma SET kuluttajakorko = ? WHERE kuluttajakorko = ?");
             pStatement.setDouble(1, newConsumerInterest);
             pStatement.setDouble(2, seppo.getConsumerInterest());
             pStatement.executeUpdate();
-            con.commit();
+            
         }
-        catch(SQLException e) {
-            con.rollback(); 
-            }
+        
         finally {
             if (pStatement != null) {
                 pStatement.close();
@@ -194,16 +177,14 @@ public class SeppoCompanyCont {
         PreparedStatement pStatement = null;
         SeppoCompany seppo = seppoInfo(con);
         try {
-            con.setAutoCommit(false);
+            
             pStatement = con.prepareStatement("UPDATE sepon_firma SET yrityskorko = ? WHERE yrityskorko = ?");
             pStatement.setDouble(1, newCompanyInterest);
             pStatement.setDouble(2, seppo.getCompanyInterest());
             pStatement.executeUpdate();
-            con.commit();
+           
         }
-        catch(SQLException e) {
-            con.rollback(); 
-            }
+      
         finally {
             if (pStatement != null) {
                 pStatement.close();
