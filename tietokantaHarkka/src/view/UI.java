@@ -15,14 +15,18 @@ import transaction.Transaction;
  */
 
 /**
- *
+ * UI-luuokka.
  * @author Jipsu
  */
 public class UI {
     
+    /* Tapahtumat */
     Transaction transaction;
+    
+    /* Tietokannan yhteys */
     dBConnection con;
     
+    /** Vakioituja komentoja ja viestejä. */
     private final String ADDCOMMAND = "1";
     private final String SEARCHCOMMAND = "2";
     private final String INVOICINGCOMMAND = "3";
@@ -70,6 +74,9 @@ public class UI {
     private final String NORESULTS = "Ei tuloksia.";
     private final String QUITCONFIRMMESSAGE = "Haluatko varmasti lopettaa? k)Kyllä e)Ei";
     
+    /**
+     * Käynnistää käyttöliittymä-silmukan.
+     */
     public void run() {
         transaction = new Transaction();
         con = new dBConnection();
@@ -342,11 +349,9 @@ public class UI {
                         
                         // Jos valitaan tarvikelistan lisäys(tavikkeiden lisäys tiedostosta ja vanhojen kirjoittaminen tiedostoon).
                         else if (userCommand.equals(ADDARTICLELISTCOMMAND)) {
-                            System.out.print("Anna polku, jossa tarvikelista: ");
+                            System.out.print("Anna uuden tarvikelistan tiedoston nimi: ");
                             tmp1 = commandReader.nextLine();
-                            System.out.print("Anna polku, johon vanha tarvikelista tallennetaan: ");
-                            tmp2 = commandReader.nextLine();
-                            oK = transaction.fullUpdateFromFile(tmp1, tmp2, con.getConnection());
+                            oK = transaction.fullUpdateFromFile(tmp1, con.getConnection());
                             if (oK) {
                                 System.out.println(OKMESSAGE);
                                 oK = false;
