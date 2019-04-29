@@ -433,6 +433,8 @@ public class Transaction {
     }
     
     /**
+     * Luo hinta-arvio-merkkijonoesityksen parametreina saatujen tietojen ja tietokannassa olevien töiden 
+     * ja tarvikkeiden hintojen ja tietojen perusteella.
      * 
      * @param hours työtunnit tyypeittäin
      * @param articles tarvikkeet määrineen
@@ -461,20 +463,18 @@ public class Transaction {
         return assessmentOfPrices;
     }
     
-    public boolean addWorkTypeAndPrice(String type, double price, Connection con) throws SQLException {
-        try {
-            con.setAutoCommit(false);
-            WorkPrice w = new WorkPrice(type, price);
-            wPrC.addNewWorkPrice(w, con);
-            con.commit();
-            return true;
-        }
-        catch (SQLException e) {
-            con.rollback();
-            return false; 
-        }
-    }
-    
+    /**
+     * Lisää tarvikkeen parametrien tietojen avulla tarvike-tauluun.
+     * 
+     * @param name nimi
+     * @param buyIn sisaanostohinta
+     * @param salePrice myyntihinta
+     * @param storage varastotilanne
+     * @param type tyyppi
+     * @param con yhteys-olio
+     * @return totuusarvo tapahtuman onnistumisesta
+     * @throws SQLException jos tapahtuman peruutus epäonnistuu
+     */    
     public boolean addArticle(String name, double buyIn, double salePrice, int storage, String type, Connection con) throws SQLException {
         boolean oK = false;
         try {
@@ -494,20 +494,15 @@ public class Transaction {
         }
     }
     
-    public boolean addArticleType(String type, String unit, Connection con) throws SQLException {
-        try {
-            con.setAutoCommit(false);
-            ArticleType aT = new ArticleType(0, unit, type);
-            aTC.addNewArticleType(aT, con);
-            con.commit();
-            return true;
-        }
-        catch (SQLException e) {
-            con.rollback();
-            return false; 
-        }
-    }
-    
+    /**
+     * Päivittää tarvikkeen varastotilannetta tietokannan tarvike-taulussa.
+     * 
+     * @param articleNmbr tarvikenumero
+     * @param newAmount uusi määrä
+     * @param con yhteys-olio
+     * @return totuusarvo tapahtuman onnistumisesta
+     * @throws SQLException jos tapahtuma peruutus epäonnistuu
+     */    
     public boolean updateStorage(int articleNmbr, int newAmount, Connection con) throws SQLException {
         boolean oK = false;
         try {
@@ -527,12 +522,21 @@ public class Transaction {
         }
     }
     
+    /**
+     * Vertailee vanhoja ja tulevia uusia tarvikkeita ja jakaa ne päivitettäviin, uusiin tuleviin ja poistettaviin. 
+     * 
+     * @param newList uudet tarvikkeet
+     * @param updateList tietokantaan päivitettävät tarvikkeet
+     * @param con yhteys
+     * @return tietokannasta poistettvat tarvikkeet
+     * @throws SQLException jos metodin aikana tapahtuu virhe
+     */
     public ArrayList<Article> findAllOldArticles(ArrayList<Article> newList, ArrayList<Article> updateList, Connection con) throws SQLException{
 
         ArrayList<Article> oldList = aC.findAllArcticles(con);
         Article rmv = oldList.get(0);
         boolean found = false;
-        //SAATTAA OLLA TOIMIMATON, TESTAA!
+        
         for(Article oldA: oldList){
             if(found)
                 updateList.add(rmv);
@@ -552,10 +556,14 @@ public class Transaction {
         }
 
         return oldList;
-
-
     }
     
+    /**
+     * Kirjoittaa vanhat tarvikkeet tiedostoon.
+     * 
+     * @param list lista tiedostoon kirjoitettavista tarvikkeista
+     * @return jos kirjoituksessa tapahtuu virhe
+     */
     public boolean printOldArticles(ArrayList<Article> list){
         try{
                ZoneId zoneId = ZoneId.systemDefault() ;
@@ -576,6 +584,12 @@ public class Transaction {
         
     }
     
+    /**
+     * Hakee tiedostosta uudet tarvikkeet
+     * 
+     * @param path polku jossa uusien tarvikkeiden tiedosto on.
+     * @return uusien tarvikkeiden lista
+     */
     public ArrayList<Article> readArticlesFromFile(String path){
         ArrayList<Article> newList = new ArrayList();
         try (Stream<String> stream = Files.lines( Paths.get(path), StandardCharsets.UTF_8))
@@ -595,6 +609,13 @@ public class Transaction {
         return newList;
     }
     
+    /**
+     * fullUpdateFromFile-apumetodi
+     * @param updateList päivitettävä lista
+     * @param con yhteys
+     * @return totuusarvon metodin suorittamisesta
+     * @throws SQLException 
+     */
     public boolean updateArticlesFromFile(ArrayList<Article> updateList, Connection con) throws SQLException{
 
         for(Article art : updateList){
@@ -603,6 +624,13 @@ public class Transaction {
         return true;
     }
     
+    /**
+     * fullUpdateFromFile-apumetodi
+     * @param newList uusi tarvikelista
+     * @param con yhteys
+     * @return totuusarvon metodin suorittamisesta
+     * @throws SQLException 
+     */
     public boolean newArticlesFromFile(ArrayList<Article> newList, Connection con) throws SQLException{
 
         for(Article art : newList){
@@ -612,8 +640,15 @@ public class Transaction {
 
     }
     
-    //LIIKUTA ALLA OLEVA METODIKASA JONNEKKIN
-    
+    /**
+     * Vaihtaa tarvike-taulun tarvikkeet vastaamaan tekstitiedostossa olevaa tarvike listaa.
+     * Vanhat tarvikkeet kirjoitetaan history-tiedostoon.
+     * 
+     * @param nPath tiedoston nimi
+     * @param con yhteys
+     * @return totuusarvon onnistumisesta
+     * @throws SQLException jos tapahtuman peruutus ei onnistu.
+     */
     public boolean fullUpdateFromFile(String nPath, Connection con) throws SQLException{
         try{
             con.setAutoCommit(false);
@@ -631,7 +666,14 @@ public class Transaction {
             return false;
         }
     }
-         
+    
+    /**
+     * Palauttaa tarviketyypit(nimet) tietokannasta.
+     * 
+     * @param con yhteys-olio
+     * @return merkkijonoesityksen tarviketyypeistä.
+     * @throws SQLException jos tapahtuma aihettaa virheen
+     */
     public String getArticleTypes(Connection con) throws SQLException {
         String aTypes = "";
         try {
@@ -653,6 +695,13 @@ public class Transaction {
         return aTypes;
     }
     
+    /**
+     * Hakee tietokannasta ravikkeet ja tekee niistä merkkijono esitykset.
+     * 
+     * @param con yhteys-olio
+     * @return lista tarvikkeista merkkijonoesityksinä
+     * @throws SQLException jos tapahtuma aiheuttaa virheen.
+     */
     public ArrayList<String> getAllArticles(Connection con) throws SQLException {
         ArrayList<String> aList = new ArrayList<String>();
         try {
@@ -674,6 +723,14 @@ public class Transaction {
         return aList;        
     }
     
+    /**
+     * Hakee tietokannasta tietoja työkohteestä ja palauttaa merkkijonoesitykset niistä.
+     * 
+     * @param clientNmbr asiakasnumero
+     * @param con yhteys-olio
+     * @return listan merkkijonoesityksiä työkohdetiedoista
+     * @throws SQLException jos tapahtuma aiheuttaa virheen
+     */
     public ArrayList<String> getWorkSiteInfo(int clientNmbr, Connection con) throws SQLException {
         ArrayList<String> wSInfo = new ArrayList<String>();
         try {
@@ -696,6 +753,15 @@ public class Transaction {
         return wSInfo;
     }
     
+    /**
+     * Hakee tietokannasta tietoja yksityisasiakkaista ja palauttaa merkkijonoesitykset niistä.
+     * 
+     * @param fName etunimi
+     * @param lName sukunimi
+     * @param con yhteys-olio
+     * @return listan merkkijonoesityksiä yksityisasiakkaista
+     * @throws SQLException jos tapahtuma aiheuttaa virheen
+     */
     public ArrayList<String> getClientInfo(String fName, String lName, Connection con) throws SQLException {
         ArrayList<String> cInfo = new ArrayList<String>();
         try {
@@ -718,6 +784,14 @@ public class Transaction {
         return cInfo;
     }
     
+    /**
+     * Hakee tietokannasta tietoja yritysasiakkaista ja palauttaa merkkijonoesitykset niistä.
+     * 
+     * @param name nimi
+     * @param con yhteys-olio
+     * @return listan merkkijonoesityksiä yritysasiakkaista
+     * @throws SQLException jos tapahtuma aiheuttaa virheen
+     */
     public ArrayList<String> getClientInfo(String name, Connection con) throws SQLException {
         ArrayList<String> cInfo = new ArrayList<String>();
         try {
@@ -740,7 +814,14 @@ public class Transaction {
         return cInfo;
     }
     
-     public ArrayList<String> getInvoiceInfos(Connection con) throws SQLException {
+    /**
+     * Hakee tietokannasta laskut ja palauttaa merkkijonoesityksen niistä.
+     * 
+     * @param con yhteys-olio
+     * @return merkkijonoesitys laskuista
+     * @throws SQLException jos tapahtuma aihettaa virheen
+     */
+    public ArrayList<String> getInvoiceInfos(Connection con) throws SQLException {
         ArrayList<String> iInfo = new ArrayList<String>();
         try {
             con.setAutoCommit(false);
