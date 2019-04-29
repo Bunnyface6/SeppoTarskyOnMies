@@ -556,12 +556,15 @@ public class Transaction {
 
     }
     
-    public boolean printOldArticles(String path, ArrayList<Article> list){
+    public boolean printOldArticles(ArrayList<Article> list){
         try{
                ZoneId zoneId = ZoneId.systemDefault() ;
                LocalDate today = LocalDate.now( zoneId ) ;
-               String day = "/history/" + today.toString()+".txt" ;
+               String day = today.toString()+".txt" ;
                Path out = Paths.get(day);
+               if(Files.notExists(out)) {
+                   Files.createFile(out);
+               }
                Files.write(out, list, Charset.defaultCharset());
                return true;
         }
@@ -617,7 +620,7 @@ public class Transaction {
             ArrayList<Article> newList = readArticlesFromFile(nPath);
             ArrayList<Article> updateList = new ArrayList();
             ArrayList<Article> oldList = findAllOldArticles(newList, updateList, con);
-            printOldArticles(oPath, oldList);
+            printOldArticles(oldList);
             updateArticlesFromFile(updateList, con);
             newArticlesFromFile(updateList, con);
             con.commit();
