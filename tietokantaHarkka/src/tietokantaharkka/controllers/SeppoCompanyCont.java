@@ -9,7 +9,7 @@ import tietokantaharkka.baseClasses.SeppoCompany;
 import java.util.ArrayList;
 import java.util.Date;
 /**
- *
+ * Sepon tietoihin kontrolleri
  * @author nico
  */
 public class SeppoCompanyCont {
