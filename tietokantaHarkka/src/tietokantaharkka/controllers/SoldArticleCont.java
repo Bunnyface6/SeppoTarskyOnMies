@@ -19,6 +19,14 @@ public class SoldArticleCont {
     
     private SoldArticle lastUsed;
     
+    /**
+     * luo myydyb tarvikkeen olion
+     * @param invoiceNmbr
+     * @param articleNmbr
+     * @param discountPer
+     * @param nmbrOfSold
+     * @return myyty tarvike
+     */
     public SoldArticle createSoldArticle(int invoiceNmbr, int articleNmbr, int discountPer, int nmbrOfSold) {
         SoldArticle x = new SoldArticle(invoiceNmbr, articleNmbr, discountPer, nmbrOfSold);
         recentSoldArticles.add(x);
@@ -26,6 +34,13 @@ public class SoldArticleCont {
         return x;
     }
     
+    /**
+     * lisää myydyn tarvikkeen
+     * @param x
+     * @param con
+     * @throws SQLException
+     * @throws IllegalArgumentException
+     */
     public void addNewSoldArticle(SoldArticle x, Connection con) throws SQLException, IllegalArgumentException {
         PreparedStatement pStatement = null;
         ResultSet resultSet = null;
@@ -74,6 +89,14 @@ public class SoldArticleCont {
             }
         }
     }
+
+    /**
+     * etsii myytyjä tarvikkeita tarvikenumerolla
+     * @param aNmbr
+     * @param con
+     * @return arraylist myydyistä tarvikkeista
+     * @throws SQLException jos virhe
+     */
     public ArrayList<SoldArticle> findSoldArticles(int aNmbr, Connection con) throws SQLException {
         ArrayList<SoldArticle> sA = new ArrayList<SoldArticle>();
         PreparedStatement pStatement = null;
@@ -98,6 +121,13 @@ public class SoldArticleCont {
         return sA;
     }
     
+    /**
+     * etsii myytyjä tarvikkeita laskuilta
+     * @param aNmbr
+     * @param con
+     * @return arraylist myydyistä
+     * @throws SQLException jos virhe
+     */
     public ArrayList<SoldArticle> findSoldArticlesOfInvoice(int aNmbr, Connection con) throws SQLException {
         ArrayList<SoldArticle> sA = new ArrayList<SoldArticle>();
         PreparedStatement pStatement = null;
@@ -122,6 +152,14 @@ public class SoldArticleCont {
         return sA;
     }
     
+    /**
+     * etsii myytyjä laskutunnuksella ja tarvikenumerolla
+     * @param iNmbr
+     * @param aNmbr
+     * @param con
+     * @return myyty tarvike
+     * @throws SQLException jos virhe
+     */
     public SoldArticle findSoldArticleOfInvoice(int iNmbr, int aNmbr, Connection con) throws SQLException {
         SoldArticle sA = null;
         PreparedStatement pStatement = null;
@@ -146,6 +184,13 @@ public class SoldArticleCont {
         return sA;
     }
     
+    /**
+     * poistaa myydyn tarvikkeen
+     * @param x
+     * @param con
+     * @return poistettu myyty tarvike
+     * @throws SQLException jos virhe
+     */
     public SoldArticle removeSoldArticle(SoldArticle x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         try {
@@ -162,6 +207,13 @@ public class SoldArticleCont {
         return x;    
     }
     
+    /**
+     * päivittää alennusta
+     * @param x
+     * @param con
+     * @return true/false
+     * @throws SQLException jos virhe
+     */
     public boolean updateDiscount(SoldArticle x, Connection con) throws SQLException {
         PreparedStatement pStatement = null;
         boolean oK = false;
