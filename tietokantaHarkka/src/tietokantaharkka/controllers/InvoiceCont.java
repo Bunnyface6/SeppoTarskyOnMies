@@ -357,7 +357,8 @@ public class InvoiceCont {
         try {
             if (whatNumber > 0) {
                 if (whatNumber == 1) {
-                    pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE erapaiva IS NOT NULL AND maksupaiva IS NULL"); 
+                    pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE erapaiva IS NOT NULL AND maksupaiva IS NULL AND laskunumero = ?"); 
+                    pStatement.setInt(1, whatNumber);
                 }
                 else {
                     pStatement = con.prepareStatement("SELECT laskutunnus, paivamaara, erapaiva, maksupaiva, laskunumero, asiakasnumero, muistutus_laskusta, tyosuoritusnumero FROM lasku WHERE laskunumero = ? AND maksupaiva IS NULL");

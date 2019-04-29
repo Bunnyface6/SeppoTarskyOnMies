@@ -385,7 +385,7 @@ public class Transaction {
             ArrayList<Invoice> unpaidInvoices = iC.findUnpaidInvoices(1, con);
             for (int i = 0; i < unpaidInvoices.size(); i++) {
                 Invoice inv = unpaidInvoices.get(i);
-                if (inv.getFinalPayDate().before(today) && inv.getNmbrOfInvoices() == 1) {
+                if (inv.getFinalPayDate().before(today)) {
                     Invoice reminder = new Invoice(fpDate, 0, today, null, 2, inv.getIvNmbr(), inv.getClientNmbr(), inv.getWorkPerformanceNmbr());
                     iC.addNewInvoice(reminder, con);
                     inv.setDatePaid(today);
